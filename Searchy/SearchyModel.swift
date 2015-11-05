@@ -8,7 +8,7 @@ class SearchyModel {
 	var searchResults:AnyProperty<SearchResults>
 
 	init() {
-		searchResults = AnyProperty(initialValue: [], producer: mutableSearchTerm.producer.flatMap(.Latest, transform: SearchyModel.searchTerm(networkLayer)))
+		searchResults = AnyProperty(initialValue: [], producer: mutableSearchTerm.producer.filter { $0.characters.count > 0 }.flatMap(.Latest, transform: SearchyModel.searchTerm(networkLayer)))
 	}
 
     static func searchTerm(networkLayer:NetworkLayer)(term:String) -> SignalProducer<SearchResults, NoError> {

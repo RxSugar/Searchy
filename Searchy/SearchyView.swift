@@ -67,13 +67,11 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		var cell = tableView.dequeueReusableCellWithIdentifier("Cell")
-
 		if cell == nil {
 			cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
 		}
 
 		let result = results[indexPath.row]
-
 		cell!.textLabel!.text = result.name
 		cell!.detailTextLabel!.text = result.description
 

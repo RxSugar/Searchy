@@ -7,11 +7,12 @@ class SearchyController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.title = "Searchy"
-		SearchyPresenter.bind(model: model, view: self.view as! SearchyView)
 	}
 
 	override func loadView() {
 		super.loadView()
-		self.view = SearchyView()
+		let view = SearchyView()
+		SearchyPresenter.bind(model: model, view: view)
+		self.view = view
 	}
 }
