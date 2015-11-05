@@ -20,6 +20,7 @@
 		5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839611BEA7D8400622B04 /* SearchService.swift */; };
 		5A1839641BEA846900622B04 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839631BEA846900622B04 /* SearchResult.swift */; };
 		5A1839661BEA866400622B04 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839651BEA866300622B04 /* NetworkLayer.swift */; };
+		5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEB20621BEB9D7700418692 /* SearchyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +52,7 @@
 		5A1839611BEA7D8400622B04 /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		5A1839631BEA846900622B04 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		5A1839651BEA866300622B04 /* NetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
+		5AEB20621BEB9D7700418692 /* SearchyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,11 +99,12 @@
 			children = (
 				5A1839341BEA6BC900622B04 /* AppDelegate.swift */,
 				5A1839361BEA6BC900622B04 /* SearchyController.swift */,
+				5AEB20621BEB9D7700418692 /* SearchyView.swift */,
 				5A18395D1BEA7B4B00622B04 /* SearchyPresenter.swift */,
 				5A18395F1BEA7B8500622B04 /* SearchyModel.swift */,
 				5A1839611BEA7D8400622B04 /* SearchService.swift */,
-				5A1839631BEA846900622B04 /* SearchResult.swift */,
 				5A1839651BEA866300622B04 /* NetworkLayer.swift */,
+				5A1839631BEA846900622B04 /* SearchResult.swift */,
 				5A18393D1BEA6BC900622B04 /* Assets.xcassets */,
 				5A18393F1BEA6BC900622B04 /* LaunchScreen.storyboard */,
 				5A1839421BEA6BC900622B04 /* Info.plist */,
@@ -185,6 +188,7 @@
 				5A1839601BEA7B8500622B04 /* SearchyModel.swift in Sources */,
 				5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */,
 				5A18395E1BEA7B4B00622B04 /* SearchyPresenter.swift in Sources */,
+				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,
 			);
