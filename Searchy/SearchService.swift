@@ -22,9 +22,9 @@ enum ServiceResponse<T> {
 let resultLimit = 50
 
 class SearchService {
-	static func searchPopularRepositories(networkLayer:NetworkLayer)(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ()) {
+	static func search(networkLayer:NetworkLayer)(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ()) {
 		let escapedSearchTerm = SearchService.EscapedQuery(searchTerm)
-		let url = "https://api.github.com/search/repositories?q=\(escapedSearchTerm)&sort=stars&order=desc&per_page=\(resultLimit)"
+        let url = "http://api.duckduckgo.com/?q=\(escapedSearchTerm)&format=json&no_html=1&t=searchy"
 
 		networkLayer.getServiceResponseWithUrl(url) { jsonResponse, error in
 			guard error == nil else {
@@ -33,7 +33,7 @@ class SearchService {
 				return
 			}
 
-			guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["items"] as? Array<Dictionary<String,AnyObject>> else {
+			guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["RelatedTopics"] as? Array<Dictionary<String,AnyObject>> else {
 				print("Request succeeded, but no data was returned: \(jsonResponse)")
 				completion(.Success([]));
 				return
@@ -51,11 +51,12 @@ class SearchService {
 
 extension SearchResult {
 	static func FromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
-		guard let name = json["full_name"] as? String,
-			let description = json["description"] as? String else {
-				return nil
-		}
+        guard let text = json["Text"] as? String else { return nil }
+        guard let url = json["FirstURL"] as? String, resultUrl =  NSURL(string: url) else { return nil }
+        
+        let iconUrlString = json["Icon"]?["URL"] as? String ?? ""
+        let iconURL = NSURL(string: iconUrlString)
 
-		return SearchResult(name: name, description: description)
+        return SearchResult(text: text, resultUrl: resultUrl, iconUrl: iconURL)
 	}
 }

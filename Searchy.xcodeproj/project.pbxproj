@@ -15,7 +15,7 @@
 		5A18395A1BEA764000622B04 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839551BEA762100622B04 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A18395B1BEA764000622B04 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; };
 		5A18395C1BEA764000622B04 /* Result.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5A18395E1BEA7B4B00622B04 /* SearchyPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A18395D1BEA7B4B00622B04 /* SearchyPresenter.swift */; };
+		5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */; };
 		5A1839601BEA7B8500622B04 /* SearchyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A18395F1BEA7B8500622B04 /* SearchyModel.swift */; };
 		5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839611BEA7D8400622B04 /* SearchService.swift */; };
 		5A1839641BEA846900622B04 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839631BEA846900622B04 /* SearchResult.swift */; };
@@ -47,7 +47,7 @@
 		5A1839421BEA6BC900622B04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A1839551BEA762100622B04 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		5A1839561BEA762100622B04 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
-		5A18395D1BEA7B4B00622B04 /* SearchyPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyPresenter.swift; sourceTree = "<group>"; };
+		5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyBinding.swift; sourceTree = "<group>"; };
 		5A18395F1BEA7B8500622B04 /* SearchyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyModel.swift; sourceTree = "<group>"; };
 		5A1839611BEA7D8400622B04 /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		5A1839631BEA846900622B04 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
@@ -100,7 +100,7 @@
 				5A1839341BEA6BC900622B04 /* AppDelegate.swift */,
 				5A1839361BEA6BC900622B04 /* SearchyController.swift */,
 				5AEB20621BEB9D7700418692 /* SearchyView.swift */,
-				5A18395D1BEA7B4B00622B04 /* SearchyPresenter.swift */,
+				5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */,
 				5A18395F1BEA7B8500622B04 /* SearchyModel.swift */,
 				5A1839611BEA7D8400622B04 /* SearchService.swift */,
 				5A1839651BEA866300622B04 /* NetworkLayer.swift */,
@@ -187,7 +187,7 @@
 				5A1839371BEA6BC900622B04 /* SearchyController.swift in Sources */,
 				5A1839601BEA7B8500622B04 /* SearchyModel.swift in Sources */,
 				5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */,
-				5A18395E1BEA7B4B00622B04 /* SearchyPresenter.swift in Sources */,
+				5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */,
 				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,

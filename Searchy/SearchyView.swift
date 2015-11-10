@@ -6,6 +6,9 @@ let StandardTouchSize = CGFloat(44)
 class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 	private let tableView = UITableView()
 	private let textField = UITextField()
+    
+    let selectionStream:Signal<SearchResult, NoError>
+    private let selectionObserver:Observer<SearchResult, NoError>
 
 	var results = SearchResults() {
 		didSet {
@@ -14,10 +17,12 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 	}
 
 	let viewState = MutableProperty<SearchResults>([])
-	var searchTermUpdates:SignalProducer<String, NoError>
+	var searchTerm:SignalProducer<String, NoError>
 
 	override init(frame: CGRect) {
-		searchTermUpdates = textField.rac_textSignal().toSignalProducer()
+        (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
+        
+		searchTerm = textField.rac_textSignal().toSignalProducer()
 			.map { $0 as! String }
 			.flatMapError { _ in SignalProducer<String, NoError>.empty }
 			.throttle(0.33, onScheduler: QueueScheduler.mainQueueScheduler)
@@ -50,15 +55,11 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 
-		let contentSize = UIScreen.mainScreen().bounds
+		let contentSize = self.bounds
 		let textFieldHeight = max(textField.sizeThatFits(CGSize(width: contentSize.width, height: CGFloat.max)).height, StandardTouchSize)
 
 		textField.frame = CGRect(x: 0, y: 0, width: contentSize.width, height: textFieldHeight)
 		tableView.frame = CGRect(x: 0, y: textFieldHeight, width: contentSize.width, height: contentSize.height - textFieldHeight)
-	}
-
-	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		return 1
 	}
 
 	func tableView(tableView: UITableView, numberOfRowsInSection: Int) -> Int {
@@ -66,15 +67,16 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 	}
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		var cell = tableView.dequeueReusableCellWithIdentifier("Cell")
-		if cell == nil {
-			cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
-		}
+		let cell = tableView.dequeueReusableCellWithIdentifier("Cell") ?? UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
 
 		let result = results[indexPath.row]
-		cell!.textLabel!.text = result.name
-		cell!.detailTextLabel!.text = result.description
+		cell.textLabel!.text = result.text
+		cell.detailTextLabel!.text = result.resultUrl.absoluteString
 
-		return cell!
+		return cell
 	}
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        selectionObserver.sendNext(results[indexPath.row])
+    }
 }
