@@ -2,19 +2,20 @@ import Foundation
 import ReactiveCocoa
 
 class SearchyModel {
-	private let networkLayer = NetworkLayer()
+    private let searchService: SearchService
 
 	let searchTerm = MutableProperty<String>("")
-	var searchResults:AnyProperty<SearchResults>
+	let searchResults:AnyProperty<SearchResults>
 
-	init() {
-		searchResults = AnyProperty(initialValue: [], producer: searchTerm.producer.flatMap(.Latest, transform: SearchyModel.searchTerm(networkLayer)))
+    init(searchService:SearchService) {
+        self.searchService = searchService
+		searchResults = AnyProperty(initialValue: [], producer: searchTerm.producer.flatMap(.Latest, transform: SearchyModel.searchTerm(searchService)))
 	}
 
-    static func searchTerm(networkLayer:NetworkLayer)(term:String) -> SignalProducer<SearchResults, NoError> {
+    private static func searchTerm(searchService:SearchService)(term:String) -> SignalProducer<SearchResults, NoError> {
 		return SignalProducer { observer, disposable in
             guard term.characters.count > 0 else { observer.sendNext([]); observer.sendCompleted(); return }
-            SearchService.search(networkLayer)(searchTerm: term) { serverResponse in
+            searchService.search(term) { serverResponse in
 				switch serverResponse {
 				case .Success(let results):
 					observer.sendNext(results)

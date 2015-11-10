@@ -21,9 +21,19 @@ enum ServiceResponse<T> {
 
 let resultLimit = 50
 
-class SearchService {
-	static func search(networkLayer:NetworkLayer)(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ()) {
-		let escapedSearchTerm = SearchService.EscapedQuery(searchTerm)
+protocol SearchService {
+    func search(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ())
+}
+
+struct DuckDuckGoSearchService: SearchService {
+    private let networkLayer:NetworkLayer
+    
+    init(networkLayer:NetworkLayer) {
+        self.networkLayer = networkLayer
+    }
+    
+	func search(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ()) {
+		let escapedSearchTerm = escapedQuery(searchTerm)
         let url = "http://api.duckduckgo.com/?q=\(escapedSearchTerm)&format=json&no_html=1&t=searchy"
 
 		networkLayer.getServiceResponseWithUrl(url) { jsonResponse, error in
@@ -39,18 +49,18 @@ class SearchService {
 				return
 			}
 
-			let results:[SearchResult] = itemJsonObjects.map(SearchResult.FromJson).flatMap { return $0 }
+			let results:[SearchResult] = itemJsonObjects.map(SearchResult.buildFromJson).flatMap { return $0 }
 			completion(.Success(results))
 		}
 	}
 
-	static func EscapedQuery(query:String) -> String {
+	private func escapedQuery(query:String) -> String {
 		return query.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
 	}
 }
 
 extension SearchResult {
-	static func FromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
+	static func buildFromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
         guard let text = json["Text"] as? String else { return nil }
         guard let url = json["FirstURL"] as? String, resultUrl =  NSURL(string: url) else { return nil }
         

@@ -77,6 +77,7 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 	}
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         selectionObserver.sendNext(results[indexPath.row])
     }
 }

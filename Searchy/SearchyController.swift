@@ -3,7 +3,7 @@ import ReactiveCocoa
 import SafariServices
 
 class SearchyController: UIViewController {
-	let model:SearchyModel = SearchyModel()
+	let model:SearchyModel = SearchyModel(searchService: DuckDuckGoSearchService(networkLayer: NetworkLayer()))
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
