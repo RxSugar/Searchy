@@ -20,8 +20,21 @@
 		5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839611BEA7D8400622B04 /* SearchService.swift */; };
 		5A1839641BEA846900622B04 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839631BEA846900622B04 /* SearchResult.swift */; };
 		5A1839661BEA866400622B04 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839651BEA866300622B04 /* NetworkLayer.swift */; };
+		5A3A5FAA1BF3936800A99B68 /* SearchyModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */; };
+		5A3A5FB11BF39D8800A99B68 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839551BEA762100622B04 /* ReactiveCocoa.framework */; };
+		5A3A5FB21BF39D8800A99B68 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; };
 		5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEB20621BEB9D7700418692 /* SearchyView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5A3A5FAC1BF3936800A99B68 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A1839291BEA6BC900622B04 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5A1839301BEA6BC900622B04;
+			remoteInfo = Searchy;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		5A1839541BEA75AE00622B04 /* Embed Frameworks */ = {
@@ -52,6 +65,9 @@
 		5A1839611BEA7D8400622B04 /* SearchService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
 		5A1839631BEA846900622B04 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		5A1839651BEA866300622B04 /* NetworkLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkLayer.swift; sourceTree = "<group>"; };
+		5A3A5FA71BF3936800A99B68 /* SearchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SearchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchyModelTests.swift; sourceTree = "<group>"; };
+		5A3A5FAB1BF3936800A99B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5AEB20621BEB9D7700418692 /* SearchyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +78,15 @@
 			files = (
 				5A1839591BEA764000622B04 /* ReactiveCocoa.framework in Frameworks */,
 				5A18395B1BEA764000622B04 /* Result.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A3A5FA41BF3936800A99B68 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A3A5FB11BF39D8800A99B68 /* ReactiveCocoa.framework in Frameworks */,
+				5A3A5FB21BF39D8800A99B68 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				5A1839331BEA6BC900622B04 /* Searchy */,
+				5A3A5FA81BF3936800A99B68 /* SearchyTests */,
 				5A1839321BEA6BC900622B04 /* Products */,
 				24CD4A6213AEED8C0DE7C23F /* Frameworks */,
 			);
@@ -90,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				5A1839311BEA6BC900622B04 /* Searchy.app */,
+				5A3A5FA71BF3936800A99B68 /* SearchyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,6 +137,15 @@
 				5A1839421BEA6BC900622B04 /* Info.plist */,
 			);
 			path = Searchy;
+			sourceTree = "<group>";
+		};
+		5A3A5FA81BF3936800A99B68 /* SearchyTests */ = {
+			isa = PBXGroup;
+			children = (
+				5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */,
+				5A3A5FAB1BF3936800A99B68 /* Info.plist */,
+			);
+			path = SearchyTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,18 +169,40 @@
 			productReference = 5A1839311BEA6BC900622B04 /* Searchy.app */;
 			productType = "com.apple.product-type.application";
 		};
+		5A3A5FA61BF3936800A99B68 /* SearchyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A3A5FB01BF3936800A99B68 /* Build configuration list for PBXNativeTarget "SearchyTests" */;
+			buildPhases = (
+				5A3A5FA31BF3936800A99B68 /* Sources */,
+				5A3A5FA41BF3936800A99B68 /* Frameworks */,
+				5A3A5FA51BF3936800A99B68 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A3A5FAD1BF3936800A99B68 /* PBXTargetDependency */,
+			);
+			name = SearchyTests;
+			productName = SearchyTests;
+			productReference = 5A3A5FA71BF3936800A99B68 /* SearchyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		5A1839291BEA6BC900622B04 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = Asynchrony;
 				TargetAttributes = {
 					5A1839301BEA6BC900622B04 = {
 						CreatedOnToolsVersion = 7.1;
+					};
+					5A3A5FA61BF3936800A99B68 = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 5A1839301BEA6BC900622B04;
 					};
 				};
 			};
@@ -162,6 +220,7 @@
 			projectRoot = "";
 			targets = (
 				5A1839301BEA6BC900622B04 /* Searchy */,
+				5A3A5FA61BF3936800A99B68 /* SearchyTests */,
 			);
 		};
 /* End PBXProject section */
@@ -173,6 +232,13 @@
 			files = (
 				5A1839411BEA6BC900622B04 /* LaunchScreen.storyboard in Resources */,
 				5A18393E1BEA6BC900622B04 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5A3A5FA51BF3936800A99B68 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +260,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5A3A5FA31BF3936800A99B68 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A3A5FAA1BF3936800A99B68 /* SearchyModelTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5A3A5FAD1BF3936800A99B68 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5A1839301BEA6BC900622B04 /* Searchy */;
+			targetProxy = 5A3A5FAC1BF3936800A99B68 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		5A18393F1BEA6BC900622B04 /* LaunchScreen.storyboard */ = {
@@ -323,6 +405,40 @@
 			};
 			name = Release;
 		};
+		5A3A5FAE1BF3936800A99B68 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = SearchyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.asynchrony.SearchyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Searchy.app/Searchy";
+			};
+			name = Debug;
+		};
+		5A3A5FAF1BF3936800A99B68 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = SearchyTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.asynchrony.SearchyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Searchy.app/Searchy";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -343,6 +459,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		5A3A5FB01BF3936800A99B68 /* Build configuration list for PBXNativeTarget "SearchyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A3A5FAE1BF3936800A99B68 /* Debug */,
+				5A3A5FAF1BF3936800A99B68 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

@@ -5,18 +5,17 @@ enum ServiceResponse<T> {
 	case Success(T)
 	case Error(NSError)
 
-	init(value:T?, error:NSError?) {
-		guard error == nil else {
-			self = .Error(error!)
-			return
-		}
+	init(value:T?) {
 		guard let value = value else {
 			self = .Error(NSError(domain: "com.asynchrony.serviceError", code: 11, userInfo: [NSLocalizedDescriptionKey: "Bad response"]))
 			return
 		}
-
 		self = .Success(value)
 	}
+    
+    init(error:NSError) {
+        self = .Error(error)
+    }
 }
 
 let resultLimit = 50
