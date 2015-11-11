@@ -10,27 +10,19 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
     let selectionStream:Signal<SearchResult, NoError>
     private let selectionObserver:Observer<SearchResult, NoError>
 
-	var results = SearchResults() {
-		didSet {
-			tableView.reloadData()
-		}
-	}
-
-	let viewState = MutableProperty<SearchResults>([])
+	let searchResults = MutableProperty<SearchResults>([])
+    
 	var searchTerm:SignalProducer<String, NoError>
 
 	override init(frame: CGRect) {
         (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
         
-		searchTerm = textField.rac_textSignal().toSignalProducer()
-			.map { $0 as! String }
-			.flatMapError { _ in SignalProducer<String, NoError>.empty }
-			.throttle(0.33, onScheduler: QueueScheduler.mainQueueScheduler)
+		searchTerm = textField.textChanges().throttle(0.33, onScheduler: QueueScheduler.mainQueueScheduler)
 
 		super.init(frame: frame)
 
-		viewState.producer.startWithNext { [unowned self] searchResults in
-			self.results = searchResults
+		searchResults.producer.startWithNext { [unowned self] _ in
+			self.tableView.reloadData()
 		}
 
 		self.backgroundColor = UIColor.whiteColor()
@@ -63,13 +55,13 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
 	}
 
 	func tableView(tableView: UITableView, numberOfRowsInSection: Int) -> Int {
-		return results.count
+		return searchResults.value.count
 	}
 
 	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCellWithIdentifier("Cell") ?? UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
 
-		let result = results[indexPath.row]
+		let result = searchResults.value[indexPath.row]
 		cell.textLabel!.text = result.text
 		cell.detailTextLabel!.text = result.resultUrl.absoluteString
 
@@ -78,6 +70,6 @@ class SearchyView: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        selectionObserver.sendNext(results[indexPath.row])
+        selectionObserver.sendNext(searchResults.value[indexPath.row])
     }
 }

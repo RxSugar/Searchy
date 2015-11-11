@@ -23,6 +23,7 @@
 		5A3A5FAA1BF3936800A99B68 /* SearchyModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */; };
 		5A3A5FB11BF39D8800A99B68 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839551BEA762100622B04 /* ReactiveCocoa.framework */; };
 		5A3A5FB21BF39D8800A99B68 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; };
+		5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */; };
 		5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEB20621BEB9D7700418692 /* SearchyView.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		5A3A5FA71BF3936800A99B68 /* SearchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SearchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchyModelTests.swift; sourceTree = "<group>"; };
 		5A3A5FAB1BF3936800A99B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveExtensions.swift; sourceTree = "<group>"; };
 		5AEB20621BEB9D7700418692 /* SearchyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +137,7 @@
 				5A18393D1BEA6BC900622B04 /* Assets.xcassets */,
 				5A18393F1BEA6BC900622B04 /* LaunchScreen.storyboard */,
 				5A1839421BEA6BC900622B04 /* Info.plist */,
+				5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */,
 			);
 			path = Searchy;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 				5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */,
 				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
+				5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
