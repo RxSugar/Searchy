@@ -6,7 +6,7 @@ class SearchyController: UIViewController {
 	let model:SearchyModel = SearchyModel(searchService: DuckDuckGoSearchService(networkLayer: NetworkLayer()))
 
     override func loadView() {
-        self.title = "Searchy"
+        self.title = "searchy"
         
 		let view = SearchyView()
 		SearchyBinding.bind(model: model, view: view, selectionHandler: self.selectionHandler)
