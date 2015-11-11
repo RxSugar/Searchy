@@ -2,7 +2,7 @@ import XCTest
 import ReactiveCocoa
 @testable import Searchy
 
-struct TestSearchService: SearchService {
+struct FakeSearchService: SearchService {
     let searchOperation:(String, (ServiceResponse<SearchResults>) -> ()) -> ()
     
     func search(searchTerm: String, completion: (ServiceResponse<SearchResults>) -> ()) {
@@ -17,8 +17,8 @@ class SearchyModelTests: XCTestCase {
     
     let results = MutableProperty(SearchResults())
     
-    func synchronousSearchService() -> TestSearchService {
-        return TestSearchService { term, completion in
+    func synchronousSearchService() -> FakeSearchService {
+        return FakeSearchService { term, completion in
             switch term {
             case "1": fallthrough
             case "Stuff":
@@ -29,20 +29,12 @@ class SearchyModelTests: XCTestCase {
                 completion(ServiceResponse(value: [self.resultThree]))
             case "things":
                 completion(ServiceResponse(value: [self.resultOne, self.resultTwo, self.resultThree]))
-            default:
+            case "BadSearch":
                 completion(ServiceResponse(error: NSError(domain: "Ack!", code: 723, userInfo: nil)))
+            default:
+                completion(ServiceResponse(value: [self.resultTwo, self.resultThree]))
             }
         }
-    }
-    
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
     }
     
     func testWhenEmptyStringIsSearchedThenResultsAreEmpty() {
@@ -51,6 +43,16 @@ class SearchyModelTests: XCTestCase {
         model.searchTerm.value = "Stuff"
         
         model.searchTerm.value = ""
+        
+        XCTAssertEqual(results.value, [])
+    }
+    
+    func testWhenWhitespaceIsSearchedThenResultsAreEmpty() {
+        let model = SearchyModel(searchService: synchronousSearchService())
+        results <~ model.searchResults
+        model.searchTerm.value = "Stuff"
+        
+        model.searchTerm.value = " \n  "
         
         XCTAssertEqual(results.value, [])
     }
@@ -79,7 +81,7 @@ class SearchyModelTests: XCTestCase {
         var completionTwo:(ServiceResponse<SearchResults>) -> () = { _ in }
         var completionThree:(ServiceResponse<SearchResults>) -> () = { _ in }
         
-        let searchService = TestSearchService { term, completion in
+        let searchService = FakeSearchService { term, completion in
             switch term {
             case "1":
                 completionOne = completion

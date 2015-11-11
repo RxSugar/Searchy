@@ -5,13 +5,9 @@ import SafariServices
 class SearchyController: UIViewController {
 	let model:SearchyModel = SearchyModel(searchService: DuckDuckGoSearchService(networkLayer: NetworkLayer()))
 
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		self.title = "Searchy"
-	}
-
-	override func loadView() {
-		super.loadView()
+    override func loadView() {
+        self.title = "Searchy"
+        
 		let view = SearchyView()
 		SearchyBinding.bind(model: model, view: view, selectionHandler: self.selectionHandler)
 		self.view = view

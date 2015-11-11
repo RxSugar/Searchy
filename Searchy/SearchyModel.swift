@@ -9,8 +9,17 @@ class SearchyModel {
 
     init(searchService:SearchService) {
         self.searchService = searchService
-		searchResults = AnyProperty(initialValue: [], producer: searchTerm.producer.flatMap(.Latest, transform: SearchyModel.searchTerm(searchService)))
+        
+        let searchResultsStream = searchTerm.producer
+            .map(SearchyModel.stripWhitespace)
+            .flatMap(.Latest, transform: SearchyModel.searchTerm(searchService))
+        
+		searchResults = AnyProperty(initialValue: [], producer: searchResultsStream)
 	}
+    
+    private static func stripWhitespace(term: String) -> String {
+        return term.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    }
 
     private static func searchTerm(searchService:SearchService)(term:String) -> SignalProducer<SearchResults, NoError> {
 		return SignalProducer { observer, disposable in
@@ -19,11 +28,11 @@ class SearchyModel {
 				switch serverResponse {
                 case .Success(let results):
 					observer.sendNext(results)
-//					observer.sendCompleted()
+					observer.sendCompleted()
 				case .Error(let error):
 					print("\(error)")
                     observer.sendNext([])
-//                    observer.sendCompleted()
+                    observer.sendCompleted()
 				}
 			}
 		}
