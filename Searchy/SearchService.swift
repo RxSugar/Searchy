@@ -33,7 +33,7 @@ struct DuckDuckGoSearchService: SearchService {
     
 	func search(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ()) {
 		let escapedSearchTerm = escapedQuery(searchTerm)
-        let url = "http://api.duckduckgo.com/?q=\(escapedSearchTerm)&format=json&no_html=1&t=searchy"
+        let url = "http://itunes.apple.com/search?term=\(escapedSearchTerm)&media=music"
 
 		networkLayer.getServiceResponseWithUrl(url) { jsonResponse, error in
 			guard error == nil else {
@@ -42,7 +42,7 @@ struct DuckDuckGoSearchService: SearchService {
 				return
 			}
 
-			guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["RelatedTopics"] as? Array<Dictionary<String,AnyObject>> else {
+			guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["results"] as? Array<Dictionary<String,AnyObject>> else {
 				print("Request succeeded, but no data was returned: \(jsonResponse)")
 				completion(.Success([]));
 				return
@@ -60,11 +60,11 @@ struct DuckDuckGoSearchService: SearchService {
 
 extension SearchResult {
 	static func buildFromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
-        guard let text = json["Text"] as? String else { return nil }
-        guard let url = json["FirstURL"] as? String, resultUrl =  NSURL(string: url) else { return nil }
+        guard let text = json["artistName"] as? String else { return nil }
+        guard let url = json["artistViewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
         
-        let iconUrlString = json["Icon"]?["URL"] as? String ?? ""
-        let iconURL = NSURL(string: iconUrlString)
+        let iconUrlString = json["artworkUrl60"] as? String ?? ""
+        let iconURL = NSURL(string: iconUrlString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()))
 
         return SearchResult(text: text, resultUrl: resultUrl, iconUrl: iconURL)
 	}

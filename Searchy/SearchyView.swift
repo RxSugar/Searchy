@@ -15,6 +15,7 @@ class SearchyView: UIView {
 	override init(frame: CGRect) {
         selectionEvents = tableHandler.selectionStream
 		searchTerm = textField.textChanges().throttle(0.33, onScheduler: QueueScheduler.mainQueueScheduler)
+        
 
 		super.init(frame: frame)
 
@@ -48,6 +49,7 @@ class SearchyView: UIView {
     class TableHandler : NSObject, UITableViewDelegate, UITableViewDataSource {
         let view = UITableView()
         let data = MutableProperty<SearchResults>([])
+        private var cachedImages = [String : UIImage?]()
         let (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
         
         override init() {
@@ -65,6 +67,10 @@ class SearchyView: UIView {
             return data.value.count
         }
         
+        func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+            
+        }
+        
         func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCellWithIdentifier("Cell") ?? UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
             
@@ -72,6 +78,24 @@ class SearchyView: UIView {
             cell.textLabel!.text = result.text
             cell.detailTextLabel!.text = result.resultUrl.absoluteString
             
+            guard let url = result.iconUrl where url.absoluteString != "" else { return cell }
+            
+            guard cachedImages[url.absoluteString] == nil else {
+                cell.imageView?.image = cachedImages[url.absoluteString]!
+                return cell
+            }
+            
+            let task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { [weak self] data, response, error in
+                guard error == nil else {print("Error: \(error?.localizedDescription) \(url)"); return }
+                guard let imageData = data else { print("Bad Data"); return }
+                let image = UIImage(data: imageData)
+                self?.cachedImages[url.absoluteString] = image
+                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+                    guard let cellToUpdate = self?.view.cellForRowAtIndexPath(indexPath) else { print("Not on screen"); return }
+                    cellToUpdate.imageView?.image = image
+                })
+            })
+            task.resume()
             return cell
         }
         
