@@ -25,6 +25,7 @@
 		5A3A5FB21BF39D8800A99B68 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; };
 		5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */; };
 		5A3A5FB61BF3F23700A99B68 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FB51BF3F23700A99B68 /* main.swift */; };
+		5ADFFE711BF528D80081C6B8 /* SearchyBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADFFE701BF528D80081C6B8 /* SearchyBackView.swift */; };
 		5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEB20621BEB9D7700418692 /* SearchyView.swift */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		5A3A5FAB1BF3936800A99B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveExtensions.swift; sourceTree = "<group>"; };
 		5A3A5FB51BF3F23700A99B68 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		5ADFFE701BF528D80081C6B8 /* SearchyBackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyBackView.swift; sourceTree = "<group>"; };
 		5AEB20621BEB9D7700418692 /* SearchyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,6 +133,7 @@
 				5A1839341BEA6BC900622B04 /* AppDelegate.swift */,
 				5A1839361BEA6BC900622B04 /* SearchyController.swift */,
 				5AEB20621BEB9D7700418692 /* SearchyView.swift */,
+				5ADFFE701BF528D80081C6B8 /* SearchyBackView.swift */,
 				5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */,
 				5A18395F1BEA7B8500622B04 /* SearchyModel.swift */,
 				5A1839611BEA7D8400622B04 /* SearchService.swift */,
@@ -262,6 +265,7 @@
 				5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */,
 				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
 				5A3A5FB61BF3F23700A99B68 /* main.swift in Sources */,
+				5ADFFE711BF528D80081C6B8 /* SearchyBackView.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
 				5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,

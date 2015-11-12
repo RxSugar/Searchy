@@ -1,9 +1,11 @@
 import UIKit
 import ReactiveCocoa
 import SafariServices
+import AVFoundation
 
 class SearchyController: UIViewController {
 	let model:SearchyModel = SearchyModel(searchService: DuckDuckGoSearchService(networkLayer: NetworkLayer()))
+    let player = AVQueuePlayer()
 
     override func loadView() {
         self.title = "searchy"
@@ -14,6 +16,9 @@ class SearchyController: UIViewController {
 	}
     
     lazy var selectionHandler:(SearchResult)->() = { [weak self] in
-        self?.presentViewController(SFSafariViewController(URL: $0.resultUrl), animated: true, completion: nil)
+        self?.player.removeAllItems()
+        self?.player.insertItem(AVPlayerItem(URL: $0.resultUrl), afterItem: nil)
+        self?.player.play()
+//        self?.presentViewController(SFSafariViewController(URL: $0.resultUrl), animated: true, completion: nil)
     }
 }

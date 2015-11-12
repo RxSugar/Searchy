@@ -62,7 +62,7 @@ extension SearchResult {
     static func buildFromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
         guard let artist = json["artistName"] as? String else { return nil }
         guard let songTitle = json["trackName"] as? String else { return nil }
-        guard let url = json["collectionViewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
+        guard let url = json["previewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
         
         let iconUrlString = json["artworkUrl100"] as? String ?? ""
         let iconURL = NSURL(string: iconUrlString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()))
