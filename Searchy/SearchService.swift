@@ -59,13 +59,14 @@ struct DuckDuckGoSearchService: SearchService {
 }
 
 extension SearchResult {
-	static func buildFromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
-        guard let text = json["artistName"] as? String else { return nil }
-        guard let url = json["artistViewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
+    static func buildFromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
+        guard let artist = json["artistName"] as? String else { return nil }
+        guard let songTitle = json["trackName"] as? String else { return nil }
+        guard let url = json["collectionViewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
         
-        let iconUrlString = json["artworkUrl60"] as? String ?? ""
+        let iconUrlString = json["artworkUrl100"] as? String ?? ""
         let iconURL = NSURL(string: iconUrlString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()))
 
-        return SearchResult(text: text, resultUrl: resultUrl, iconUrl: iconURL)
+        return SearchResult(artist: artist, songTitle: songTitle, resultUrl: resultUrl, iconUrl: iconURL)
 	}
 }

@@ -50,6 +50,8 @@ class SearchyView: UIView {
         let view = UITableView()
         let data = MutableProperty<SearchResults>([])
         private var cachedImages = [String : UIImage?]()
+        private let blankImage = UIImage(named: "blank.png")!
+        private var cacheCount = 0
         let (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
         
         override init() {
@@ -69,33 +71,35 @@ class SearchyView: UIView {
         
         func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
             
-        }
-        
-        func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCellWithIdentifier("Cell") ?? UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
-            
             let result = data.value[indexPath.row]
-            cell.textLabel!.text = result.text
-            cell.detailTextLabel!.text = result.resultUrl.absoluteString
-            
-            guard let url = result.iconUrl where url.absoluteString != "" else { return cell }
-            
-            guard cachedImages[url.absoluteString] == nil else {
-                cell.imageView?.image = cachedImages[url.absoluteString]!
-                return cell
-            }
+            guard let url = result.iconUrl where url.absoluteString != "" else { return }
+            guard cachedImages[url.absoluteString] == nil else { return }
             
             let task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { [weak self] data, response, error in
                 guard error == nil else {print("Error: \(error?.localizedDescription) \(url)"); return }
                 guard let imageData = data else { print("Bad Data"); return }
                 let image = UIImage(data: imageData)
                 self?.cachedImages[url.absoluteString] = image
-                dispatch_async(dispatch_get_main_queue(), { [weak self] in
+                print("\(self?.cacheCount++)")
+                dispatch_async(dispatch_get_main_queue(), {
                     guard let cellToUpdate = self?.view.cellForRowAtIndexPath(indexPath) else { print("Not on screen"); return }
                     cellToUpdate.imageView?.image = image
+                    })
                 })
-            })
             task.resume()
+        }
+        
+        func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+            let cell = tableView.dequeueReusableCellWithIdentifier("Cell") ?? UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
+            
+            let result = data.value[indexPath.row]
+            cell.textLabel?.text = result.artist
+            cell.detailTextLabel?.text = "Title: \(result.songTitle)"
+            
+            guard let url = result.iconUrl, let image = cachedImages[url.absoluteString] else { cell.imageView?.image = blankImage; return cell }
+            
+            cell.imageView?.image = image
+    
             return cell
         }
         
