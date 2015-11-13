@@ -48,6 +48,8 @@ class SearchyView: UIView {
     class TableHandler : NSObject, UITableViewDelegate, UITableViewDataSource {
         let view = UITableView()
         let data = MutableProperty<SearchResults>([])
+        var cachedImages = [String : UIImage]()
+        let blankImage = UIImage(named: "blank.png")
         let (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
         
         override init() {
@@ -65,12 +67,35 @@ class SearchyView: UIView {
             return data.value.count
         }
         
+        func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+            
+            let result = data.value[indexPath.row]
+            guard let url = result.iconUrl where url.absoluteString != "" else { return }
+            guard cachedImages[url.absoluteString] == nil else { return }
+            
+            let task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { [weak self] data, response, error in
+                guard error == nil else {print("Error: \(error?.localizedDescription) \(url)"); return }
+                guard let imageData = data else { print("Bad Data"); return }
+                let image = UIImage(data: imageData)
+                self?.cachedImages[url.absoluteString] = image
+                dispatch_async(dispatch_get_main_queue(), {
+                    guard let cellToUpdate = self?.view.cellForRowAtIndexPath(indexPath) else { print("Not on screen"); return }
+                    cellToUpdate.imageView?.image = image
+                })
+                })
+            task.resume()
+        }
+        
         func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
             let cell = tableView.dequeueReusableCellWithIdentifier("Cell") ?? UITableViewCell(style: .Subtitle, reuseIdentifier: "Cell")
             
             let result = data.value[indexPath.row]
             cell.textLabel!.text = result.text
             cell.detailTextLabel!.text = result.resultUrl.absoluteString
+            
+            guard let url = result.iconUrl, let image = cachedImages[url.absoluteString] else { cell.imageView?.image = blankImage; return cell }
+            
+            cell.imageView?.image = image
             
             return cell
         }
