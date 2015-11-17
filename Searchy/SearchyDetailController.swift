@@ -2,7 +2,7 @@ import UIKit
 import ReactiveCocoa
 import AVFoundation
 
-class SearchyDetailController: UIViewController {
+class SearchyDetailController: UIViewController, UINavigationControllerDelegate {
     let item:SearchyDisplayItem
     
     init(item: SearchyDisplayItem) {
@@ -19,5 +19,17 @@ class SearchyDetailController: UIViewController {
         
         let view = SearchyDetailView(item: item)
         self.view = view
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.navigationController?.delegate = self
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationController?.delegate = nil
+    }
+    
+    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return Transition(selectedItem: self.item.result)
     }
 }

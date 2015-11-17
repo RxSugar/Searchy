@@ -3,7 +3,7 @@ import ReactiveCocoa
 
 let StandardTouchSize = CGFloat(44)
 
-class SearchyView: UIView {
+class SearchyView: UIView, SearchyTransitionable {
     private let tableHandler:TableHandler
     private let textField = UITextField()
     
@@ -45,6 +45,13 @@ class SearchyView: UIView {
 		textField.frame = CGRect(x: 0, y: 0, width: contentSize.width, height: textFieldHeight)
 		tableHandler.view.frame = CGRect(x: 0, y: textFieldHeight, width: contentSize.width, height: contentSize.height - textFieldHeight)
 	}
+    
+    func imageRectForItem(item: SearchResult) -> CGRect {
+        let rowIndex = searchResults.value.indexOf(item) ?? 0
+        guard let cell = tableHandler.view.cellForItemAtIndexPath(NSIndexPath(forRow: rowIndex, inSection: 0)) as? SearchyCell else { return CGRectZero }
+        
+        return cell.convertRect(cell.imageRect(), toView: self)
+    }
     
     class TableHandler : UICollectionViewFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
         private let sizeForSquare = 100

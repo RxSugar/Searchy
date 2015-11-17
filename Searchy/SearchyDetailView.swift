@@ -1,10 +1,10 @@
 import UIKit
 
-class SearchyDetailView: UIView {
-    static let margin:CGFloat = 10.0
-    let imageView = UIImageView()
-    let titleLabel = UILabel()
-    let item:SearchyDisplayItem
+class SearchyDetailView: UIView, SearchyTransitionable {
+    private static let margin:CGFloat = 10.0
+    private let imageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let item:SearchyDisplayItem
     
     init(item: SearchyDisplayItem) {
         self.item = item
@@ -36,4 +36,7 @@ class SearchyDetailView: UIView {
         
     }
     
+    func imageRectForItem(_: SearchResult) -> CGRect {
+        return imageView.frame
+    }
 }

@@ -15,6 +15,10 @@ class SearchyCell : UICollectionViewCell {
     private let item = MutableProperty(SearchResult.emptyResult)
     private var cellItem:SearchyDisplayItem?
     
+    func imageRect() -> CGRect {
+        return imageView.convertRect(imageView.bounds, toView: self)
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: CGRectZero)
         
