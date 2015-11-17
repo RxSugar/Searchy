@@ -34,7 +34,7 @@ class SearchyCell : UICollectionViewCell {
             self.label.text = "\(item.artist) - \(item.songTitle)"
         }
         
-        image.producer.startWithNext {
+        image.producer.skipRepeats(==).startWithNext {
             self.imageView.image = $0
         }
     }

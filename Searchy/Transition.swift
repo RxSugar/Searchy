@@ -18,7 +18,11 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
             let fromTransitionable = fromView as? SearchyTransitionable,
             let toTransitionable = toView as? SearchyTransitionable,
             let fromImageView = fromTransitionable.imageViewForItem(selectedItem),
-            let toImageView = toTransitionable.imageViewForItem(selectedItem) else { return }
+            let toImageView = toTransitionable.imageViewForItem(selectedItem) else {
+                print("FAIL!!!")
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                return
+        }
         
         toView.frame = transitionContext.finalFrameForViewController(transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
         toView.layoutIfNeeded()
