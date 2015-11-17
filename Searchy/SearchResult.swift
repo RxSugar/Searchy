@@ -4,7 +4,9 @@ struct SearchResult: Equatable {
     let artist:String
     let songTitle:String
     let resultUrl:NSURL
-    let iconUrl:NSURL?
+    let iconUrl:NSURL
+    
+    static let emptyResult = SearchResult(artist: "", songTitle: "", resultUrl: NSURL(), iconUrl: NSURL())
 }
 
 typealias SearchResults = [SearchResult]

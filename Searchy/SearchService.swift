@@ -24,7 +24,7 @@ protocol SearchService {
     func search(searchTerm:String, completion: (ServiceResponse<[SearchResult]>) -> ())
 }
 
-struct DuckDuckGoSearchService: SearchService {
+struct ItunesSearchService: SearchService {
     private let networkLayer:NetworkLayer
     
     init(networkLayer:NetworkLayer) {
@@ -35,21 +35,20 @@ struct DuckDuckGoSearchService: SearchService {
 		let escapedSearchTerm = escapedQuery(searchTerm)
         let url = "http://itunes.apple.com/search?term=\(escapedSearchTerm)&media=music"
 
-		networkLayer.getServiceResponseWithUrl(url) { jsonResponse, error in
-			guard error == nil else {
-				print("Error ocurred while retrieving results")
-				completion(.Error(error!));
-				return
-			}
-
-			guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["results"] as? Array<Dictionary<String,AnyObject>> else {
-				print("Request succeeded, but no data was returned: \(jsonResponse)")
-				completion(.Success([]));
-				return
-			}
-
-			let results:[SearchResult] = itemJsonObjects.map(SearchResult.buildFromJson).flatMap { return $0 }
-			completion(.Success(results))
+		networkLayer.getServiceResponseWithUrl(url) { result in
+            switch result {
+            case .Success(let jsonResponse):
+                guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["results"] as? Array<Dictionary<String,AnyObject>> else {
+                    print("Request succeeded, but no data was returned: \(jsonResponse)")
+                    completion(.Success([]))
+                    return
+                }
+                
+                let results:[SearchResult] = itemJsonObjects.map(SearchResult.buildFromJson).flatMap { return $0 }
+                completion(.Success(results))
+            case .Failure(let error):
+                completion(.Error(error));
+            }
 		}
 	}
 
@@ -64,8 +63,9 @@ extension SearchResult {
         guard let songTitle = json["trackName"] as? String else { return nil }
         guard let url = json["previewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
         
-        let iconUrlString = json["artworkUrl100"] as? String ?? ""
-        let iconURL = NSURL(string: iconUrlString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()))
+        let imageString100px = json["artworkUrl100"] as? String ?? ""
+        let imageString600px = imageString100px.stringByReplacingOccurrencesOfString("100x100", withString: "600x600")
+        let iconURL = NSURL(string: imageString600px) ?? NSURL()
 
         return SearchResult(artist: artist, songTitle: songTitle, resultUrl: resultUrl, iconUrl: iconURL)
 	}
