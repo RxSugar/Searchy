@@ -39,7 +39,8 @@ class SearchyController: UIViewController, UINavigationControllerDelegate {
         
         this.transition = Transition(selectedItem: $0)
         let item = SearchyDisplayItem(result: $0, imageProvider: this.context.imageProvider)
-        this.navigationController?.pushViewController(SearchyDetailController(item: item), animated: true)
+        let snapshot = this.view.snapshotViewAfterScreenUpdates(false)
+        this.navigationController?.pushViewController(SearchyDetailController(item: item, snapshot: snapshot), animated: true)
     }
     
     func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {

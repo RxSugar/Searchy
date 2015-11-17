@@ -4,9 +4,11 @@ import AVFoundation
 
 class SearchyDetailController: UIViewController, UINavigationControllerDelegate {
     let item:SearchyDisplayItem
+    let snapshot:UIView
     
-    init(item: SearchyDisplayItem) {
+    init(item: SearchyDisplayItem, snapshot:UIView) {
         self.item = item
+        self.snapshot = snapshot
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -17,8 +19,7 @@ class SearchyDetailController: UIViewController, UINavigationControllerDelegate 
     override func loadView() {
         self.title = "searchy"
         
-        let view = SearchyDetailView(item: item)
-        self.view = view
+        self.view = SearchyDetailView(item: item, backgroundSnapshot: snapshot)
     }
     
     override func viewDidAppear(animated: Bool) {

@@ -5,16 +5,23 @@ class SearchyDetailView: UIView, SearchyTransitionable {
     private let imageView = UIImageView()
     private let titleLabel = UILabel()
     private let item:SearchyDisplayItem
+    private let backgroundSnapshot:UIView
+    private let blurView:UIView
     
-    init(item: SearchyDisplayItem) {
+    init(item: SearchyDisplayItem, backgroundSnapshot: UIView) {
         self.item = item
+        self.backgroundSnapshot = backgroundSnapshot
+        self.blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         
         super.init(frame: CGRectZero)
+        
+        addSubview(backgroundSnapshot)
+        addSubview(blurView)
         addSubview(titleLabel)
         
         imageView.contentMode = .ScaleAspectFit
         addSubview(imageView)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         
         titleLabel.text = "\(item.result.artist) - \(item.result.songTitle)"
         item.image.producer.startWithNext { [weak self] in
@@ -28,6 +35,9 @@ class SearchyDetailView: UIView, SearchyTransitionable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundSnapshot.frame = self.bounds
+        blurView.frame = self.bounds
+        
         let margin = SearchyDetailView.margin
         
         let labelHeight = titleLabel.sizeThatFits(self.bounds.size).height
