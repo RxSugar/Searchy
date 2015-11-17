@@ -26,6 +26,9 @@ class SearchyController: UIViewController {
 	}
     
     lazy var selectionHandler:(SearchResult)->() = { [weak self] in
-        self?.navigationController?.pushViewController(SearchyDetailController(item: $0), animated: true)
+        guard let this = self else { return }
+        
+        let item = SearchyDisplayItem(result: $0, imageProvider: this.context.imageProvider)
+        this.navigationController?.pushViewController(SearchyDetailController(item: item), animated: true)
     }
 }

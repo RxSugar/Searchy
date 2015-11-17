@@ -3,9 +3,9 @@ import ReactiveCocoa
 import AVFoundation
 
 class SearchyDetailController: UIViewController {
-    let item:SearchResult
+    let item:SearchyDisplayItem
     
-    init(item: SearchResult) {
+    init(item: SearchyDisplayItem) {
         self.item = item
         super.init(nibName: nil, bundle: nil)
     }
@@ -17,9 +17,7 @@ class SearchyDetailController: UIViewController {
     override func loadView() {
         self.title = "searchy"
         
-        let view = UIView()
-        view.backgroundColor = UIColor.orangeColor()
-        //SearchyBinding.bind(model: model, view: view, selectionHandler: self.selectionHandler)
+        let view = SearchyDetailView(item: item)
         self.view = view
     }
 }

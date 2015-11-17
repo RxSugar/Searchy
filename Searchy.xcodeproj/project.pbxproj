@@ -34,6 +34,8 @@
 		5A6326B91BFA7B75000B07CC /* clone-4.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6326B51BFA7B75000B07CC /* clone-4.png */; };
 		5A6326BF1BFA8ACE000B07CC /* ApplicationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */; };
 		5A6326C11BFA8C53000B07CC /* SearchyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6326C01BFA8C53000B07CC /* SearchyCell.swift */; };
+		5A6326C31BFB8630000B07CC /* SearchyDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6326C21BFB8630000B07CC /* SearchyDisplayItem.swift */; };
+		5A6326C51BFB868E000B07CC /* SearchyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6326C41BFB868E000B07CC /* SearchyDetailView.swift */; };
 		5A8E37201BFA262700D6E6BC /* SearchyAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8E371F1BFA262700D6E6BC /* SearchyAnimation.swift */; };
 		5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEB20621BEB9D7700418692 /* SearchyView.swift */; };
 /* End PBXBuildFile section */
@@ -91,6 +93,8 @@
 		5A6326B51BFA7B75000B07CC /* clone-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clone-4.png"; sourceTree = "<group>"; };
 		5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationContext.swift; sourceTree = "<group>"; };
 		5A6326C01BFA8C53000B07CC /* SearchyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyCell.swift; sourceTree = "<group>"; };
+		5A6326C21BFB8630000B07CC /* SearchyDisplayItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyDisplayItem.swift; sourceTree = "<group>"; };
+		5A6326C41BFB868E000B07CC /* SearchyDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyDetailView.swift; sourceTree = "<group>"; };
 		5A8E371F1BFA262700D6E6BC /* SearchyAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyAnimation.swift; sourceTree = "<group>"; };
 		5AEB20621BEB9D7700418692 /* SearchyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -166,6 +170,8 @@
 				5A6326AE1BFA7189000B07CC /* ImageProvider.swift */,
 				5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */,
 				5A6326C01BFA8C53000B07CC /* SearchyCell.swift */,
+				5A6326C21BFB8630000B07CC /* SearchyDisplayItem.swift */,
+				5A6326C41BFB868E000B07CC /* SearchyDetailView.swift */,
 			);
 			path = Searchy;
 			sourceTree = "<group>";
@@ -297,11 +303,13 @@
 				5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */,
 				5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */,
 				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
+				5A6326C31BFB8630000B07CC /* SearchyDisplayItem.swift in Sources */,
 				5A6326C11BFA8C53000B07CC /* SearchyCell.swift in Sources */,
 				5A3A5FB61BF3F23700A99B68 /* main.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
 				5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,
+				5A6326C51BFB868E000B07CC /* SearchyDetailView.swift in Sources */,
 				5A6326AD1BFA6FBD000B07CC /* SearchyDetailController.swift in Sources */,
 				5A6326AF1BFA7189000B07CC /* ImageProvider.swift in Sources */,
 				5A8E37201BFA262700D6E6BC /* SearchyAnimation.swift in Sources */,

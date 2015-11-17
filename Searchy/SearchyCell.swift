@@ -1,11 +1,6 @@
 import UIKit
 import ReactiveCocoa
 
-struct SearchyCellItem {
-    let result:SearchResult
-    let image:AnyProperty<UIImage?>
-}
-
 class SearchyCell : UICollectionViewCell {
     static let reuseIdentifier = "\(SearchyCell.self)"
     
@@ -18,7 +13,7 @@ class SearchyCell : UICollectionViewCell {
     
     private let image = MutableProperty<UIImage?>(nil)
     private let item = MutableProperty(SearchResult.emptyResult)
-    private var cellItem:SearchyCellItem?
+    private var cellItem:SearchyDisplayItem?
     
     override init(frame: CGRect) {
         super.init(frame: CGRectZero)
@@ -40,7 +35,7 @@ class SearchyCell : UICollectionViewCell {
         }
     }
     
-    func populateCell(cellItem: SearchyCellItem) {
+    func populateCell(cellItem: SearchyDisplayItem) {
         self.cellItem = cellItem
         item.value = cellItem.result
         image <~ cellItem.image

@@ -95,9 +95,7 @@ class SearchyView: UIView {
                 fatalError()
             }
             
-            let result = data.value[indexPath.row]
-            let image = AnyProperty<UIImage?>(initialValue: nil, producer: imageProvider.imageFromURL(result.iconUrl).map { .Some($0) })
-            cell.populateCell(SearchyCellItem(result: result, image: image))
+            cell.populateCell(SearchyDisplayItem(result: data.value[indexPath.row], imageProvider: imageProvider))
             
             return cell
         }
