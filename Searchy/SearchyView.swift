@@ -53,6 +53,13 @@ class SearchyView: UIView, SearchyTransitionable {
         return cell.convertRect(cell.imageRect(), toView: self)
     }
     
+    func imageViewForItem(item: SearchResult) -> UIImageView? {
+        let rowIndex = searchResults.value.indexOf(item) ?? 0
+        guard let cell = tableHandler.view.cellForItemAtIndexPath(NSIndexPath(forRow: rowIndex, inSection: 0)) as? SearchyCell else { return nil }
+        
+        return cell.imageView
+    }
+    
     class TableHandler : UICollectionViewFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
         private let sizeForSquare = 100
         let view:UICollectionView

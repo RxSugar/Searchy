@@ -1,7 +1,7 @@
 import UIKit
 
 protocol SearchyTransitionable {
-    func imageRectForItem(item: SearchResult) -> CGRect
+    func imageViewForItem(item: SearchResult) -> UIImageView?
 }
 
 class Transition : NSObject, UIViewControllerAnimatedTransitioning {
@@ -14,26 +14,33 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
         guard let fromView = transitionContext.viewForKey(UITransitionContextFromViewKey),
             let toView = transitionContext.viewForKey(UITransitionContextToViewKey),
-        let containerView = transitionContext.containerView(),
-        let fromTransitionable = fromView as? SearchyTransitionable,
-        let toTransitionable = toView as? SearchyTransitionable else { return }
+            let containerView = transitionContext.containerView(),
+            let fromTransitionable = fromView as? SearchyTransitionable,
+            let toTransitionable = toView as? SearchyTransitionable,
+            let fromImageView = fromTransitionable.imageViewForItem(selectedItem),
+            let toImageView = toTransitionable.imageViewForItem(selectedItem) else { return }
         
         toView.frame = transitionContext.finalFrameForViewController(transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
         toView.layoutIfNeeded()
         toView.alpha = 0.0
         containerView.addSubview(toView)
         
-        let imageSnapshot = UIView()
-        imageSnapshot.frame = fromView.convertRect(fromTransitionable.imageRectForItem(selectedItem), toView: containerView)
+        let imageSnapshot = UIImageView(image: fromImageView.image)
+        imageSnapshot.contentMode = fromImageView.contentMode
+        imageSnapshot.frame = fromImageView.convertRect(fromImageView.bounds, toView: containerView)
         print("from: \(imageSnapshot.frame)")
-        imageSnapshot.backgroundColor = UIColor.greenColor()
         containerView.addSubview(imageSnapshot)
+        
+        fromImageView.hidden = true
+        toImageView.hidden = true
         
         UIView.animateWithDuration(0.3, animations: {
             toView.alpha = 1.0
-            imageSnapshot.frame = toView.convertRect(toTransitionable.imageRectForItem(self.selectedItem), toView: containerView)
+            imageSnapshot.frame = toImageView.convertRect(toImageView.bounds, toView: containerView)
             print("to: \(imageSnapshot.frame)")
             }, completion: { _ in
+                fromImageView.hidden = false
+                toImageView.hidden = false
                 imageSnapshot.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
         })

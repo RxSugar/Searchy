@@ -8,7 +8,7 @@ class SearchyCell : UICollectionViewCell {
         return SearchyCell.reuseIdentifier
     }
     
-    private let imageView = UIImageView()
+    let imageView = UIImageView()
     private let label = UILabel()
     
     private let image = MutableProperty<UIImage?>(nil)

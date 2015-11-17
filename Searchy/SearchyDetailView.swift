@@ -11,6 +11,8 @@ class SearchyDetailView: UIView, SearchyTransitionable {
         
         super.init(frame: CGRectZero)
         addSubview(titleLabel)
+        
+        imageView.contentMode = .ScaleAspectFit
         addSubview(imageView)
         backgroundColor = UIColor.whiteColor()
         
@@ -36,7 +38,7 @@ class SearchyDetailView: UIView, SearchyTransitionable {
         
     }
     
-    func imageRectForItem(_: SearchResult) -> CGRect {
-        return imageView.frame
+    func imageViewForItem(item: SearchResult) -> UIImageView? {
+        return imageView
     }
 }
