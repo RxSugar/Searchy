@@ -5,6 +5,6 @@ final class SearchyBinding {
     static func bind(model model:SearchyModel, view:SearchyView, selectionHandler:(SearchResult)->()) {
         view.searchResults <~ model.searchResults
         model.searchTerm <~ view.searchTerm
-        view.selectionEvents.observeNext(selectionHandler)
+        selectionHandler <~ view.selectionEvents
     }
 }
