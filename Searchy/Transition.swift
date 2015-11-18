@@ -1,40 +1,73 @@
 import UIKit
 
-protocol SearchyTransitionable {
+protocol SearchyImageTransitionable : SearchyReversableTransitionable {
     func imageViewForItem(item: SearchResult) -> UIImageView?
+}
+
+protocol SearchyReversableTransitionable {
     func setVisibleTransitionState(visible:Bool)
     func view() -> UIView
 }
 
-extension SearchyTransitionable where Self: UIView {
+extension SearchyReversableTransitionable where Self: UIView {
     func view() -> UIView {
         return self
     }
 }
 
 class Transition : NSObject, UIViewControllerAnimatedTransitioning {
-    let selectedItem: SearchResult
-    let navigationController: UINavigationController
+    let imageTransition: (UIViewControllerContextTransitioning) -> ImageTransition?
     
     init(selectedItem: SearchResult, navigationController: UINavigationController) {
-        self.selectedItem = selectedItem
-        self.navigationController = navigationController
+       self.imageTransition = ImageTransition.build(selectedItem, navigationController: navigationController)
     }
     
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromTransitionable = transitionContext.viewForKey(UITransitionContextFromViewKey) as? SearchyTransitionable,
-            let toTransitionable = transitionContext.viewForKey(UITransitionContextToViewKey) as? SearchyTransitionable,
+        imageTransition(transitionContext)?.animate()
+    }
+    
+    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+        return ImageTransition.duration
+    }
+}
+
+struct ImageTransition {
+    static let duration = 0.3
+    private let navigationController:UINavigationController
+    private let selectedItem:SearchResult
+    private let fromView: UIView
+    private let toView: UIView
+    private let containerView: UIView
+    private let fromImageView: UIImageView
+    private let toImageView: UIImageView
+    private let fromTransitionable: SearchyImageTransitionable
+    private let toTransitionable: SearchyImageTransitionable
+    private let context: UIViewControllerContextTransitioning
+    
+    init?(selectedItem: SearchResult, navigationController: UINavigationController, transitionContext: UIViewControllerContextTransitioning) {
+        guard let fromTransitionable = transitionContext.viewForKey(UITransitionContextFromViewKey) as? SearchyImageTransitionable,
+            let toTransitionable = transitionContext.viewForKey(UITransitionContextToViewKey) as? SearchyImageTransitionable,
             let containerView = transitionContext.containerView(),
             let fromImageView = fromTransitionable.imageViewForItem(selectedItem),
             let toImageView = toTransitionable.imageViewForItem(selectedItem) else {
                 print("FAIL!!!")
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
-                return
+                return nil
         }
         
-        let fromView = fromTransitionable.view()
-        let toView = toTransitionable.view()
-        
+        self.fromTransitionable = fromTransitionable
+        self.toTransitionable = toTransitionable
+        self.containerView = containerView
+        self.fromImageView = fromImageView
+        self.toImageView = toImageView
+        self.fromView = fromTransitionable.view()
+        self.toView = toTransitionable.view()
+        self.context = transitionContext
+        self.navigationController = navigationController
+        self.selectedItem = selectedItem
+    }
+    
+    func animate() {
         let isPush = navigationController.viewControllers.reduce(false) { isPush, viewController in
             return isPush || viewController.isViewLoaded() && viewController.view == fromView
         }
@@ -46,7 +79,7 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
         toTransitionable.setVisibleTransitionState(false)
         fromTransitionable.setVisibleTransitionState(true)
         
-        toView.frame = transitionContext.finalFrameForViewController(transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!)
+        toView.frame = context.finalFrameForViewController(context.viewControllerForKey(UITransitionContextToViewControllerKey)!)
         toView.layoutIfNeeded()
         
         let imageSnapshot = UIImageView(image: fromImageView.image)
@@ -57,19 +90,19 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
         fromImageView.hidden = true
         toImageView.hidden = true
         
-        UIView.animateWithDuration(0.3, animations: {
-            toTransitionable.setVisibleTransitionState(true)
-            fromTransitionable.setVisibleTransitionState(false)
-            imageSnapshot.frame = toImageView.convertRect(toImageView.bounds, toView: containerView)
+        UIView.animateWithDuration(ImageTransition.duration, animations: {
+            self.toTransitionable.setVisibleTransitionState(true)
+            self.fromTransitionable.setVisibleTransitionState(false)
+            imageSnapshot.frame = self.toImageView.convertRect(self.toImageView.bounds, toView: self.containerView)
             }, completion: { _ in
-                fromImageView.hidden = false
-                toImageView.hidden = false
+                self.fromImageView.hidden = false
+                self.toImageView.hidden = false
                 imageSnapshot.removeFromSuperview()
-                transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                self.context.completeTransition(!self.context.transitionWasCancelled())
         })
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
-        return 0.3
+    static func build(selectedItem: SearchResult, navigationController: UINavigationController)(transitionContext: UIViewControllerContextTransitioning) -> ImageTransition? {
+        return self.init(selectedItem: selectedItem, navigationController: navigationController, transitionContext: transitionContext)
     }
 }

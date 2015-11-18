@@ -1,6 +1,6 @@
 import UIKit
 
-class SearchyDetailView: UIView, SearchyTransitionable {
+class SearchyDetailView: UIView, SearchyImageTransitionable {
     private static let margin:CGFloat = 10.0
     private let imageView = UIImageView()
     private let titleLabel = UILabel()

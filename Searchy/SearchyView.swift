@@ -3,7 +3,7 @@ import ReactiveCocoa
 
 let StandardTouchSize = CGFloat(44)
 
-class SearchyView: UIView, SearchyTransitionable {
+class SearchyView: UIView, SearchyImageTransitionable {
     private let tableHandler:TableHandler
     private let textField = UITextField()
     
