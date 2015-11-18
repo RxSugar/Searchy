@@ -91,15 +91,21 @@ struct ImageTransition {
         toImageView.hidden = true
         
         UIView.animateWithDuration(ImageTransition.duration, animations: {
-            self.toTransitionable.setVisibleTransitionState(true)
-            self.fromTransitionable.setVisibleTransitionState(false)
+            self.toTransitionable.setVisibleTransitionState(!self.cancelled())
+            self.fromTransitionable.setVisibleTransitionState(self.cancelled())
             imageSnapshot.frame = self.toImageView.convertRect(self.toImageView.bounds, toView: self.containerView)
             }, completion: { _ in
                 self.fromImageView.hidden = false
                 self.toImageView.hidden = false
+                self.toTransitionable.setVisibleTransitionState(!self.cancelled())
+                self.fromTransitionable.setVisibleTransitionState(self.cancelled())
                 imageSnapshot.removeFromSuperview()
-                self.context.completeTransition(!self.context.transitionWasCancelled())
+                self.context.completeTransition(!self.cancelled())
         })
+    }
+    
+    func cancelled() -> Bool {
+        return self.context.transitionWasCancelled()
     }
     
     static func build(selectedItem: SearchResult, navigationController: UINavigationController)(transitionContext: UIViewControllerContextTransitioning) -> ImageTransition? {
