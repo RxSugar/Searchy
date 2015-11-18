@@ -31,6 +31,6 @@ class SearchyDetailController: UIViewController, UINavigationControllerDelegate 
     }
     
     func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return Transition(selectedItem: self.item.result)
+        return Transition(selectedItem: self.item.result, navigationController: navigationController)
     }
 }

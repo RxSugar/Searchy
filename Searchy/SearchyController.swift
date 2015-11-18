@@ -35,12 +35,13 @@ class SearchyController: UIViewController, UINavigationControllerDelegate {
     }
     
     lazy var selectionHandler:(SearchResult)->() = { [weak self] in
-        guard let this = self else { return }
+        guard let this = self,
+            let navigationController = this.navigationController else { self?.transition = nil; return }
         
-        this.transition = Transition(selectedItem: $0)
+        this.transition = Transition(selectedItem: $0, navigationController: navigationController)
         let item = SearchyDisplayItem(result: $0, imageProvider: this.context.imageProvider)
         let snapshot = this.view.snapshotViewAfterScreenUpdates(false)
-        this.navigationController?.pushViewController(SearchyDetailController(item: item, snapshot: snapshot), animated: true)
+        navigationController.pushViewController(SearchyDetailController(item: item, snapshot: snapshot), animated: true)
     }
     
     func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {

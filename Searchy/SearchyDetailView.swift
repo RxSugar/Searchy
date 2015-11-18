@@ -6,17 +6,17 @@ class SearchyDetailView: UIView, SearchyTransitionable {
     private let titleLabel = UILabel()
     private let item:SearchyDisplayItem
     private let backgroundSnapshot:UIView
-    private let blurView:UIView
+    private let visualEffectView:UIVisualEffectView
     
     init(item: SearchyDisplayItem, backgroundSnapshot: UIView) {
         self.item = item
         self.backgroundSnapshot = backgroundSnapshot
-        self.blurView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        self.visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
         
         super.init(frame: CGRectZero)
         
         addSubview(backgroundSnapshot)
-        addSubview(blurView)
+        addSubview(visualEffectView)
         addSubview(titleLabel)
         
         imageView.contentMode = .ScaleAspectFit
@@ -36,7 +36,7 @@ class SearchyDetailView: UIView, SearchyTransitionable {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundSnapshot.frame = self.bounds
-        blurView.frame = self.bounds
+        visualEffectView.frame = self.bounds
         
         let margin = SearchyDetailView.margin
         
@@ -50,5 +50,9 @@ class SearchyDetailView: UIView, SearchyTransitionable {
     
     func imageViewForItem(item: SearchResult) -> UIImageView? {
         return imageView
+    }
+    
+    func blurView() -> UIVisualEffectView? {
+        return visualEffectView
     }
 }
