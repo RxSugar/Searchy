@@ -19,6 +19,8 @@ class SearchyView: UIView, SearchyTransitionable {
 
         super.init(frame: CGRectZero)
 
+        tableHandler.parent = self
+        
         tableHandler.data <~ searchResults
 
 		textField.placeholder = "Search..."
@@ -27,6 +29,7 @@ class SearchyView: UIView, SearchyTransitionable {
 		textField.leftViewMode = .Always
         textField.clearButtonMode = .Always
         textField.returnKeyType = .Done
+        textField.autocorrectionType = .No
 		self.addSubview(textField)
 
 		self.addSubview(tableHandler.view)
@@ -36,9 +39,7 @@ class SearchyView: UIView, SearchyTransitionable {
 	    fatalError("init(coder:) has not been implemented")
 	}
     
-    func blurView() -> UIVisualEffectView? {
-        return nil
-    }
+    func setVisibleTransitionState(_:Bool) {}
 
 	override func layoutSubviews() {
 		super.layoutSubviews()
@@ -47,7 +48,10 @@ class SearchyView: UIView, SearchyTransitionable {
 		let textFieldHeight = max(textField.sizeThatFits(CGSize(width: contentSize.width, height: CGFloat.max)).height, StandardTouchSize)
 
 		textField.frame = CGRect(x: 0, y: 0, width: contentSize.width, height: textFieldHeight)
-		tableHandler.view.frame = CGRect(x: 0, y: textFieldHeight, width: contentSize.width, height: contentSize.height - textFieldHeight)
+        tableHandler.view.frame = CGRect(x: 0, y: textFieldHeight, width: contentSize.width, height: contentSize.height - textFieldHeight)
+        
+        let sizeForSquare = (self.bounds.width - 30) / 2
+        tableHandler.layout.itemSize = CGSize(width: sizeForSquare, height: sizeForSquare + 20)
 	}
     
     func imageRectForItem(item: SearchResult) -> CGRect {
@@ -65,35 +69,27 @@ class SearchyView: UIView, SearchyTransitionable {
     }
     
     class TableHandler : UICollectionViewFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
-        private let sizeForSquare = 100
+        weak var parent:SearchyView?
         let view:UICollectionView
-        let backView = UIView()
         let data = MutableProperty<SearchResults>([])
-        private var cachedImages = NSCache()
-        private let blankImage = UIImage(named: "blank.png")!
-        private var cacheCount = 0
         private let imageProvider:ImageProvider
         let (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
+        let layout = UICollectionViewFlowLayout()
         
         init(imageProvider: ImageProvider) {
-            let layout = UICollectionViewFlowLayout()
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-            layout.itemSize = CGSize(width: sizeForSquare, height: sizeForSquare)
-            
             self.imageProvider = imageProvider
-            
             view = UICollectionView(frame: CGRect(), collectionViewLayout: layout)
-            view.registerClass(SearchyCell.self, forCellWithReuseIdentifier: SearchyCell.reuseIdentifier)
+            
             super.init()
             
-
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
+            
+            view.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+            view.registerClass(SearchyCell.self, forCellWithReuseIdentifier: SearchyCell.reuseIdentifier)
             view.dataSource = self
             view.delegate = self
             view.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
             view.backgroundColor = UIColor.whiteColor()
-            
-            backView.backgroundColor = UIColor.whiteColor()
-            
             
             data.producer.startWithNext { [unowned self] _ in
                 self.view.reloadData()
@@ -119,6 +115,7 @@ class SearchyView: UIView, SearchyTransitionable {
         }
         
         func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+            parent?.textField.resignFirstResponder()
             selectionObserver.sendNext(data.value[indexPath.row])
         }
     }

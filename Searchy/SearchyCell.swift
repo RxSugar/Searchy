@@ -26,7 +26,8 @@ class SearchyCell : UICollectionViewCell {
         self.contentView.addSubview(imageView)
         
         label.textAlignment = .Center
-        label.font = label.font.fontWithSize(8.0)
+        label.font = label.font.fontWithSize(14.0)
+        label.textColor = UIColor.darkGrayColor()
         label.backgroundColor = UIColor.whiteColor()
         self.contentView.addSubview(label)
         
