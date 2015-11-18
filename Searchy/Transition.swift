@@ -22,14 +22,12 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
     }
     
     func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey),
-            let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey),
+        guard let fromTransitionable = transitionContext.viewForKey(UITransitionContextFromViewKey) as? SearchyTransitionable,
+            let toTransitionable = transitionContext.viewForKey(UITransitionContextToViewKey) as? SearchyTransitionable,
             let containerView = transitionContext.containerView(),
-            let fromTransitionable = fromViewController.view as? SearchyTransitionable,
-            let toTransitionable = toViewController.view as? SearchyTransitionable,
             let fromImageView = fromTransitionable.imageViewForItem(selectedItem),
             let toImageView = toTransitionable.imageViewForItem(selectedItem) else {
-                print("FAIL2!!!")
+                print("FAIL!!!")
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
                 return
         }
@@ -37,7 +35,9 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
         let fromView = fromTransitionable.view()
         let toView = toTransitionable.view()
         
-        let isPush = navigationController.viewControllers.indexOf(fromViewController) != nil
+        let isPush = navigationController.viewControllers.reduce(false) { isPush, viewController in
+            return isPush || viewController.isViewLoaded() && viewController.view == fromView
+        }
         let topView = isPush ? toView : fromView
         containerView.addSubview(fromView)
         containerView.addSubview(toView)
