@@ -130,6 +130,68 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4D1128091BFF7148004370E0 /* Search Results UI */ = {
+			isa = PBXGroup;
+			children = (
+				5A1839361BEA6BC900622B04 /* SearchyController.swift */,
+				5AEB20621BEB9D7700418692 /* SearchyView.swift */,
+				5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */,
+				5A8E371F1BFA262700D6E6BC /* Transition.swift */,
+				5A6326C01BFA8C53000B07CC /* SearchyCell.swift */,
+			);
+			name = "Search Results UI";
+			sourceTree = "<group>";
+		};
+		4D11280A1BFF717E004370E0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5A18395F1BEA7B8500622B04 /* SearchyModel.swift */,
+				5A1839631BEA846900622B04 /* SearchResult.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		4D11280B1BFF7194004370E0 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				5A1839651BEA866300622B04 /* NetworkLayer.swift */,
+				5A1839611BEA7D8400622B04 /* SearchService.swift */,
+				5A6326AE1BFA7189000B07CC /* ImageProvider.swift */,
+			);
+			name = Service;
+			sourceTree = "<group>";
+		};
+		4D11280C1BFF71B9004370E0 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */,
+				5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */,
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
+		4D11280D1BFF7203004370E0 /* Result Detail UI */ = {
+			isa = PBXGroup;
+			children = (
+				5A6326AC1BFA6FBD000B07CC /* SearchyDetailController.swift */,
+				5A6326C21BFB8630000B07CC /* SearchyDisplayItem.swift */,
+				5A6326C41BFB868E000B07CC /* SearchyDetailView.swift */,
+			);
+			name = "Result Detail UI";
+			sourceTree = "<group>";
+		};
+		4D11280E1BFF721D004370E0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5A1839341BEA6BC900622B04 /* AppDelegate.swift */,
+				5A18393D1BEA6BC900622B04 /* Assets.xcassets */,
+				5A18393F1BEA6BC900622B04 /* LaunchScreen.storyboard */,
+				5A1839421BEA6BC900622B04 /* Info.plist */,
+				5A3A5FB51BF3F23700A99B68 /* main.swift */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		5A1839281BEA6BC900622B04 = {
 			isa = PBXGroup;
 			children = (
@@ -152,26 +214,12 @@
 		5A1839331BEA6BC900622B04 /* Searchy */ = {
 			isa = PBXGroup;
 			children = (
-				5A1839341BEA6BC900622B04 /* AppDelegate.swift */,
-				5A1839361BEA6BC900622B04 /* SearchyController.swift */,
-				5AEB20621BEB9D7700418692 /* SearchyView.swift */,
-				5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */,
-				5A18395F1BEA7B8500622B04 /* SearchyModel.swift */,
-				5A1839611BEA7D8400622B04 /* SearchService.swift */,
-				5A1839651BEA866300622B04 /* NetworkLayer.swift */,
-				5A1839631BEA846900622B04 /* SearchResult.swift */,
-				5A18393D1BEA6BC900622B04 /* Assets.xcassets */,
-				5A18393F1BEA6BC900622B04 /* LaunchScreen.storyboard */,
-				5A1839421BEA6BC900622B04 /* Info.plist */,
-				5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */,
-				5A3A5FB51BF3F23700A99B68 /* main.swift */,
-				5A8E371F1BFA262700D6E6BC /* Transition.swift */,
-				5A6326AC1BFA6FBD000B07CC /* SearchyDetailController.swift */,
-				5A6326AE1BFA7189000B07CC /* ImageProvider.swift */,
-				5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */,
-				5A6326C01BFA8C53000B07CC /* SearchyCell.swift */,
-				5A6326C21BFB8630000B07CC /* SearchyDisplayItem.swift */,
-				5A6326C41BFB868E000B07CC /* SearchyDetailView.swift */,
+				4D11280D1BFF7203004370E0 /* Result Detail UI */,
+				4D1128091BFF7148004370E0 /* Search Results UI */,
+				4D11280A1BFF717E004370E0 /* Model */,
+				4D11280B1BFF7194004370E0 /* Service */,
+				4D11280C1BFF71B9004370E0 /* Common */,
+				4D11280E1BFF721D004370E0 /* Supporting Files */,
 			);
 			path = Searchy;
 			sourceTree = "<group>";
