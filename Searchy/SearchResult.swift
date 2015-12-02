@@ -1,13 +1,16 @@
 import Foundation
 
 struct SearchResult: Equatable {
-    let text:String
+    let artist:String
+    let songTitle:String
     let resultUrl:NSURL
-    let iconUrl:NSURL?
+    let iconUrl:NSURL
+    
+    static let emptyResult = SearchResult(artist: "", songTitle: "", resultUrl: NSURL(), iconUrl: NSURL())
 }
 
 typealias SearchResults = [SearchResult]
 
 func ==(lhs:SearchResult, rhs:SearchResult) -> Bool {
-    return lhs.text == rhs.text && lhs.resultUrl == rhs.resultUrl && lhs.iconUrl == rhs.iconUrl
+    return lhs.artist == rhs.artist && lhs.songTitle == rhs.songTitle && lhs.resultUrl == rhs.resultUrl && lhs.iconUrl == rhs.iconUrl
 }

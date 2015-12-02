@@ -11,9 +11,9 @@ struct FakeSearchService: SearchService {
 }
 
 class SearchyModelTests: XCTestCase {
-    let resultOne = SearchResult(text: "One", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: nil)
-    let resultTwo = SearchResult(text: "Two", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: nil)
-    let resultThree = SearchResult(text: "Three", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: nil)
+    let resultOne = SearchResult(artist: "One", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
+    let resultTwo = SearchResult(artist: "Two", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
+    let resultThree = SearchResult(artist: "Three", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
     
     let results = MutableProperty(SearchResults())
     
