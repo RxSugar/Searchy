@@ -1,6 +1,6 @@
 import XCTest
-import ReactiveCocoa
 @testable import Searchy
+import RxSwift
 
 struct FakeSearchService: SearchService {
     let searchOperation:(String, (ServiceResponse<SearchResults>) -> ()) -> ()
@@ -15,7 +15,7 @@ class SearchyModelTests: XCTestCase {
     let resultTwo = SearchResult(artist: "Two", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
     let resultThree = SearchResult(artist: "Three", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
     
-    let results = MutableProperty(SearchResults())
+    let results = Variable(SearchResults())
     
     func synchronousSearchService() -> FakeSearchService {
         return FakeSearchService { term, completion in
@@ -39,7 +39,7 @@ class SearchyModelTests: XCTestCase {
     
     func testWhenEmptyStringIsSearchedThenResultsAreEmpty() {
         let model = SearchyModel(searchService: synchronousSearchService())
-        results <~ model.searchResults
+        _ = results <~ model.searchResults
         model.searchTerm.value = "Stuff"
         
         model.searchTerm.value = ""
@@ -49,7 +49,7 @@ class SearchyModelTests: XCTestCase {
     
     func testWhenWhitespaceIsSearchedThenResultsAreEmpty() {
         let model = SearchyModel(searchService: synchronousSearchService())
-        results <~ model.searchResults
+        _ = results <~ model.searchResults
         model.searchTerm.value = "Stuff"
         
         model.searchTerm.value = " \n  "
@@ -59,7 +59,7 @@ class SearchyModelTests: XCTestCase {
     
     func testWhenResultIsReturnedThenResultsAreCorrect() {
         let model = SearchyModel(searchService: synchronousSearchService())
-        results <~ model.searchResults
+        _ = results <~ model.searchResults
         
         model.searchTerm.value = "Stuff"
         
@@ -68,7 +68,7 @@ class SearchyModelTests: XCTestCase {
     
     func testWhenResultIsReturnedAsAnErrorThenResultsAreEmptyArray() {
         let model = SearchyModel(searchService: synchronousSearchService())
-        results <~ model.searchResults
+        _ = results <~ model.searchResults
         model.searchTerm.value = "Stuff"
         
         model.searchTerm.value = "BadSearch"
@@ -95,7 +95,7 @@ class SearchyModelTests: XCTestCase {
         }
         
         let model = SearchyModel(searchService: searchService)
-        results <~ model.searchResults
+        _ = results <~ model.searchResults
         
         model.searchTerm.value = "1"
         model.searchTerm.value = "2"

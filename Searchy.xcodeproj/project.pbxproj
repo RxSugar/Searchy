@@ -7,14 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A0CFB5F1C0F6F34004069F8 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */; };
-		5A0CFB601C0F6F34004069F8 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4DCB710B1C4E95A40027B59B /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB710A1C4E95A40027B59B /* RxSwift.framework */; };
+		4DCB710C1C4E95A40027B59B /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB710A1C4E95A40027B59B /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4DCB710E1C4EA6220027B59B /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB710D1C4EA6220027B59B /* RxCocoa.framework */; };
+		4DCB710F1C4EA6220027B59B /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4DCB710D1C4EA6220027B59B /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4DCB71121C4EABB50027B59B /* RxOperators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71101C4EABB50027B59B /* RxOperators.swift */; };
+		4DCB71141C4EABB90027B59B /* RxOperatorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71111C4EABB50027B59B /* RxOperatorsTests.swift */; };
+		4DCB71161C4EABC70027B59B /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71151C4EABC70027B59B /* Optional.swift */; };
+		4DCB71181C4EAD020027B59B /* RxVariableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71171C4EAD020027B59B /* RxVariableBinding.swift */; };
+		4DCB711A1C4EAD0C0027B59B /* RxVariableBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71191C4EAD0C0027B59B /* RxVariableBindingTests.swift */; };
+		4DCB711C1C4EAF030027B59B /* RxDisposal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB711B1C4EAF030027B59B /* RxDisposal.swift */; };
 		5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839341BEA6BC900622B04 /* AppDelegate.swift */; };
 		5A1839371BEA6BC900622B04 /* SearchyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839361BEA6BC900622B04 /* SearchyController.swift */; };
 		5A18393E1BEA6BC900622B04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A18393D1BEA6BC900622B04 /* Assets.xcassets */; };
 		5A1839411BEA6BC900622B04 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5A18393F1BEA6BC900622B04 /* LaunchScreen.storyboard */; };
-		5A1839591BEA764000622B04 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839551BEA762100622B04 /* ReactiveCocoa.framework */; };
-		5A18395A1BEA764000622B04 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839551BEA762100622B04 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A18395B1BEA764000622B04 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; };
 		5A18395C1BEA764000622B04 /* Result.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */; };
@@ -23,9 +29,7 @@
 		5A1839641BEA846900622B04 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839631BEA846900622B04 /* SearchResult.swift */; };
 		5A1839661BEA866400622B04 /* NetworkLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839651BEA866300622B04 /* NetworkLayer.swift */; };
 		5A3A5FAA1BF3936800A99B68 /* SearchyModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */; };
-		5A3A5FB11BF39D8800A99B68 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839551BEA762100622B04 /* ReactiveCocoa.framework */; };
 		5A3A5FB21BF39D8800A99B68 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A1839561BEA762100622B04 /* Result.framework */; };
-		5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */; };
 		5A3A5FB61BF3F23700A99B68 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A5FB51BF3F23700A99B68 /* main.swift */; };
 		5A6326AD1BFA6FBD000B07CC /* SearchyDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6326AC1BFA6FBD000B07CC /* SearchyDetailController.swift */; };
 		5A6326AF1BFA7189000B07CC /* ImageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6326AE1BFA7189000B07CC /* ImageProvider.swift */; };
@@ -59,9 +63,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5A18395A1BEA764000622B04 /* ReactiveCocoa.framework in Embed Frameworks */,
+				4DCB710F1C4EA6220027B59B /* RxCocoa.framework in Embed Frameworks */,
 				5A18395C1BEA764000622B04 /* Result.framework in Embed Frameworks */,
-				5A0CFB601C0F6F34004069F8 /* RxSwift.framework in Embed Frameworks */,
+				4DCB710C1C4E95A40027B59B /* RxSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,14 +73,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		4DCB710A1C4E95A40027B59B /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		4DCB710D1C4EA6220027B59B /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		4DCB71101C4EABB50027B59B /* RxOperators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxOperators.swift; sourceTree = "<group>"; };
+		4DCB71111C4EABB50027B59B /* RxOperatorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxOperatorsTests.swift; sourceTree = "<group>"; };
+		4DCB71151C4EABC70027B59B /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		4DCB71171C4EAD020027B59B /* RxVariableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxVariableBinding.swift; sourceTree = "<group>"; };
+		4DCB71191C4EAD0C0027B59B /* RxVariableBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxVariableBindingTests.swift; sourceTree = "<group>"; };
+		4DCB711B1C4EAF030027B59B /* RxDisposal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxDisposal.swift; sourceTree = "<group>"; };
 		5A1839311BEA6BC900622B04 /* Searchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Searchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A1839341BEA6BC900622B04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A1839361BEA6BC900622B04 /* SearchyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchyController.swift; sourceTree = "<group>"; };
 		5A18393D1BEA6BC900622B04 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5A1839401BEA6BC900622B04 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5A1839421BEA6BC900622B04 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5A1839551BEA762100622B04 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		5A1839561BEA762100622B04 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
 		5A18395D1BEA7B4B00622B04 /* SearchyBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyBinding.swift; sourceTree = "<group>"; };
 		5A18395F1BEA7B8500622B04 /* SearchyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyModel.swift; sourceTree = "<group>"; };
@@ -86,7 +96,6 @@
 		5A3A5FA71BF3936800A99B68 /* SearchyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SearchyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A3A5FA91BF3936800A99B68 /* SearchyModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchyModelTests.swift; sourceTree = "<group>"; };
 		5A3A5FAB1BF3936800A99B68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveExtensions.swift; sourceTree = "<group>"; };
 		5A3A5FB51BF3F23700A99B68 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5A6326AC1BFA6FBD000B07CC /* SearchyDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyDetailController.swift; sourceTree = "<group>"; };
 		5A6326AE1BFA7189000B07CC /* ImageProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProvider.swift; sourceTree = "<group>"; };
@@ -108,9 +117,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A1839591BEA764000622B04 /* ReactiveCocoa.framework in Frameworks */,
+				4DCB710E1C4EA6220027B59B /* RxCocoa.framework in Frameworks */,
 				5A18395B1BEA764000622B04 /* Result.framework in Frameworks */,
-				5A0CFB5F1C0F6F34004069F8 /* RxSwift.framework in Frameworks */,
+				4DCB710B1C4E95A40027B59B /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,7 +127,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A3A5FB11BF39D8800A99B68 /* ReactiveCocoa.framework in Frameworks */,
 				5A3A5FB21BF39D8800A99B68 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,8 +137,8 @@
 		24CD4A6213AEED8C0DE7C23F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */,
-				5A1839551BEA762100622B04 /* ReactiveCocoa.framework */,
+				4DCB710D1C4EA6220027B59B /* RxCocoa.framework */,
+				4DCB710A1C4E95A40027B59B /* RxSwift.framework */,
 				5A1839561BEA762100622B04 /* Result.framework */,
 			);
 			name = Frameworks;
@@ -170,8 +178,13 @@
 		4D11280C1BFF71B9004370E0 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				5A3A5FB31BF3DF0700A99B68 /* ReactiveExtensions.swift */,
 				5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */,
+				4DCB71151C4EABC70027B59B /* Optional.swift */,
+				4DCB711B1C4EAF030027B59B /* RxDisposal.swift */,
+				4DCB71101C4EABB50027B59B /* RxOperators.swift */,
+				4DCB71171C4EAD020027B59B /* RxVariableBinding.swift */,
+				4DCB71191C4EAD0C0027B59B /* RxVariableBindingTests.swift */,
+				4DCB71111C4EABB50027B59B /* RxOperatorsTests.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -355,17 +368,20 @@
 				5A6326BF1BFA8ACE000B07CC /* ApplicationContext.swift in Sources */,
 				5A1839601BEA7B8500622B04 /* SearchyModel.swift in Sources */,
 				5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */,
+				4DCB71181C4EAD020027B59B /* RxVariableBinding.swift in Sources */,
 				5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */,
 				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
 				5A6326C31BFB8630000B07CC /* SearchyDisplayItem.swift in Sources */,
 				5A6326C11BFA8C53000B07CC /* SearchyCell.swift in Sources */,
+				4DCB71121C4EABB50027B59B /* RxOperators.swift in Sources */,
 				5A3A5FB61BF3F23700A99B68 /* main.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
-				5A3A5FB41BF3DF0700A99B68 /* ReactiveExtensions.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,
 				5A6326C51BFB868E000B07CC /* SearchyDetailView.swift in Sources */,
+				4DCB711C1C4EAF030027B59B /* RxDisposal.swift in Sources */,
 				5A6326AD1BFA6FBD000B07CC /* SearchyDetailController.swift in Sources */,
 				5A6326AF1BFA7189000B07CC /* ImageProvider.swift in Sources */,
+				4DCB71161C4EABC70027B59B /* Optional.swift in Sources */,
 				5A8E37201BFA262700D6E6BC /* Transition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,6 +391,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A6326B11BFA7355000B07CC /* ImageProviderTests.swift in Sources */,
+				4DCB711A1C4EAD0C0027B59B /* RxVariableBindingTests.swift in Sources */,
+				4DCB71141C4EABB90027B59B /* RxOperatorsTests.swift in Sources */,
 				5A3A5FAA1BF3936800A99B68 /* SearchyModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

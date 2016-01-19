@@ -9,8 +9,16 @@ if [ `xcodebuild -showsdks | grep tvOS | wc -l` -gt 0 ]; then
 fi
 
 if [ "$1" == "r" ]; then
-	printf "${GREEN}Pre release tests on, hang on tight ...${RESET}"
+	printf "${GREEN}Pre release tests on, hang on tight ...${RESET}\n"
 	RELEASE_TEST=1
+fi
+
+./scripts/validate-headers.swift
+./scripts/package-spm.swift > /dev/null
+
+if [ `git ls-files -o -d --exclude-standard | wc -l` -gt 0 ]; then
+	echo "Package for Swift package manager isn't updated, please run ./scripts/package-spm.swift and commit the changes"
+	exit -1
 fi
 
 # ios 7 sim
@@ -31,7 +39,19 @@ if [ "${RELEASE_TEST}" -eq 1 ]; then
 	. scripts/automation-tests.sh
 fi
 
-CONFIGURATIONS=(Release)
+CONFIGURATIONS=(Release-Tests)
+
+if [ "${RELEASE_TEST}" -eq 1 ]; then
+	CONFIGURATIONS=(Release Release-Tests Debug)
+fi
+
+#make sure all tvOS tests pass
+if [ $TV_OS -eq 1 ]; then
+	for configuration in ${CONFIGURATIONS[@]}
+	do
+		rx "RxSwift-tvOS" ${configuration} $DEFAULT_TVOS_SIMULATOR test
+	done
+fi
 
 # make sure watchos builds
 # temporary solution
@@ -40,36 +60,15 @@ for scheme in ${WATCH_OS_BUILD_TARGETS[@]}
 do
 	for configuration in ${CONFIGURATIONS[@]}
 	do
-		echo
-		printf "${GREEN}${build} ${BOLDCYAN}${scheme} - ${configuration}${RESET}\n"
-		echo
-		xcodebuild -workspace Rx.xcworkspace \
-					-scheme ${scheme} \
-					-configuration ${configuration} \
-					-sdk watchos \
-					-derivedDataPath "${BUILD_DIRECTORY}" \
-					build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty -c; STATUS=${PIPESTATUS[0]}
-
-		if [ $STATUS -ne 0 ]; then
-			echo $STATUS
-	 		exit $STATUS
-		fi
+		rx "${scheme}" "${configuration}" "${DEFAULT_WATCHOS2_SIMULATOR}" build
 	done
 done
 
 #make sure all iOS tests pass
 for configuration in ${CONFIGURATIONS[@]}
 do
-	rx "RxTests-iOS" ${configuration} $DEFAULT_IOS9_SIMULATOR test
+	rx "RxSwift-iOS" ${configuration} $DEFAULT_IOS9_SIMULATOR test
 done
-
-#make sure all tvOS tests pass
-if [ $TV_OS -eq 1 ]; then
-	for configuration in ${CONFIGURATIONS[@]}
-	do
-		rx "RxTests-tvOS" ${configuration} $DEFAULT_TVOS_SIMULATOR test
-	done
-fi
 
 #make sure all watchOS tests pass
 #tests for Watch OS are not available rdar://21760513
@@ -81,7 +80,7 @@ fi
 #make sure all OSX tests pass
 for configuration in ${CONFIGURATIONS[@]}
 do
-	rx "RxTests-OSX" ${configuration} "" test
+	rx "RxSwift-OSX" ${configuration} "" test
 done
 
 # make sure no module can be built
@@ -89,8 +88,6 @@ for scheme in "RxExample-iOS-no-module"
 do
 	for configuration in ${CONFIGURATIONS[@]}
 	do
-		#rx ${scheme} ${configuration} $DEFAULT_IOS7_SIMULATOR build
-		#rx ${scheme} ${configuration} $DEFAULT_IOS8_SIMULATOR build
 		rx ${scheme} ${configuration} $DEFAULT_IOS9_SIMULATOR build
 	done
 done
@@ -100,8 +97,16 @@ for scheme in "RxExample-iOS"
 do
 	for configuration in ${CONFIGURATIONS[@]}
 	do
-	rx ${scheme} ${configuration} $DEFAULT_IOS9_SIMULATOR build
+		rx ${scheme} ${configuration} $DEFAULT_IOS9_SIMULATOR build
 	done
+done
+
+for scheme in "RxExample-iOS"
+do
+    for configuration in "Debug"
+    do
+        rx ${scheme} ${configuration} $DEFAULT_IOS9_SIMULATOR test
+    done
 done
 
 # make sure osx builds
@@ -115,9 +120,9 @@ done
 
 # compile and run playgrounds
 
-. scripts/playgrounds.sh
+. scripts/validate-playgrounds.sh
 
 if [ "${RELEASE_TEST}" -eq 1 ]; then
-	mdast -u mdast-slug -u mdast-validate-links ./*.md
-	mdast -u mdast-slug -u mdast-validate-links ./**/*.md
+    scripts/validate-markdown.sh
+	scripts/validate-podspec.sh
 fi

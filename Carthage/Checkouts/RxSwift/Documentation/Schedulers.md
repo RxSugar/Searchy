@@ -23,11 +23,11 @@ Example of using `observeOn` operator
 sequence1
   .observeOn(backgroundScheduler)
   .map { n in
-      println("This is performed on background scheduler")
+      print("This is performed on background scheduler")
   }
-  .observeOn(MainScheduler.sharedInstance)
+  .observeOn(MainScheduler.instance)
   .map { n in
-      println("This is performed on main scheduler")
+      print("This is performed on main scheduler")
   }
 ```
 

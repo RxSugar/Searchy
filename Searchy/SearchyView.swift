@@ -1,27 +1,29 @@
 import UIKit
-import ReactiveCocoa
+import RxSwift
+import RxCocoa
 
 let StandardTouchSize = CGFloat(44)
 
 class SearchyView: UIView, SearchyImageTransitionable {
+	private let disposeBag = DisposeBag()
     private let tableHandler:TableHandler
     private let textField = UITextField()
     
-    let searchResults = MutableProperty<SearchResults>([])
-    let selectionEvents:Signal<SearchResult, NoError>
+    let searchResults = Variable<SearchResults>([])
+    let selectionEvents:Observable<SearchResult>
     
-    var searchTerm:SignalProducer<String, NoError>
+    var searchTerm:Observable<String>
     
     init(imageProvider: ImageProvider) {
         tableHandler = TableHandler(imageProvider: imageProvider)
-        selectionEvents = tableHandler.selectionStream
-        searchTerm = textField.textChanges().throttle(0.33, onScheduler: QueueScheduler.mainQueueScheduler)
+        selectionEvents = tableHandler.selectionEvents
+        searchTerm = textField.rx_text.debounce(0.33, scheduler: MainScheduler.instance)
         
         super.init(frame: CGRectZero)
         
         tableHandler.parent = self
         
-        tableHandler.data <~ searchResults
+        disposeBag ++ (tableHandler.data <~ searchResults)
         
         textField.placeholder = "Search..."
         textField.backgroundColor = UIColor(white: 0.925, alpha: 1.0)
@@ -69,14 +71,17 @@ class SearchyView: UIView, SearchyImageTransitionable {
     }
     
     class TableHandler : UICollectionViewFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
+		private let disposeBag = DisposeBag()
         weak var parent:SearchyView?
         let view:UICollectionView
-        let data = MutableProperty<SearchResults>([])
+        let data = Variable<SearchResults>([])
         private let imageProvider:ImageProvider
-        let (selectionStream, selectionObserver) = Signal<SearchResult, NoError>.pipe()
+		private let selectionEventsPublisher = PublishSubject<SearchResult>()
+		let selectionEvents:Observable<SearchResult>
         let layout = UICollectionViewFlowLayout()
         
         init(imageProvider: ImageProvider) {
+			selectionEvents = selectionEventsPublisher.asObservable()
             self.imageProvider = imageProvider
             view = UICollectionView(frame: CGRect(), collectionViewLayout: layout)
             
@@ -91,9 +96,9 @@ class SearchyView: UIView, SearchyImageTransitionable {
             view.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
             view.backgroundColor = UIColor.whiteColor()
             
-            data.producer.startWithNext { [unowned self] _ in
+            data.asObservable().subscribeNext { [unowned self] _ in
                 self.view.reloadData()
-            }
+            }.addDisposableTo(disposeBag)
         }
         
         required init?(coder aDecoder: NSCoder) {
@@ -116,7 +121,7 @@ class SearchyView: UIView, SearchyImageTransitionable {
         
         func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
             parent?.textField.resignFirstResponder()
-            selectionObserver.sendNext(data.value[indexPath.row])
+            selectionEventsPublisher.onNext(data.value[indexPath.row])
         }
     }
 }

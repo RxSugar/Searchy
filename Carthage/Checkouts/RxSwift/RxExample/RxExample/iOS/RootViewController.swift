@@ -3,11 +3,15 @@
 //  RxExample
 //
 //  Created by Krunoslav Zaher on 4/6/15.
-//  Copyright (c) 2015 Krunoslav Zaher. All rights reserved.
+//  Copyright © 2015 Krunoslav Zaher. All rights reserved.
 //
 
 import Foundation
 import UIKit
+#if !RX_NO_MODULE
+    import RxSwift
+    import RxCocoa
+#endif
 
 public class RootViewController : UITableViewController {
     public override func viewDidLoad() {
@@ -16,5 +20,8 @@ public class RootViewController : UITableViewController {
         GitHubSearchRepositoriesAPI.sharedAPI.activityIndicator
         DefaultWikipediaAPI.sharedAPI
         DefaultImageService.sharedImageService
+        DefaultWireframe.sharedInstance
+        MainScheduler.instance
+        ReachabilityService.sharedReachabilityService
     }
 }

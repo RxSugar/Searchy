@@ -3,7 +3,7 @@
 //  RxCocoa
 //
 //  Created by Krunoslav Zaher on 5/31/15.
-//  Copyright (c) 2015 Krunoslav Zaher. All rights reserved.
+//  Copyright © 2015 Krunoslav Zaher. All rights reserved.
 //
 
 import Foundation
@@ -16,15 +16,15 @@ var rx_value_key: UInt8 = 0
 var rx_control_events_key: UInt8 = 0
 
 extension NSControl {
-    
+
     /**
     Reactive wrapper for control event.
     */
-    public var rx_controlEvents: ControlEvent<Void> {
+    public var rx_controlEvent: ControlEvent<Void> {
         MainScheduler.ensureExecutingOnScheduler()
 
         let source = rx_lazyInstanceObservable(&rx_control_events_key) { () -> Observable<Void> in
-            create { [weak self] observer in
+            Observable.create { [weak self] observer in
                 MainScheduler.ensureExecutingOnScheduler()
 
                 guard let control = self else {
@@ -40,7 +40,7 @@ extension NSControl {
             }.takeUntil(self.rx_deallocated)
         }
         
-        return ControlEvent(source: source)
+        return ControlEvent(events: source)
     }
 
     /**
@@ -59,11 +59,11 @@ extension NSControl {
         return observable
     }
 
-    func rx_value<T>(getter getter: () -> T, setter: T -> Void) -> ControlProperty<T> {
+    func rx_value<T: Equatable>(getter getter: () -> T, setter: T -> Void) -> ControlProperty<T> {
         MainScheduler.ensureExecutingOnScheduler()
 
         let source = rx_lazyInstanceObservable(&rx_value_key) { () -> Observable<T> in
-            return create { [weak self] observer in
+            return Observable.create { [weak self] observer in
                 guard let control = self else {
                     observer.on(.Completed)
                     return NopDisposable.instance
@@ -76,11 +76,13 @@ extension NSControl {
                 }
                 
                 return observer
-            }.takeUntil(self.rx_deallocated)
+            }
+                .distinctUntilChanged()
+                .takeUntil(self.rx_deallocated)
         }
 
 
-        return ControlProperty(source: source, observer: AnyObserver { event in
+        return ControlProperty(values: source, valueSink: AnyObserver { event in
             switch event {
             case .Next(let value):
                 setter(value)
@@ -91,5 +93,23 @@ extension NSControl {
             }
         })
     }
-    
+
+    /**
+     Bindable sink for `enabled` property.
+    */
+    public var rx_enabled: AnyObserver<Bool> {
+        return AnyObserver { [weak self] event in
+            MainScheduler.ensureExecutingOnScheduler()
+
+            switch event {
+            case .Next(let value):
+                self?.enabled = value
+            case .Error(let error):
+                bindingErrorToInterface(error)
+                break
+            case .Completed:
+                break
+            }
+        }
+    }
 }

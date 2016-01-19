@@ -1,7 +1,7 @@
 import XCTest
 @testable import Searchy
-import ReactiveCocoa
 import Result
+import RxSwift
 
 func testImageNamed(named: String) -> UIImage! {
     return UIImage(named: named, inBundle: NSBundle(forClass: FakeNetworkLayer.self), compatibleWithTraitCollection: nil)!
@@ -38,12 +38,12 @@ class FakeNetworkLayer : NetworkLayer {
 }
 
 class ImageProviderTests: XCTestCase {
-    let result = MutableProperty(UIImage())
+    let result = Variable(UIImage())
     
     func testWhenImageIsRequestedThenImageIsLoaded() {
         let testObject = ImageProvider(networkLayer: FakeNetworkLayer())
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/one.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/one.png")!)
         
         XCTAssertEqual(result.value.pngData(), FakeNetworkLayer.cloneOne.pngData())
     }
@@ -52,14 +52,14 @@ class ImageProviderTests: XCTestCase {
         let testObject = ImageProvider(networkLayer: FakeNetworkLayer())
         
         var count = 0
-        result.producer.startWithNext { _ in
+        _ = result.asObservable().subscribeNext { _ in
             count++
         }
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
         let firstLoad = result.value
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
         let secondLoad = result.value
         
         XCTAssertEqual(count, 3) // initial value, then two loads
@@ -69,16 +69,16 @@ class ImageProviderTests: XCTestCase {
     func testMultipleImagesAreCached() {
         let testObject = ImageProvider(networkLayer: FakeNetworkLayer())
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
         let firstLoad = result.value
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/three.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/three.png")!)
         let secondLoad = result.value
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/two.png")!)
         let thirdLoad = result.value
         
-        result <~ testObject.imageFromURL(NSURL(string: "http://example.com/three.png")!)
+        _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/three.png")!)
         let fourthLoad = result.value
         
         XCTAssertEqual(firstLoad.pngData(), FakeNetworkLayer.cloneTwo.pngData())

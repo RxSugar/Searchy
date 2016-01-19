@@ -1,5 +1,6 @@
 import Foundation
-import ReactiveCocoa
+import RxSwift
+import RxCocoa
 
 enum ServiceResponse<T> {
 	case Success(T)
@@ -38,7 +39,7 @@ struct ItunesSearchService: SearchService {
 		networkLayer.getServiceResponseWithUrl(url) { result in
             switch result {
             case .Success(let jsonResponse):
-                guard let json = jsonResponse as? Dictionary<String,AnyObject>, let itemJsonObjects = json["results"] as? Array<Dictionary<String,AnyObject>> else {
+                guard let json = jsonResponse as? Dictionary<String, AnyObject>, let itemJsonObjects = json["results"] as? Array<Dictionary<String,AnyObject>> else {
                     print("Request succeeded, but no data was returned: \(jsonResponse)")
                     completion(.Success([]))
                     return
@@ -58,10 +59,13 @@ struct ItunesSearchService: SearchService {
 }
 
 extension SearchResult {
-    static func buildFromJson(json:Dictionary<String,AnyObject>) -> SearchResult? {
-        guard let artist = json["artistName"] as? String else { return nil }
-        guard let songTitle = json["trackName"] as? String else { return nil }
-        guard let url = json["previewUrl"] as? String, resultUrl =  NSURL(string: url) else { return nil }
+    static func buildFromJson(json:Dictionary<String, AnyObject>) -> SearchResult? {
+        guard let
+			artist = json["artistName"] as? String,
+			songTitle = json["trackName"] as? String,
+			url = json["previewUrl"] as? String,
+			resultUrl =  NSURL(string: url)
+			else { return nil }
         
         let imageString100px = json["artworkUrl100"] as? String ?? ""
         let imageString600px = imageString100px.stringByReplacingOccurrencesOfString("100x100", withString: "600x600")

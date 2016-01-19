@@ -3,7 +3,7 @@
 //  Example
 //
 //  Created by Krunoslav Zaher on 4/3/15.
-//  Copyright (c) 2015 Krunoslav Zaher. All rights reserved.
+//  Copyright © 2015 Krunoslav Zaher. All rights reserved.
 //
 
 import Foundation
@@ -29,6 +29,8 @@ protocol Wireframe {
 
 
 class DefaultWireframe: Wireframe {
+    static let sharedInstance = DefaultWireframe()
+
     func openURL(URL: NSURL) {
         #if os(iOS)
             UIApplication.sharedApplication().openURL(URL)
@@ -37,42 +39,44 @@ class DefaultWireframe: Wireframe {
         #endif
     }
 
+    #if os(iOS)
+    private static func rootViewController() -> UIViewController {
+        // cheating, I know
+        return UIApplication.sharedApplication().keyWindow!.rootViewController!
+    }
+    #endif
+
+    static func presentAlert(message: String) {
+        #if os(iOS)
+            let alertView = UIAlertController(title: "RxExample", message: message, preferredStyle: .Alert)
+            alertView.addAction(UIAlertAction(title: "OK", style: .Cancel) { _ in
+            })
+            rootViewController().presentViewController(alertView, animated: true, completion: nil)
+        #endif
+    }
+
     func promptFor<Action : CustomStringConvertible>(message: String, cancelAction: Action, actions: [Action]) -> Observable<Action> {
         #if os(iOS)
-        return create { observer in
-            let alertView = UIAlertView(
-                title: "RxExample",
-                message: message,
-                delegate: nil,
-                cancelButtonTitle: cancelAction.description
-            )
+        return Observable.create { observer in
+            let alertView = UIAlertController(title: "RxExample", message: message, preferredStyle: .Alert)
+            alertView.addAction(UIAlertAction(title: cancelAction.description, style: .Cancel) { _ in
+                observer.on(.Next(cancelAction))
+            })
 
             for action in actions {
-                alertView.addButtonWithTitle(action.description)
+                alertView.addAction(UIAlertAction(title: action.description, style: .Default) { _ in
+                    observer.on(.Next(action))
+                })
             }
 
-            alertView.show()
-
-            observer.on(.Next(alertView))
+            DefaultWireframe.rootViewController().presentViewController(alertView, animated: true, completion: nil)
 
             return AnonymousDisposable {
-                alertView.dismissWithClickedButtonIndex(-1, animated: true)
-            }
-        }.flatMap { (alertView: UIAlertView) -> Observable<Action> in
-            return alertView.rx_didDismissWithButtonIndex.flatMap { index -> Observable<Action> in
-                if index < 0 {
-                    return empty()
-                }
-
-                if index == 0 {
-                    return just(cancelAction)
-                }
-
-                return just(actions[index - 1])
+                alertView.dismissViewControllerAnimated(false, completion: nil)
             }
         }
         #elseif os(OSX)
-            return failWith(NSError(domain: "Unimplemented", code: -1, userInfo: nil))
+            return Observable.error(NSError(domain: "Unimplemented", code: -1, userInfo: nil))
         #endif
     }
 }

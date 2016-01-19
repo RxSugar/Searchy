@@ -7,7 +7,7 @@ struct SearchyDisplayItem {
     
     init(result:SearchResult, imageProvider:ImageProvider) {
         self.result = result
-        let fetchImage = imageProvider.imageFromURL2(result.iconUrl)
+        let fetchImage = imageProvider.imageFromURL(result.iconUrl)
         
         let connectableImage = fetchImage.replay(1)
         connectableImage.connect()

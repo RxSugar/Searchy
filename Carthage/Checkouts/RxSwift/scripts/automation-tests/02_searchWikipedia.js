@@ -6,7 +6,7 @@ test("----- searchWikipedia -----", function (check, pass) {
 
   var width = target.frontMostApp().mainWindow().rect().size.width
 
-  target.frontMostApp().mainWindow().tableViews()[0].cells()[3].tap();
+  target.frontMostApp().mainWindow().tableViews()[0].cells()[11].tap();
 
   target.delay(2);
 
@@ -29,7 +29,7 @@ test("----- searchWikipedia -----", function (check, pass) {
 
   target.tap({x:width - 40, y:43});
 
-  target.frontMostApp().navigationBar().leftButton().tap();
+  goBack();
 
-  pass()
+  pass();
 });

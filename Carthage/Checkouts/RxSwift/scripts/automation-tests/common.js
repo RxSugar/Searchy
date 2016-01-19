@@ -1,3 +1,10 @@
+var goBack = function() {
+   UIATarget.localTarget().frontMostApp().navigationBar().leftButton().tap()
+}
+
+var typeString = function(value) {
+    UIATarget.localTarget().frontMostApp().keyboard().typeString(value)
+}
 
 function test(testName, callback) {
 
@@ -45,10 +52,4 @@ function warning(string) {
 
 function sleep(time) {
   UIATarget.localTarget().delay(time);
-}
-
-function writeInElement(element, text) {
-  for (var i = 1; i < text.length + 1; i++) {
-    element.setValue(text.substring(0, i));
-  }
 }

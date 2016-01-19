@@ -34,3 +34,19 @@ timeline.xctimeline
 # Carthage/Checkouts
 
 Carthage/Build
+
+
+# Various
+
+.DS_Store
+
+
+# Linux
+
+*.swp
+*.swo
+
+# Swift Package Manager
+
+.build/
+Packages/

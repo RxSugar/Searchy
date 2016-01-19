@@ -1,2 +1,2 @@
-github "ReactiveCocoa/ReactiveCocoa" ~> 4.0.0
 github "ReactiveX/RxSwift" ~> 2.0.0
+github "antitypical/Result"

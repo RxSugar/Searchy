@@ -1,21 +1,19 @@
 import UIKit
-import ReactiveCocoa
 import RxSwift
 
 class SearchyCell : UICollectionViewCell {
     static let reuseIdentifier = "\(SearchyCell.self)"
+	private var cellReuseDisposeBag = DisposeBag()
     
     override var reuseIdentifier:String {
         return SearchyCell.reuseIdentifier
     }
     
     let imageSubject = PublishSubject<UIImage?>()
-    var disposeBag2 = DisposeBag()
-    var disposeBag = DisposeBag()
     let imageView = UIImageView()
     private let label = UILabel()
     
-    private let item = MutableProperty(SearchResult.emptyResult)
+    private let item = Variable(SearchResult.emptyResult)
     private var cellItem:SearchyDisplayItem?
     
     func imageRect() -> CGRect {
@@ -34,36 +32,28 @@ class SearchyCell : UICollectionViewCell {
         label.backgroundColor = UIColor.whiteColor()
         self.contentView.addSubview(label)
         
-        item.producer.startWithNext { [unowned self] item in
+        item.asObservable().subscribeNext { [unowned self] item in
             self.label.text = "\(item.artist) - \(item.songTitle)"
-        }
+        }.addDisposableTo(rx_disposeBag)
         
         imageSubject.subscribeNext {
             print("setting image: \($0)")
             self.imageView.image = $0
-        }.addDisposableTo(disposeBag2)
+        }.addDisposableTo(rx_disposeBag)
     }
     
     func populateCell(cellItem: SearchyDisplayItem) {
         self.cellItem = cellItem
         item.value = cellItem.result
         
-//        cellItem.image.subscribe(imageSubject).addDisposableTo(disposeBag)
-        
         cellItem.image.subscribeNext {
             self.imageSubject.onNext($0)
-        }.addDisposableTo(disposeBag)
-        
-        
-//        cellItem.image.subscribeNext {
-//            self.imageView.image = $0
-//        }.addDisposableTo(disposeBag)
+        }.addDisposableTo(cellReuseDisposeBag)
     }
     
     override func prepareForReuse() {
         imageSubject.onNext(nil)
-        print("disposed? \(imageSubject.disposed)")
-        //disposeBag = DisposeBag()
+		cellReuseDisposeBag = DisposeBag()
         super.prepareForReuse()
         self.cellItem = nil
     }

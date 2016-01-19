@@ -5,11 +5,11 @@ Examples
 1. [Simple UI bindings](#simple-ui-bindings)
 1. [Autocomplete](#autocomplete)
 1. [more examples](../RxExample)
-1. [Playgrounds](../Rx.Playground)
+1. [Playgrounds](../README.md#playgrounds)
 
 ## Calculated variable
 
-Let's first start with some imperative swift code.
+Let's first start with some imperative swift code.Sw
 The purpose of example is to bind identifier `c` to a value calculated from `a` and `b` if some condition is satisfied.
 
 Here is the imperative swift code that calculates the value of `c`:
@@ -34,7 +34,7 @@ a = 4           // c will still be equal "3 is positive" which is not good
 
 This is not the wanted behavior.
 
-To integrate RxSwift framework into your project just include framework in your project and write `import RxSwit`.
+To integrate RxSwift framework into your project just include framework in your project and write `import RxSwift`.
 
 This is the same logic using RxSwift.
 
@@ -46,7 +46,7 @@ let b /*: Observable<Int>*/ = Variable(2)   // b = 2
 // if a + b >= 0 {
 //      c = "\(a + b) is positive"
 // }
-let c = combineLatest(a, b) { $0 + $1 }     // combines latest values of variables `a` and `b` using `+`
+let c = Observable.combineLatest(a, b) { $0 + $1 }     // combines latest values of variables `a` and `b` using `+`
 	.filter { $0 >= 0 }               // if `a + b >= 0` is true, `a + b` is passed to map operator
 	.map { "\($0) is positive" }      // maps `a + b` to "\(a + b) is positive"
 
@@ -60,7 +60,7 @@ c.subscribeNext { print($0) }          // prints: "3 is positive"
 
 // Now let's increase the value of `a`
 // a = 4 is in RxSwift
-a.next(4)                                   // prints: 6 is positive
+a.value = 4                                   // prints: 6 is positive
 // Sum of latest values is now `4 + 2`, `6` is >= 0, map operator
 // produces "6 is positive" and that result is "assigned" to `c`.
 // Since the value of `c` changed, `{ print($0) }` will get called,
@@ -68,7 +68,7 @@ a.next(4)                                   // prints: 6 is positive
 
 // Now let's change the value of `b`
 // b = -8 is in RxSwift
-b.next(-8)                                  // doesn't print anything
+b.value = -8                                 // doesn't print anything
 // Sum of latest values is `4 + (-8)`, `-4` is not >= 0, map doesn't
 // get executed.
 // That means that `c` still contains "6 is positive" and that's correct.
@@ -83,7 +83,7 @@ b.next(-8)                                  // doesn't print anything
 * instead of binding to variables, let's bind to text field values (rx_text)
 * next, parse that into an int and calculate if the number is prime using an async API (map)
 * if text field value is changed before async call completes, new async call will be enqueued (concat)
-* bind results to label (resultLabel.rx_subscribeTextTo)
+* bind results to label (bindTo(resultLabel.rx_text))
 
 ```swift
 let subscription/*: Disposable */ = primeTextField.rx_text      // type is Observable<String>
@@ -120,11 +120,11 @@ self.usernameOutlet.rx_text
     .map { username in
 
         // synchronous validation, nothing special here
-        if count(username) == 0 {
+        if username.isEmpty {
             // Convenience for constructing synchronous result.
             // In case there is mixed synchronous and asychronous code inside the same
             // method, this will construct an async result that is resolved immediatelly.
-            return returnElement((valid: false, message: "Username can't be empty."))
+            return just((valid: false, message: "Username can't be empty."))
         }
 
         ...

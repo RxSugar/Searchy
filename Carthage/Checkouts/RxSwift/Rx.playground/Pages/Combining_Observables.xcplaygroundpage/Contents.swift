@@ -20,7 +20,7 @@ emit a specified sequence of items before beginning to emit the items from the s
 */
 example("startWith") {
 
-    let subscription = sequenceOf(4, 5, 6, 7, 8, 9)
+    let subscription = Observable.of(4, 5, 6, 7, 8, 9)
         .startWith(3)
         .startWith(2)
         .startWith(1)
@@ -45,7 +45,7 @@ example("combineLatest 1") {
     let intOb1 = PublishSubject<String>()
     let intOb2 = PublishSubject<Int>()
 
-    _ = combineLatest(intOb1, intOb2) {
+    _ = Observable.combineLatest(intOb1, intOb2) {
         "\($0) \($1)"
         }
         .subscribe {
@@ -65,10 +65,10 @@ example("combineLatest 1") {
 //: To produce output, at least one element has to be received from each sequence in arguements.
 
 example("combineLatest 2") {
-    let intOb1 = just(2)
-    let intOb2 = sequenceOf(0, 1, 2, 3, 4)
+    let intOb1 = Observable.just(2)
+    let intOb2 = Observable.of(0, 1, 2, 3, 4)
 
-    _ = combineLatest(intOb1, intOb2) {
+    _ = Observable.combineLatest(intOb1, intOb2) {
             $0 * $1
         }
         .subscribe {
@@ -81,15 +81,48 @@ example("combineLatest 2") {
 //: Combine latest has versions with more than 2 arguments.
 
 example("combineLatest 3") {
-    let intOb1 = just(2)
-    let intOb2 = sequenceOf(0, 1, 2, 3)
-    let intOb3 = sequenceOf(0, 1, 2, 3, 4)
+    let intOb1 = Observable.just(2)
+    let intOb2 = Observable.of(0, 1, 2, 3)
+    let intOb3 = Observable.of(0, 1, 2, 3, 4)
 
-    _ = combineLatest(intOb1, intOb2, intOb3) {
-        ($0 + $1) * $2
+    _ = Observable.combineLatest(intOb1, intOb2, intOb3) {
+            ($0 + $1) * $2
         }
         .subscribe {
             print($0)
+        }
+}
+
+
+
+//: Combinelatest version that allows combining sequences with different types.
+
+example("combineLatest 4") {
+    let intOb = Observable.just(2)
+    let stringOb = Observable.just("a")
+    
+    _ = Observable.combineLatest(intOb, stringOb) {
+            "\($0) " + $1
+        }
+        .subscribe {
+            print($0)
+    }
+}
+
+
+//: `combineLatest` extension method for Array of `ObservableType` conformable types
+//: The array must be formed by `Observables` of the same type.
+
+example("combineLatest 5") {
+    let intOb1 = Observable.just(2)
+    let intOb2 = Observable.of(0, 1, 2, 3)
+    let intOb3 = Observable.of(0, 1, 2, 3, 4)
+    
+    _ = [intOb1, intOb2, intOb3].combineLatest { intArray -> Int in
+            Int((intArray[0] + intArray[1]) * intArray[2])
+        }
+        .subscribe { (event: Event<Int>) -> Void in
+            print(event)
         }
 }
 
@@ -108,7 +141,7 @@ example("zip 1") {
     let intOb1 = PublishSubject<String>()
     let intOb2 = PublishSubject<Int>()
 
-    _ = zip(intOb1, intOb2) {
+    _ = Observable.zip(intOb1, intOb2) {
         "\($0) \($1)"
         }
         .subscribe {
@@ -128,11 +161,11 @@ example("zip 1") {
 
 
 example("zip 2") {
-    let intOb1 = just(2)
+    let intOb1 = Observable.just(2)
 
-    let intOb2 = sequenceOf(0, 1, 2, 3, 4)
+    let intOb2 = Observable.of(0, 1, 2, 3, 4)
 
-    _ = zip(intOb1, intOb2) {
+    _ = Observable.zip(intOb1, intOb2) {
             $0 * $1
         }
         .subscribe {
@@ -142,11 +175,11 @@ example("zip 2") {
 
 
 example("zip 3") {
-    let intOb1 = sequenceOf(0, 1)
-    let intOb2 = sequenceOf(0, 1, 2, 3)
-    let intOb3 = sequenceOf(0, 1, 2, 3, 4)
+    let intOb1 = Observable.of(0, 1)
+    let intOb2 = Observable.of(0, 1, 2, 3)
+    let intOb3 = Observable.of(0, 1, 2, 3, 4)
 
-    _ = zip(intOb1, intOb2, intOb3) {
+    _ = Observable.zip(intOb1, intOb2, intOb3) {
             ($0 + $1) * $2
         }
         .subscribe {
@@ -170,7 +203,7 @@ example("merge 1") {
     let subject1 = PublishSubject<Int>()
     let subject2 = PublishSubject<Int>()
 
-    _ = sequenceOf(subject1, subject2)
+    _ = Observable.of(subject1, subject2)
         .merge()
         .subscribeNext { int in
             print(int)
@@ -190,7 +223,7 @@ example("merge 2") {
     let subject1 = PublishSubject<Int>()
     let subject2 = PublishSubject<Int>()
 
-    _ = sequenceOf(subject1, subject2)
+    _ = Observable.of(subject1, subject2)
         .merge(maxConcurrent: 2)
         .subscribe {
             print($0)
@@ -222,9 +255,10 @@ example("switchLatest") {
     let var2 = Variable(200)
 
     // var3 is like an Observable<Observable<Int>>
-    let var3 = Variable(var1)
+    let var3 = Variable(var1.asObservable())
 
     let d = var3
+        .asObservable()
         .switchLatest()
         .subscribe {
             print($0)
@@ -235,7 +269,7 @@ example("switchLatest") {
     var1.value = 3
     var1.value = 4
 
-    var3.value = var2
+    var3.value = var2.asObservable()
 
     var2.value = 201
 

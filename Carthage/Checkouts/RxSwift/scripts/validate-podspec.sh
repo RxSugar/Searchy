@@ -3,6 +3,9 @@
 
 set -e
 
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+ESCAPED_SOURCE=$(pwd | sed -E "s/\//\\\\\//g")
+
 function cleanup {
   pushd ~/.cocoapods/repos/master
   git clean -d -f
@@ -13,26 +16,34 @@ function cleanup {
 trap cleanup EXIT
 
 VERSION=`cat RxSwift.podspec | grep -E "s.version\s+=" | cut -d '"' -f 2`
+TARGETS=(RxTests RxCocoa RxBlocking RxSwift)
 
-pushd ~/.cocoapods/repos/master
-pushd Specs
-
-mkdir -p RxSwift/${VERSION}
-mkdir -p RxCocoa/${VERSION}
-mkdir -p RxBlocking/${VERSION}
-
-popd
+pushd ~/.cocoapods/repos/master/Specs
+for TARGET in ${TARGETS[@]}
+do
+  mkdir -p ${TARGET}/${VERSION}
+done
 popd
 
-cat RxSwift.podspec |
-sed -E "s/s.source[^\}]+\}/s.source           = { :git => '\/Users\/kzaher\/Projects\/Rx', :branch => \'develop\' }/" > ~/.cocoapods/repos/master/Specs/RxSwift/${VERSION}/RxSwift.podspec
+for TARGET in ${TARGETS[@]}
+do
 
-cat RxCocoa.podspec |
-sed -E "s/s.source[^\}]+\}/s.source           = { :git => '\/Users\/kzaher\/Projects\/Rx', :branch => \'develop\' }/" > ~/.cocoapods/repos/master/Specs/RxCocoa/${VERSION}/RxCocoa.podspec
+  mkdir -p ~/.cocoapods/repos/master/Specs/${TARGET}/${VERSION}
+  rm       ~/.cocoapods/repos/master/Specs/${TARGET}/${VERSION}/* || echo
 
-cat RxBlocking.podspec |
-sed -E "s/s.source[^\}]+\}/s.source           = { :git => '\/Users\/kzaher\/Projects\/Rx', :branch => \'develop\' }/" > ~/.cocoapods/repos/master/Specs/RxBlocking/${VERSION}/RxBlocking.podspec
+  cat $TARGET.podspec |
+  sed -E "s/s.source[^\}]+\}/s.source           = { :git => '${ESCAPED_SOURCE}', :branch => \'${BRANCH}\' }/" > ~/.cocoapods/repos/master/Specs/${TARGET}/${VERSION}/${TARGET}.podspec
+done
 
-pod lib lint RxSwift.podspec
-pod lib lint RxCocoa.podspec
-pod lib lint RxBlocking.podspec
+function validate() {
+    local PODSPEC=$1
+
+    pod lib lint $PODSPEC --verbose --no-clean --allow-warnings # temporary allow warning because of deprecated API in rc
+}
+
+for TARGET in ${TARGETS[@]}
+do
+
+validate ${TARGET}.podspec
+
+done

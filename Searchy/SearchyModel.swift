@@ -1,40 +1,42 @@
 import Foundation
-import ReactiveCocoa
+import RxSwift
 
 class SearchyModel {
     private let searchService: SearchService
 
-	let searchTerm = MutableProperty<String>("")
-	let searchResults:AnyProperty<SearchResults>
+	let searchTerm = Variable<String>("")
+	let searchResults:Observable<SearchResults>
 
     init(searchService:SearchService) {
         self.searchService = searchService
         
-        let searchResultsStream = searchTerm.producer
+        let searchResultsStream = searchTerm.asObservable()
             .map(SearchyModel.stripWhitespace)
-            .flatMap(.Latest, transform: SearchyModel.searchTerm(searchService))
+            .flatMapLatest(SearchyModel.searchTerm(searchService))
+			.share()
         
-		searchResults = AnyProperty(initialValue: [], producer: searchResultsStream)
+		searchResults = searchResultsStream
 	}
     
     private static func stripWhitespace(term: String) -> String {
         return term.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
 
-    private static func searchTerm(searchService:SearchService)(term:String) -> SignalProducer<SearchResults, NoError> {
-		return SignalProducer { observer, disposable in
-            guard term.characters.count > 0 else { observer.sendNext([]); observer.sendCompleted(); return }
+    private static func searchTerm(searchService:SearchService)(term:String) -> Observable<SearchResults> {
+		return Observable.create { observer in
+            guard term.characters.count > 0 else { observer.on(.Next([])); observer.on(.Completed); return NopDisposable.instance }
             searchService.search(term) { serverResponse in
 				switch serverResponse {
                 case .Success(let results):
-					observer.sendNext(results)
-					observer.sendCompleted()
+					observer.on(.Next(results))
+					observer.on(.Completed)
 				case .Error(let error):
 					print("\(error)")
-                    observer.sendNext([])
-                    observer.sendCompleted()
+                    observer.on(.Next([]))
+                    observer.on(.Completed)
 				}
 			}
+			return AnonymousDisposable {}
 		}
 	}
 }

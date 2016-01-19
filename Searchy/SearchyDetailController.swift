@@ -1,5 +1,4 @@
 import UIKit
-import ReactiveCocoa
 import AVFoundation
 
 class SearchyDetailController: UIViewController, UINavigationControllerDelegate {
