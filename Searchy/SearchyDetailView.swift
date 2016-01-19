@@ -1,4 +1,5 @@
 import UIKit
+import RxSwift
 
 class SearchyDetailView: UIView, SearchyImageTransitionable {
     private static let margin:CGFloat = 10.0
@@ -8,6 +9,7 @@ class SearchyDetailView: UIView, SearchyImageTransitionable {
     private let backgroundSnapshot:UIView
     private let blurView:UIVisualEffectView
     private let blurEffect = UIBlurEffect(style: .Light)
+    private let disposeBag = DisposeBag()
     
     init(item: SearchyDisplayItem, backgroundSnapshot: UIView) {
         self.item = item
@@ -25,9 +27,9 @@ class SearchyDetailView: UIView, SearchyImageTransitionable {
         backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         
         titleLabel.text = "\(item.result.artist) - \(item.result.songTitle)"
-        item.image.producer.startWithNext { [weak self] in
+        item.image.subscribeNext { [weak self] in
             self?.imageView.image = $0
-        }
+        }.addDisposableTo(disposeBag)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -1,5 +1,6 @@
 import UIKit
 import ReactiveCocoa
+import RxSwift
 
 class SearchyCell : UICollectionViewCell {
     static let reuseIdentifier = "\(SearchyCell.self)"
@@ -8,10 +9,12 @@ class SearchyCell : UICollectionViewCell {
         return SearchyCell.reuseIdentifier
     }
     
+    let imageSubject = PublishSubject<UIImage?>()
+    var disposeBag2 = DisposeBag()
+    var disposeBag = DisposeBag()
     let imageView = UIImageView()
     private let label = UILabel()
     
-    private let image = MutableProperty<UIImage?>(nil)
     private let item = MutableProperty(SearchResult.emptyResult)
     private var cellItem:SearchyDisplayItem?
     
@@ -35,18 +38,32 @@ class SearchyCell : UICollectionViewCell {
             self.label.text = "\(item.artist) - \(item.songTitle)"
         }
         
-        image.producer.skipRepeats(==).startWithNext {
+        imageSubject.subscribeNext {
+            print("setting image: \($0)")
             self.imageView.image = $0
-        }
+        }.addDisposableTo(disposeBag2)
     }
     
     func populateCell(cellItem: SearchyDisplayItem) {
         self.cellItem = cellItem
         item.value = cellItem.result
-        image <~ cellItem.image
+        
+//        cellItem.image.subscribe(imageSubject).addDisposableTo(disposeBag)
+        
+        cellItem.image.subscribeNext {
+            self.imageSubject.onNext($0)
+        }.addDisposableTo(disposeBag)
+        
+        
+//        cellItem.image.subscribeNext {
+//            self.imageView.image = $0
+//        }.addDisposableTo(disposeBag)
     }
     
     override func prepareForReuse() {
+        imageSubject.onNext(nil)
+        print("disposed? \(imageSubject.disposed)")
+        //disposeBag = DisposeBag()
         super.prepareForReuse()
         self.cellItem = nil
     }

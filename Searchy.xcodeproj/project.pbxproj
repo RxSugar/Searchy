@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A0CFB5F1C0F6F34004069F8 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */; };
+		5A0CFB601C0F6F34004069F8 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839341BEA6BC900622B04 /* AppDelegate.swift */; };
 		5A1839371BEA6BC900622B04 /* SearchyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839361BEA6BC900622B04 /* SearchyController.swift */; };
 		5A18393E1BEA6BC900622B04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A18393D1BEA6BC900622B04 /* Assets.xcassets */; };
@@ -59,6 +61,7 @@
 			files = (
 				5A18395A1BEA764000622B04 /* ReactiveCocoa.framework in Embed Frameworks */,
 				5A18395C1BEA764000622B04 /* Result.framework in Embed Frameworks */,
+				5A0CFB601C0F6F34004069F8 /* RxSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -66,6 +69,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		5A1839311BEA6BC900622B04 /* Searchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Searchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A1839341BEA6BC900622B04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A1839361BEA6BC900622B04 /* SearchyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchyController.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 			files = (
 				5A1839591BEA764000622B04 /* ReactiveCocoa.framework in Frameworks */,
 				5A18395B1BEA764000622B04 /* Result.framework in Frameworks */,
+				5A0CFB5F1C0F6F34004069F8 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +129,7 @@
 		24CD4A6213AEED8C0DE7C23F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A0CFB5E1C0F6F34004069F8 /* RxSwift.framework */,
 				5A1839551BEA762100622B04 /* ReactiveCocoa.framework */,
 				5A1839561BEA762100622B04 /* Result.framework */,
 			);
