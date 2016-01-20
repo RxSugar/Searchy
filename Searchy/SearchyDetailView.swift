@@ -2,7 +2,7 @@ import UIKit
 import RxSwift
 
 class SearchyDetailView: UIView, SearchyImageTransitionable {
-    private static let margin:CGFloat = 10.0
+    private let margin:CGFloat = 10.0
     private let imageView = UIImageView()
     private let titleLabel = UILabel()
     private let item:SearchyDisplayItem
@@ -27,7 +27,7 @@ class SearchyDetailView: UIView, SearchyImageTransitionable {
         backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.5)
         
         titleLabel.text = "\(item.result.artist) - \(item.result.songTitle)"
-        item.image.subscribeNext { [weak self] in
+        item.image.asObservable().subscribeNext { [weak self] in
             self?.imageView.image = $0
         }.addDisposableTo(disposeBag)
     }
@@ -38,17 +38,14 @@ class SearchyDetailView: UIView, SearchyImageTransitionable {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundSnapshot.frame = self.bounds
-        blurView.frame = self.bounds
+        backgroundSnapshot.frame = bounds
+        blurView.frame = bounds
         
-        let margin = SearchyDetailView.margin
+        let labelHeight = titleLabel.sizeThatFits(bounds.size).height
+        titleLabel.frame = CGRectMake(0, margin, bounds.width, labelHeight).insetBy(dx: margin, dy: 0)
         
-        let labelHeight = titleLabel.sizeThatFits(self.bounds.size).height
-        titleLabel.frame = CGRectMake(0, margin, self.bounds.width, labelHeight).insetBy(dx: margin, dy: 0)
-        
-        let imageSide = self.bounds.width - margin * 2
+        let imageSide = bounds.insetBy(dx: margin, dy: 0).width
         imageView.frame = CGRectMake(margin, titleLabel.frame.maxY + margin, imageSide, imageSide)
-        
     }
     
     func imageViewForItem(item: SearchResult) -> UIImageView? {

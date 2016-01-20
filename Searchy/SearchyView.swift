@@ -23,7 +23,7 @@ class SearchyView: UIView, SearchyImageTransitionable {
         
         tableHandler.parent = self
         
-        disposeBag ++ (tableHandler.data <~ searchResults)
+        disposeBag ++ tableHandler.data <~ searchResults
         
         textField.placeholder = "Search..."
         textField.backgroundColor = UIColor(white: 0.925, alpha: 1.0)

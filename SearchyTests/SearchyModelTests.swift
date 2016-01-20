@@ -3,36 +3,37 @@ import XCTest
 import RxSwift
 
 struct FakeSearchService: SearchService {
-    let searchOperation:(String, (ServiceResponse<SearchResults>) -> ()) -> ()
-    
-    func search(searchTerm: String, completion: (ServiceResponse<SearchResults>) -> ()) {
-        searchOperation(searchTerm, completion)
-    }
+    let searchOperation:(String -> Observable<[SearchResult]>)
+	
+	func search(searchTerm: String) -> Observable<[SearchResult]> {
+		return searchOperation(searchTerm)
+	}
 }
 
 class SearchyModelTests: XCTestCase {
-    let resultOne = SearchResult(artist: "One", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
-    let resultTwo = SearchResult(artist: "Two", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
-    let resultThree = SearchResult(artist: "Three", songTitle: "hello", resultUrl: NSURL(string: "http://www.google.com")!, iconUrl: NSURL(string: "http://www.google.com")!)
+	static let url =  NSURL(string: "http://www.asynchrony.com")!
+    let resultOne = SearchResult(artist: "One", songTitle: "hello", resultUrl: SearchyModelTests.url, iconUrl: SearchyModelTests.url)
+    let resultTwo = SearchResult(artist: "Two", songTitle: "hello", resultUrl: SearchyModelTests.url, iconUrl: SearchyModelTests.url)
+    let resultThree = SearchResult(artist: "Three", songTitle: "hello", resultUrl: SearchyModelTests.url, iconUrl: SearchyModelTests.url)
     
     let results = Variable(SearchResults())
     
     func synchronousSearchService() -> FakeSearchService {
-        return FakeSearchService { term, completion in
+        return FakeSearchService { term in
             switch term {
             case "1": fallthrough
             case "Stuff":
-                completion(ServiceResponse(value: [self.resultOne]))
-            case "2":
-                completion(ServiceResponse(value: [self.resultTwo]))
-            case "3":
-                completion(ServiceResponse(value: [self.resultThree]))
-            case "things":
-                completion(ServiceResponse(value: [self.resultOne, self.resultTwo, self.resultThree]))
-            case "BadSearch":
-                completion(ServiceResponse(error: NSError(domain: "Ack!", code: 723, userInfo: nil)))
-            default:
-                completion(ServiceResponse(value: [self.resultTwo, self.resultThree]))
+                return Observable.just([self.resultOne])
+			case "2":
+				return Observable.just([self.resultTwo])
+			case "3":
+				return Observable.just([self.resultThree])
+			case "things":
+				return Observable.just([self.resultOne, self.resultTwo, self.resultThree])
+			case "BadSearch":
+				return Observable.error(NSError(domain: "Ack!", code: 723, userInfo: nil))
+			default:
+				return Observable.just([self.resultTwo, self.resultThree])
             }
         }
     }
@@ -76,34 +77,30 @@ class SearchyModelTests: XCTestCase {
         XCTAssertEqual(results.value, [])
     }
     
-    func testWhenResultsComeOutOfOrderThenResultsForTheCurrentSearchArePopulated() {
-        var completionOne:(ServiceResponse<SearchResults>) -> () = { _ in }
-        var completionTwo:(ServiceResponse<SearchResults>) -> () = { _ in }
-        var completionThree:(ServiceResponse<SearchResults>) -> () = { _ in }
-        
-        let searchService = FakeSearchService { term, completion in
+	func testWhenResultsComeOutOfOrderThenResultsForTheCurrentSearchArePopulated() {
+		let stream1 = PublishSubject<SearchResults>()
+		let stream2 = PublishSubject<SearchResults>()
+		let stream3 = PublishSubject<SearchResults>()
+		
+        let searchService = FakeSearchService { term in
             switch term {
-            case "1":
-                completionOne = completion
-            case "2":
-                completionTwo = completion
-            case "3":
-                completionThree = completion
-            default:
-                break
+            case "1": return stream1
+            case "2": return stream2
+            case "3": return stream3
+            default: return Observable<SearchResults>.never()
             }
         }
-        
+
         let model = SearchyModel(searchService: searchService)
         _ = results <~ model.searchResults
         
         model.searchTerm.value = "1"
         model.searchTerm.value = "2"
         model.searchTerm.value = "3"
-        
-        completionTwo(ServiceResponse(value: [self.resultTwo]))
-        completionThree(ServiceResponse(value: [self.resultThree]))
-        completionOne(ServiceResponse(value: [self.resultOne]))
+		
+		stream2.onNext([resultTwo])
+		stream3.onNext([resultThree])
+		stream1.onNext([resultOne])
         
         XCTAssertEqual(results.value, [self.resultThree])
     }

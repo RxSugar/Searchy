@@ -8,7 +8,7 @@ func testImageNamed(named: String) -> UIImage! {
 }
 
 extension UIImage {
-    func pngData() -> NSData! {
+	var pngData:NSData! {
         return UIImagePNGRepresentation(self)
     }
 }
@@ -18,23 +18,23 @@ class FakeNetworkLayer : NetworkLayer {
     static let cloneTwo = testImageNamed("clone-2.png")
     static let cloneThree = testImageNamed("clone-3.png")
     static let cloneFour = testImageNamed("clone-4.png")
-    
-    func getServiceResponseWithUrl(url:String, completion:(Result<AnyObject, NSError>) -> ()) {  }
-    
-    func fetchDataFromUrl(url:String, completion:(Result<NSData, NSError>) -> ()) {
-        switch url {
-        case "http://example.com/one.png":
-            completion(.Success(FakeNetworkLayer.cloneOne.pngData()))
-        case "http://example.com/two.png":
-            completion(.Success(FakeNetworkLayer.cloneTwo.pngData()))
-        case "http://example.com/three.png":
-            completion(.Success(FakeNetworkLayer.cloneThree.pngData()))
-        case "http://example.com/four.png":
-            completion(.Success(FakeNetworkLayer.cloneFour.pngData()))
-        default:
-            completion(.Failure(NSError(domain: "test", code: 42, userInfo: nil)))
-        }
-    }
+	
+	func dataFromUrl(urlString: String) -> Observable<NSData> {
+		switch urlString {
+		case "http://example.com/one.png":
+			return Observable.just(FakeNetworkLayer.cloneOne.pngData)
+		case "http://example.com/two.png":
+			return Observable.just(FakeNetworkLayer.cloneTwo.pngData)
+		case "http://example.com/three.png":
+			return Observable.just(FakeNetworkLayer.cloneThree.pngData)
+		case "http://example.com/four.png":
+			return Observable.just(FakeNetworkLayer.cloneFour.pngData)
+		default:
+			return Observable.error(NSError(domain: "test", code: 42, userInfo: nil))
+		}
+	}
+	
+	func jsonFromUrl(urlString: String) -> Observable<AnyObject> { return Observable.never() }
 }
 
 class ImageProviderTests: XCTestCase {
@@ -45,7 +45,7 @@ class ImageProviderTests: XCTestCase {
         
         _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/one.png")!)
         
-        XCTAssertEqual(result.value.pngData(), FakeNetworkLayer.cloneOne.pngData())
+        XCTAssertEqual(result.value.pngData, FakeNetworkLayer.cloneOne.pngData)
     }
     
     func testWhenImageIsRequestedAgainThenCachedImageIsUsed() {
@@ -81,8 +81,8 @@ class ImageProviderTests: XCTestCase {
         _ = result <~ testObject.imageFromURL(NSURL(string: "http://example.com/three.png")!)
         let fourthLoad = result.value
         
-        XCTAssertEqual(firstLoad.pngData(), FakeNetworkLayer.cloneTwo.pngData())
-        XCTAssertEqual(secondLoad.pngData(), FakeNetworkLayer.cloneThree.pngData())
+        XCTAssertEqual(firstLoad.pngData, FakeNetworkLayer.cloneTwo.pngData)
+        XCTAssertEqual(secondLoad.pngData, FakeNetworkLayer.cloneThree.pngData)
         XCTAssertTrue(firstLoad === thirdLoad)
         XCTAssertTrue(secondLoad === fourthLoad)
     }

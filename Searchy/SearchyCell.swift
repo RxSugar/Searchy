@@ -9,7 +9,7 @@ class SearchyCell : UICollectionViewCell {
         return SearchyCell.reuseIdentifier
     }
     
-    let imageSubject = PublishSubject<UIImage?>()
+    let image = Variable<UIImage?>(nil)
     let imageView = UIImageView()
     private let label = UILabel()
     
@@ -35,9 +35,8 @@ class SearchyCell : UICollectionViewCell {
         item.asObservable().subscribeNext { [unowned self] item in
             self.label.text = "\(item.artist) - \(item.songTitle)"
         }.addDisposableTo(rx_disposeBag)
-        
-        imageSubject.subscribeNext {
-            print("setting image: \($0)")
+		
+        image.asObservable().subscribeNext {
             self.imageView.image = $0
         }.addDisposableTo(rx_disposeBag)
     }
@@ -45,17 +44,14 @@ class SearchyCell : UICollectionViewCell {
     func populateCell(cellItem: SearchyDisplayItem) {
         self.cellItem = cellItem
         item.value = cellItem.result
-        
-        cellItem.image.subscribeNext {
-            self.imageSubject.onNext($0)
-        }.addDisposableTo(cellReuseDisposeBag)
+		cellReuseDisposeBag ++ image <~ cellItem.image
     }
     
     override func prepareForReuse() {
-        imageSubject.onNext(nil)
 		cellReuseDisposeBag = DisposeBag()
         super.prepareForReuse()
-        self.cellItem = nil
+		self.cellItem = nil
+		image.value = nil
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -66,7 +62,7 @@ class SearchyCell : UICollectionViewCell {
         super.layoutSubviews()
         
         let labelHeight = self.label.sizeThatFits(self.bounds.size).height
-        label.frame = CGRectMake(0, 0, self.bounds.width, labelHeight)
-        imageView.frame = UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsMake(labelHeight, 0, 0, 0))
+        label.frame = CGRectMake(0, 0, bounds.width, labelHeight)
+        imageView.frame = UIEdgeInsetsInsetRect(bounds, UIEdgeInsetsMake(labelHeight, 0, 0, 0))
     }
 }

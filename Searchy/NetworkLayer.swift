@@ -1,42 +1,25 @@
 import Foundation
 import UIKit
-import Result
+import RxSwift
+import RxCocoa
 
 protocol NetworkLayer {
-    func getServiceResponseWithUrl(url:String, completion:(Result<AnyObject, NSError>) -> ())
-    func fetchDataFromUrl(url:String, completion:(Result<NSData, NSError>) -> ())
+	func dataFromUrl(urlString: String) -> Observable<NSData>
+	func jsonFromUrl(urlString: String) -> Observable<AnyObject>
 }
 
 class URLSessionNetworkLayer : NetworkLayer {
-	func getServiceResponseWithUrl(url:String, completion:(Result<AnyObject, NSError>) -> ()) {
-        fetchDataFromUrl(url) { result in
-            switch result {
-            case .Success(let data):
-                guard let json = try? NSJSONSerialization.JSONObjectWithData(data, options: []) else {
-                    completion(Result(error: NSError(domain: "Searchy", code: 0, userInfo: nil)))
-                    return
-                }
-                completion(Result(json))
-            case .Failure(let error):
-                completion(Result(error: error))
-            }
-        }
+	let session = NSURLSession.sharedSession()
+	
+	func dataFromUrl(urlString: String) -> Observable<NSData> {
+		return session.rx_data(requestForPath(urlString)).observeOn(MainScheduler.instance)
 	}
-    
-    func fetchDataFromUrl(url:String, completion:(Result<NSData, NSError>) -> ()) {
-        let session = NSURLSession.sharedSession()
-        let request = NSURLRequest(URL: NSURL(string: url)!)
-        let task = session.dataTaskWithRequest(request) { (data, response, error) -> () in
-            dispatch_async(dispatch_get_main_queue(), {
-                guard let data = data else {
-                    let error = error ?? NSError(domain: "Searchy", code: 0, userInfo: nil)
-                    completion(Result(error: error))
-                    return
-                }
-                
-                completion(Result(data))
-            })
-        }
-        task.resume()
-    }
+	
+	func jsonFromUrl(urlString: String) -> Observable<AnyObject> {
+		return session.rx_JSON(requestForPath(urlString)).observeOn(MainScheduler.instance)
+	}
+	
+	private func requestForPath(urlString: String) -> NSURLRequest {
+		return NSURLRequest(URL: NSURL(string: urlString)!)
+	}
 }

@@ -2,19 +2,17 @@ import UIKit
 import RxSwift
 
 struct SearchyDisplayItem {
+	private let disposeBag = DisposeBag()
     let result:SearchResult
-    let image:Observable<UIImage?>
+	let image:Observable<UIImage?>
     
     init(result:SearchResult, imageProvider:ImageProvider) {
         self.result = result
-        let fetchImage = imageProvider.imageFromURL(result.iconUrl)
-        
-        let connectableImage = fetchImage.replay(1)
-        connectableImage.connect()
-        
-        image = connectableImage.map {
-            print("\(result.iconUrl) - \($0)")
-            return .Some($0)
-        }
+		let iconURL = result.iconUrl
+        let fetchImage = imageProvider.imageFromURL(iconURL)
+		
+		let connectableImage = fetchImage.toOptional().replay(1)
+		connectableImage.connect()
+		image = connectableImage
     }
 }
