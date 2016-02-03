@@ -10,27 +10,27 @@ class SearchyController: UIViewController, UINavigationControllerDelegate {
     
     init(context: ApplicationContext) {
         self.context = context
-        super.init(nibName: nil, bundle: nil)
+		super.init(nibName: nil, bundle: nil)
+		title = "searchy"
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        self.title = "searchy"
-        
-		let view = SearchyView(imageProvider: context.imageProvider)
-		SearchyBinding.bind(model: model, view: view, selectionHandler: self.selectionHandler)
-		self.view = view
-    }
-    
+	// if using Storyboards/XIBs the bindView(...) call would live in viewDidLoad()
+	override func loadView() {
+		let searchyView = SearchyView(imageProvider: context.imageProvider)
+		SearchyBinding.bindView(searchyView, model: model, selectionHandler: self.selectionHandler)
+		view = searchyView
+	}
+	
     override func viewDidAppear(animated: Bool) {
-        self.navigationController?.delegate = self
+        navigationController?.delegate = self
     }
     
     override func viewWillDisappear(animated: Bool) {
-        self.navigationController?.delegate = nil
+        navigationController?.delegate = nil
     }
     
     lazy var selectionHandler:(SearchResult)->() = { [weak self] in
