@@ -1,5 +1,6 @@
 import XCTest
 import RxSwift
+import RxSugar
 @testable import Searchy
 
 class RxOperatorsTests: XCTestCase {

@@ -1,8 +1,7 @@
-
 public protocol OptionalType {
-	typealias Wrapped
-
-	var optional: Wrapped? { get }
+    typealias Wrapped
+    
+    var optional: Wrapped? { get }
 }
 
 extension OptionalType {
@@ -12,7 +11,7 @@ extension OptionalType {
 }
 
 extension Optional: OptionalType {
-	public var optional: Wrapped? {
-		return self
-	}
+    public var optional: Wrapped? {
+        return self
+    }
 }

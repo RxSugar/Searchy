@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import RxSugar
 
 let StandardTouchSize = CGFloat(44)
 
@@ -16,7 +17,7 @@ class SearchyView: UIView, SearchyImageTransitionable {
     init(imageProvider: ImageProvider) {
         tableHandler = TableHandler(imageProvider: imageProvider)
         selectionEvents = tableHandler.selectionEvents
-        searchTerm = textField.rx_text.debounce(0.33, scheduler: MainScheduler.instance)
+        searchTerm = textField.rxs.text.debounce(0.33, scheduler: MainScheduler.instance)
         
         super.init(frame: CGRectZero)
         

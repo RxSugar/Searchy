@@ -1,6 +1,7 @@
 import XCTest
-@testable import Searchy
 import RxSwift
+import RxSugar
+@testable import Searchy
 
 struct FakeSearchService: SearchService {
     let searchOperation:(String -> Observable<[SearchResult]>)

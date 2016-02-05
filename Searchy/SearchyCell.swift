@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import RxSugar
 
 class SearchyCell : UICollectionViewCell {
     static let reuseIdentifier = "\(SearchyCell.self)"
@@ -34,11 +35,11 @@ class SearchyCell : UICollectionViewCell {
         
         item.asObservable().subscribeNext { [unowned self] item in
             self.label.text = "\(item.artist) - \(item.songTitle)"
-        }.addDisposableTo(rx_disposeBag)
+        }.addDisposableTo(rxs.disposeBag)
 		
         image.asObservable().subscribeNext {
             self.imageView.image = $0
-        }.addDisposableTo(rx_disposeBag)
+        }.addDisposableTo(rxs.disposeBag)
     }
     
     func populateCell(cellItem: SearchyDisplayItem) {

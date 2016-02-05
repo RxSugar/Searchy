@@ -7,12 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4DCB71121C4EABB50027B59B /* RxOperators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71101C4EABB50027B59B /* RxOperators.swift */; };
 		4DCB71141C4EABB90027B59B /* RxOperatorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71111C4EABB50027B59B /* RxOperatorsTests.swift */; };
-		4DCB71161C4EABC70027B59B /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71151C4EABC70027B59B /* Optional.swift */; };
-		4DCB71181C4EAD020027B59B /* RxVariableBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71171C4EAD020027B59B /* RxVariableBinding.swift */; };
-		4DCB711A1C4EAD0C0027B59B /* RxVariableBindingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB71191C4EAD0C0027B59B /* RxVariableBindingTests.swift */; };
-		4DCB711C1C4EAF030027B59B /* RxDisposal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB711B1C4EAF030027B59B /* RxDisposal.swift */; };
 		5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839341BEA6BC900622B04 /* AppDelegate.swift */; };
 		5A1839371BEA6BC900622B04 /* SearchyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1839361BEA6BC900622B04 /* SearchyController.swift */; };
 		5A18393E1BEA6BC900622B04 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A18393D1BEA6BC900622B04 /* Assets.xcassets */; };
@@ -41,8 +36,6 @@
 		5A6E658F1C650B43001C03FB /* Curry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E656B1C650B23001C03FB /* Curry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A6E65921C650B43001C03FB /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E653C1C650B1F001C03FB /* RxSwift.framework */; };
 		5A6E65931C650B43001C03FB /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E653C1C650B1F001C03FB /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5A6E65961C650BDF001C03FB /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65441C650B1F001C03FB /* RxCocoa.framework */; };
-		5A6E65971C650BDF001C03FB /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65441C650B1F001C03FB /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A8E37201BFA262700D6E6BC /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8E371F1BFA262700D6E6BC /* Transition.swift */; };
 		5A9AE8471C6510CE00F8FD92 /* RxSugar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65A11C651056001C03FB /* RxSugar.framework */; };
 		5A9AE8481C6510CE00F8FD92 /* RxSugar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65A11C651056001C03FB /* RxSugar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -295,13 +288,6 @@
 			remoteGlobalIDString = C8A56AD61AD7424700B4673B;
 			remoteInfo = "RxSwift-iOS";
 		};
-		5A6E65981C650BDF001C03FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5A6E65241C650B1F001C03FB /* Rx.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = C80938F51B8A71760088E94D;
-			remoteInfo = "RxCocoa-iOS";
-		};
 		5A6E65A01C651056001C03FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */;
@@ -332,7 +318,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5A6E65971C650BDF001C03FB /* RxCocoa.framework in Embed Frameworks */,
 				5A6E658F1C650B43001C03FB /* Curry.framework in Embed Frameworks */,
 				5A6E658B1C650B43001C03FB /* Argo.framework in Embed Frameworks */,
 				5A6E65931C650B43001C03FB /* RxSwift.framework in Embed Frameworks */,
@@ -344,12 +329,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		4DCB71101C4EABB50027B59B /* RxOperators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxOperators.swift; sourceTree = "<group>"; };
 		4DCB71111C4EABB50027B59B /* RxOperatorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxOperatorsTests.swift; path = ../Searchy/RxOperatorsTests.swift; sourceTree = "<group>"; };
-		4DCB71151C4EABC70027B59B /* Optional.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
-		4DCB71171C4EAD020027B59B /* RxVariableBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxVariableBinding.swift; sourceTree = "<group>"; };
-		4DCB71191C4EAD0C0027B59B /* RxVariableBindingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxVariableBindingTests.swift; path = ../Searchy/RxVariableBindingTests.swift; sourceTree = "<group>"; };
-		4DCB711B1C4EAF030027B59B /* RxDisposal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxDisposal.swift; sourceTree = "<group>"; };
 		5A1839311BEA6BC900622B04 /* Searchy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Searchy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A1839341BEA6BC900622B04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5A1839361BEA6BC900622B04 /* SearchyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchyController.swift; sourceTree = "<group>"; };
@@ -389,7 +369,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A6E65961C650BDF001C03FB /* RxCocoa.framework in Frameworks */,
 				5A6E658E1C650B43001C03FB /* Curry.framework in Frameworks */,
 				5A6E658A1C650B43001C03FB /* Argo.framework in Frameworks */,
 				5A6E65921C650B43001C03FB /* RxSwift.framework in Frameworks */,
@@ -453,10 +432,6 @@
 			isa = PBXGroup;
 			children = (
 				5A6326BE1BFA8ACE000B07CC /* ApplicationContext.swift */,
-				4DCB71151C4EABC70027B59B /* Optional.swift */,
-				4DCB711B1C4EAF030027B59B /* RxDisposal.swift */,
-				4DCB71101C4EABB50027B59B /* RxOperators.swift */,
-				4DCB71171C4EAD020027B59B /* RxVariableBinding.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -525,7 +500,6 @@
 				5A6326B51BFA7B75000B07CC /* clone-4.png */,
 				5A3A5FAB1BF3936800A99B68 /* Info.plist */,
 				5A6326B01BFA7355000B07CC /* ImageProviderTests.swift */,
-				4DCB71191C4EAD0C0027B59B /* RxVariableBindingTests.swift */,
 				4DCB71111C4EABB50027B59B /* RxOperatorsTests.swift */,
 			);
 			path = SearchyTests;
@@ -610,7 +584,6 @@
 				5A6E658D1C650B43001C03FB /* PBXTargetDependency */,
 				5A6E65911C650B43001C03FB /* PBXTargetDependency */,
 				5A6E65951C650B43001C03FB /* PBXTargetDependency */,
-				5A6E65991C650BDF001C03FB /* PBXTargetDependency */,
 				5A9AE84A1C6510CE00F8FD92 /* PBXTargetDependency */,
 			);
 			name = Searchy;
@@ -960,20 +933,16 @@
 				5A6326BF1BFA8ACE000B07CC /* ApplicationContext.swift in Sources */,
 				5A1839601BEA7B8500622B04 /* SearchyModel.swift in Sources */,
 				5A1839621BEA7D8400622B04 /* SearchService.swift in Sources */,
-				4DCB71181C4EAD020027B59B /* RxVariableBinding.swift in Sources */,
 				5A18395E1BEA7B4B00622B04 /* SearchyBinding.swift in Sources */,
 				5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */,
 				5A6326C31BFB8630000B07CC /* SearchyDisplayItem.swift in Sources */,
 				5A6326C11BFA8C53000B07CC /* SearchyCell.swift in Sources */,
-				4DCB71121C4EABB50027B59B /* RxOperators.swift in Sources */,
 				5A3A5FB61BF3F23700A99B68 /* main.swift in Sources */,
 				5A1839641BEA846900622B04 /* SearchResult.swift in Sources */,
 				5A1839351BEA6BC900622B04 /* AppDelegate.swift in Sources */,
 				5A6326C51BFB868E000B07CC /* SearchyDetailView.swift in Sources */,
-				4DCB711C1C4EAF030027B59B /* RxDisposal.swift in Sources */,
 				5A6326AD1BFA6FBD000B07CC /* SearchyDetailController.swift in Sources */,
 				5A6326AF1BFA7189000B07CC /* ImageProvider.swift in Sources */,
-				4DCB71161C4EABC70027B59B /* Optional.swift in Sources */,
 				5A8E37201BFA262700D6E6BC /* Transition.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -983,7 +952,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A6326B11BFA7355000B07CC /* ImageProviderTests.swift in Sources */,
-				4DCB711A1C4EAD0C0027B59B /* RxVariableBindingTests.swift in Sources */,
 				4DCB71141C4EABB90027B59B /* RxOperatorsTests.swift in Sources */,
 				5A3A5FAA1BF3936800A99B68 /* SearchyModelTests.swift in Sources */,
 			);
@@ -1011,11 +979,6 @@
 			isa = PBXTargetDependency;
 			name = "RxSwift-iOS";
 			targetProxy = 5A6E65941C650B43001C03FB /* PBXContainerItemProxy */;
-		};
-		5A6E65991C650BDF001C03FB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "RxCocoa-iOS";
-			targetProxy = 5A6E65981C650BDF001C03FB /* PBXContainerItemProxy */;
 		};
 		5A9AE84A1C6510CE00F8FD92 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

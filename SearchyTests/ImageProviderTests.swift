@@ -1,6 +1,7 @@
 import XCTest
-@testable import Searchy
 import RxSwift
+import RxSugar
+@testable import Searchy
 
 func testImageNamed(named: String) -> UIImage! {
     return UIImage(named: named, inBundle: NSBundle(forClass: FakeNetworkLayer.self), compatibleWithTraitCollection: nil)!
