@@ -44,6 +44,8 @@
 		5A6E65961C650BDF001C03FB /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65441C650B1F001C03FB /* RxCocoa.framework */; };
 		5A6E65971C650BDF001C03FB /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65441C650B1F001C03FB /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5A8E37201BFA262700D6E6BC /* Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8E371F1BFA262700D6E6BC /* Transition.swift */; };
+		5A9AE8471C6510CE00F8FD92 /* RxSugar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65A11C651056001C03FB /* RxSugar.framework */; };
+		5A9AE8481C6510CE00F8FD92 /* RxSugar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5A6E65A11C651056001C03FB /* RxSugar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5AEB20631BEB9D7700418692 /* SearchyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEB20621BEB9D7700418692 /* SearchyView.swift */; };
 /* End PBXBuildFile section */
 
@@ -300,6 +302,27 @@
 			remoteGlobalIDString = C80938F51B8A71760088E94D;
 			remoteInfo = "RxCocoa-iOS";
 		};
+		5A6E65A01C651056001C03FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4D91C33F1C625FE700926C99;
+			remoteInfo = RxSugar;
+		};
+		5A6E65A21C651056001C03FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4D91C3491C625FE700926C99;
+			remoteInfo = RxSugarTests;
+		};
+		5A9AE8491C6510CE00F8FD92 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D91C33E1C625FE700926C99;
+			remoteInfo = RxSugar;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -313,6 +336,7 @@
 				5A6E658F1C650B43001C03FB /* Curry.framework in Embed Frameworks */,
 				5A6E658B1C650B43001C03FB /* Argo.framework in Embed Frameworks */,
 				5A6E65931C650B43001C03FB /* RxSwift.framework in Embed Frameworks */,
+				5A9AE8481C6510CE00F8FD92 /* RxSugar.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +379,7 @@
 		5A6E65241C650B1F001C03FB /* Rx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rx.xcodeproj; path = Carthage/Checkouts/RxSwift/Rx.xcodeproj; sourceTree = "<group>"; };
 		5A6E65631C650B23001C03FB /* Curry.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Curry.xcodeproj; path = Carthage/Checkouts/Curry/Curry.xcodeproj; sourceTree = "<group>"; };
 		5A6E65721C650B28001C03FB /* Argo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Argo.xcodeproj; path = Carthage/Checkouts/Argo/Argo.xcodeproj; sourceTree = "<group>"; };
+		5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RxSugar.xcodeproj; path = Carthage/Checkouts/RxSugar/RxSugar.xcodeproj; sourceTree = "<group>"; };
 		5A8E371F1BFA262700D6E6BC /* Transition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Transition.swift; sourceTree = "<group>"; };
 		5AEB20621BEB9D7700418692 /* SearchyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -368,6 +393,7 @@
 				5A6E658E1C650B43001C03FB /* Curry.framework in Frameworks */,
 				5A6E658A1C650B43001C03FB /* Argo.framework in Frameworks */,
 				5A6E65921C650B43001C03FB /* RxSwift.framework in Frameworks */,
+				5A9AE8471C6510CE00F8FD92 /* RxSugar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +410,7 @@
 		24CD4A6213AEED8C0DE7C23F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */,
 				5A6E65721C650B28001C03FB /* Argo.xcodeproj */,
 				5A6E65631C650B23001C03FB /* Curry.xcodeproj */,
 				5A6E65241C650B1F001C03FB /* Rx.xcodeproj */,
@@ -556,6 +583,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5A6E659B1C651056001C03FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A6E65A11C651056001C03FB /* RxSugar.framework */,
+				5A6E65A31C651056001C03FB /* RxSugarTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -575,6 +611,7 @@
 				5A6E65911C650B43001C03FB /* PBXTargetDependency */,
 				5A6E65951C650B43001C03FB /* PBXTargetDependency */,
 				5A6E65991C650BDF001C03FB /* PBXTargetDependency */,
+				5A9AE84A1C6510CE00F8FD92 /* PBXTargetDependency */,
 			);
 			name = Searchy;
 			productName = Searchy;
@@ -642,6 +679,10 @@
 				{
 					ProductGroup = 5A6E65251C650B1F001C03FB /* Products */;
 					ProjectRef = 5A6E65241C650B1F001C03FB /* Rx.xcodeproj */;
+				},
+				{
+					ProductGroup = 5A6E659B1C651056001C03FB /* Products */;
+					ProjectRef = 5A6E659A1C651056001C03FB /* RxSugar.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -870,6 +911,20 @@
 			remoteRef = 5A6E65881C650B28001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		5A6E65A11C651056001C03FB /* RxSugar.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = RxSugar.framework;
+			remoteRef = 5A6E65A01C651056001C03FB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5A6E65A31C651056001C03FB /* RxSugarTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = RxSugarTests.xctest;
+			remoteRef = 5A6E65A21C651056001C03FB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -961,6 +1016,11 @@
 			isa = PBXTargetDependency;
 			name = "RxCocoa-iOS";
 			targetProxy = 5A6E65981C650BDF001C03FB /* PBXContainerItemProxy */;
+		};
+		5A9AE84A1C6510CE00F8FD92 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RxSugar;
+			targetProxy = 5A9AE8491C6510CE00F8FD92 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

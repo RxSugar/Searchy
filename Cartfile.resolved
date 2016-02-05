@@ -1,3 +1,4 @@
 github "thoughtbot/Argo" "v2.2.0"
 github "thoughtbot/Curry" "v1.4.0"
 github "ReactiveX/RxSwift" "2.1.0"
+github "RxSugar/RxSugar" "3090fce46f9df3e26846c7f6e070369201695306"
