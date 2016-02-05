@@ -1,6 +1,5 @@
 import XCTest
 @testable import Searchy
-import Result
 import RxSwift
 
 func testImageNamed(named: String) -> UIImage! {

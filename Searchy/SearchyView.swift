@@ -1,6 +1,5 @@
 import UIKit
 import RxSwift
-import RxCocoa
 
 let StandardTouchSize = CGFloat(44)
 

@@ -1,4 +1,3 @@
-github "ReactiveX/RxSwift" ~> 2.0.0
-github "antitypical/Result"
+github "ReactiveX/RxSwift" ~> 2.0
 github "thoughtbot/Argo"
 github "thoughtbot/Curry"

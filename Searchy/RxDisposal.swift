@@ -1,5 +1,5 @@
 import RxSwift
-import RxCocoa
+import Foundation
 
 var disposeBagKey: UInt8 = 0
 
