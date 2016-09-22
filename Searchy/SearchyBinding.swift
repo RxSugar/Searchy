@@ -3,7 +3,7 @@ import RxSwift
 import RxSugar
 
 struct SearchyBinding {
-	static func bindView(view:SearchyView, model:SearchyModel, selectionHandler:(SearchResult)->()) {
+	static func bindView(_ view:SearchyView, model:SearchyModel, selectionHandler: @escaping (SearchResult)->()) {
 		view.rxs.disposeBag
 			++ view.searchResults <~ model.searchResults
 			++ model.searchTerm <~ view.searchTerm

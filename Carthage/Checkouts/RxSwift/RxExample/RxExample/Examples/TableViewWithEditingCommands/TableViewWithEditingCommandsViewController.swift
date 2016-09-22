@@ -25,21 +25,21 @@ struct TableViewEditingCommandsViewModel {
     let favoriteUsers: [User]
     let users: [User]
 
-    func executeCommand(command: TableViewEditingCommand) -> TableViewEditingCommandsViewModel {
+    func executeCommand(_ command: TableViewEditingCommand) -> TableViewEditingCommandsViewModel {
         switch command {
-        case let .SetUsers(users):
+        case let .setUsers(users):
             return TableViewEditingCommandsViewModel(favoriteUsers: favoriteUsers, users: users)
-        case let .SetFavoriteUsers(favoriteUsers):
+        case let .setFavoriteUsers(favoriteUsers):
             return TableViewEditingCommandsViewModel(favoriteUsers: favoriteUsers, users: users)
-        case let .DeleteUser(indexPath):
+        case let .deleteUser(indexPath):
             var all = [self.favoriteUsers, self.users]
-            all[indexPath.section].removeAtIndex(indexPath.row)
+            all[indexPath.section].remove(at: indexPath.row)
             return TableViewEditingCommandsViewModel(favoriteUsers: all[0], users: all[1])
-        case let .MoveUser(from, to):
+        case let .moveUser(from, to):
             var all = [self.favoriteUsers, self.users]
             let user = all[from.section][from.row]
-            all[from.section].removeAtIndex(from.row)
-            all[to.section].insert(user, atIndex: to.row)
+            all[from.section].remove(at: from.row)
+            all[to.section].insert(user, at: to.row)
 
             return TableViewEditingCommandsViewModel(favoriteUsers: all[0], users: all[1])
         }
@@ -47,10 +47,10 @@ struct TableViewEditingCommandsViewModel {
 }
 
 enum TableViewEditingCommand {
-    case SetUsers(users: [User])
-    case SetFavoriteUsers(favoriteUsers: [User])
-    case DeleteUser(indexPath: NSIndexPath)
-    case MoveUser(from: NSIndexPath, to: NSIndexPath)
+    case setUsers(users: [User])
+    case setFavoriteUsers(favoriteUsers: [User])
+    case deleteUser(indexPath: IndexPath)
+    case moveUser(from: IndexPath, to: IndexPath)
 }
 
 class TableViewWithEditingCommandsViewController: ViewController, UITableViewDelegate {
@@ -62,7 +62,7 @@ class TableViewWithEditingCommandsViewController: ViewController, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         let superMan =  User(
             firstName: "Super",
@@ -70,16 +70,28 @@ class TableViewWithEditingCommandsViewController: ViewController, UITableViewDel
             imageURL: "http://nerdreactor.com/wp-content/uploads/2015/02/Superman1.jpg"
         )
 
+        let watMan = User(firstName: "Wat",
+            lastName: "Man",
+            imageURL: "http://www.iri.upc.edu/files/project/98/main.GIF"
+        )
+
         let loadFavoriteUsers = RandomUserAPI.sharedAPI
                 .getExampleUserResultSet()
-                .map(TableViewEditingCommand.SetUsers)
+                .map(TableViewEditingCommand.setUsers)
 
-        let initialLoadCommand = Observable.just(TableViewEditingCommand.SetFavoriteUsers(favoriteUsers: [superMan]))
+        let initialLoadCommand = Observable.just(TableViewEditingCommand.setFavoriteUsers(favoriteUsers: [superMan, watMan]))
                 .concat(loadFavoriteUsers)
                 .observeOn(MainScheduler.instance)
 
-        let deleteUserCommand = tableView.rx_itemDeleted.map(TableViewEditingCommand.DeleteUser)
-        let moveUserCommand = tableView.rx_itemMoved.map(TableViewEditingCommand.MoveUser)
+        let deleteUserCommand = tableView.rx.itemDeleted.map(TableViewEditingCommand.deleteUser)
+        let moveUserCommand = tableView
+            .rx.itemMoved
+            // This is needed because rx.itemMoved is being performed before delegate method is
+            // delegated to RxDataSource.
+            // This observeOn makes sure data is rebound after automatic move is performed in data source.
+            // This will be improved in RxSwift 3.0 when order will be inversed.
+            .observeOn(MainScheduler.asyncInstance)
+            .map(TableViewEditingCommand.moveUser)
 
         let initialState = TableViewEditingCommandsViewModel(favoriteUsers: [], users: [])
 
@@ -95,54 +107,54 @@ class TableViewWithEditingCommandsViewController: ViewController, UITableViewDel
                     SectionModel(model: "Normal Users", items: $0.users)
                 ]
             }
-            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
+            .bindTo(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
 
-        tableView.rx_itemSelected
+        tableView.rx.itemSelected
             .withLatestFrom(viewModel) { i, viewModel in
                 let all = [viewModel.favoriteUsers, viewModel.users]
                 return all[i.section][i.row]
             }
-            .subscribeNext { [weak self] user in
+            .subscribe(onNext: { [weak self] user in
                 self?.showDetailsForUser(user)
-            }
+            })
             .addDisposableTo(disposeBag)
 
         // customization using delegate
         // RxTableViewDelegateBridge will forward correct messages
-        tableView.rx_setDelegate(self)
+        tableView.rx.setDelegate(self)
             .addDisposableTo(disposeBag)
     }
 
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        tableView.editing = editing
+        tableView.isEditing = editing
     }
 
     // MARK: Table view delegate ;)
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let title = dataSource.sectionAtIndex(section)
 
         let label = UILabel(frame: CGRect.zero)
         // hacky I know :)
         label.text = "  \(title)"
-        label.textColor = UIColor.whiteColor()
-        label.backgroundColor = UIColor.darkGrayColor()
+        label.textColor = UIColor.white
+        label.backgroundColor = UIColor.darkGray
         label.alpha = 0.9
 
         return label
     }
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
 
     // MARK: Navigation
 
-    private func showDetailsForUser(user: User) {
-        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle(identifier: "RxExample-iOS"))
-        let viewController = storyboard.instantiateViewControllerWithIdentifier("DetailViewController") as! DetailViewController
+    private func showDetailsForUser(_ user: User) {
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle(identifier: "RxExample-iOS"))
+        let viewController = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
         viewController.user = user
         self.navigationController?.pushViewController(viewController, animated: true)
     }
@@ -152,14 +164,22 @@ class TableViewWithEditingCommandsViewController: ViewController, UITableViewDel
     static func configureDataSource() -> RxTableViewSectionedReloadDataSource<SectionModel<String, User>> {
         let dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, User>>()
 
-        dataSource.cellFactory = { (tv, ip, user: User) in
-            let cell = tv.dequeueReusableCellWithIdentifier("Cell")!
+        dataSource.configureCell = { (_, tv, ip, user: User) in
+            let cell = tv.dequeueReusableCell(withIdentifier: "Cell")!
             cell.textLabel?.text = user.firstName + " " + user.lastName
             return cell
         }
 
-        dataSource.titleForHeaderInSection = { [unowned dataSource] sectionIndex in
+        dataSource.titleForHeaderInSection = { dataSource, sectionIndex in
             return dataSource.sectionAtIndex(sectionIndex).model
+        }
+
+        dataSource.canEditRowAtIndexPath = { (ds, ip) in
+            return true
+        }
+
+        dataSource.canMoveRowAtIndexPath = { _ in
+            return true
         }
 
         return dataSource

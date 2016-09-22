@@ -1,4 +1,4 @@
-github "ReactiveX/RxSwift" ~> 2.0
-github "thoughtbot/Argo"
-github "thoughtbot/Curry"
-github "RxSugar/RxSugar" ~> 0.0.1
+github "ReactiveX/RxSwift" "3.0.0-beta.1"
+github "thoughtbot/Argo" "master"
+github "thoughtbot/Curry" "master"
+github "mattdeckard/RxSugar" "swift-3.0"

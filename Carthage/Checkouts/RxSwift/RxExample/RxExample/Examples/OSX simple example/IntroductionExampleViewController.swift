@@ -27,7 +27,7 @@ class IntroductionExampleViewController : ViewController {
         showAlert("After you close this, prepare for a loud sound ...")
 
         // c = a + b
-        let sum = Observable.combineLatest(a.rx_text, b.rx_text) { (a: String, b: String) -> (Int, Int) in
+        let sum = Observable.combineLatest(a.rx.text, b.rx.text) { (a: String, b: String) -> (Int, Int) in
             return (Int(a) ?? 0, Int(b) ?? 0)
         }
         
@@ -36,7 +36,7 @@ class IntroductionExampleViewController : ViewController {
             .map { (a, b) in
                 return "\(a + b)"
             }
-            .bindTo(c.rx_text)
+            .bindTo(c.rx.text)
             .addDisposableTo(disposeBag)
         
         // Also, tell it out loud
@@ -46,35 +46,35 @@ class IntroductionExampleViewController : ViewController {
             .map { (a, b) in
                 return "\(a) + \(b) = \(a + b)"
             }
-            .subscribeNext { result in
-                if speech.speaking {
+            .subscribe(onNext: { result in
+                if speech.isSpeaking {
                     speech.stopSpeaking()
                 }
                 
-                speech.startSpeakingString(result)
-            }
+                speech.startSpeaking(result)
+            })
             .addDisposableTo(disposeBag)
         
         
-        slider.rx_value
-            .subscribeNext { value in
+        slider.rx.value
+            .subscribe(onNext: { value in
                 self.sliderValue.stringValue = "\(Int(value))"
-            }
+            })
             .addDisposableTo(disposeBag)
         
-        sliderValue.rx_text
-            .subscribeNext { value in
+        sliderValue.rx.text
+            .subscribe(onNext: { value in
                 let doubleValue = value.toDouble() ?? 0.0
                 self.slider.doubleValue = doubleValue
                 self.sliderValue.stringValue = "\(Int(doubleValue))"
-            }
+            })
             .addDisposableTo(disposeBag)
         
-        disposeButton.rx_tap
-            .subscribeNext { [weak self] _ in
+        disposeButton.rx.tap
+            .subscribe(onNext: { [weak self] _ in
                 print("Unbind everything")
                 self?.disposeBag = DisposeBag()
-            }
+            })
             .addDisposableTo(disposeBag)
     }
 }

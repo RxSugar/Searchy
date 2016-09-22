@@ -18,30 +18,30 @@ class NSViewTests : RxTest {
 extension NSViewTests {
     func testHidden_True() {
         let subject = NSView(frame: CGRect.zero)
-        Observable.just(true).subscribe(subject.rx_hidden).dispose()
+        Observable.just(true).subscribe(subject.rx.hidden).dispose()
 
-        XCTAssertTrue(subject.hidden == true)
+        XCTAssertTrue(subject.isHidden == true)
     }
 
     func testHidden_False() {
         let subject = NSView(frame: CGRect.zero)
-        Observable.just(false).subscribe(subject.rx_hidden).dispose()
+        Observable.just(false).subscribe(subject.rx.hidden).dispose()
 
-        XCTAssertTrue(subject.hidden == false)
+        XCTAssertTrue(subject.isHidden == false)
     }
 }
 
 extension NSViewTests {
     func testAlpha_0() {
         let subject = NSView(frame: CGRect.zero)
-        Observable.just(0).subscribe(subject.rx_alpha).dispose()
+        Observable.just(0).subscribe(subject.rx.alpha).dispose()
 
         XCTAssertTrue(subject.alphaValue == 0.0)
     }
 
     func testAlpha_1() {
         let subject = NSView(frame: CGRect.zero)
-        Observable.just(1).subscribe(subject.rx_alpha).dispose()
+        Observable.just(1).subscribe(subject.rx.alpha).dispose()
 
         XCTAssertTrue(subject.alphaValue == 1.0)
     }

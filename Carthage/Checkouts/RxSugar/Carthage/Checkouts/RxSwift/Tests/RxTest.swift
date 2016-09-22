@@ -30,15 +30,13 @@ class RxTest
     : XCTestCase {
 
     #if os(Linux)
-        var allTests : [(String, () -> Void)] = []
+        var allTests : [(String, () throws -> Void)] = []
     #endif
 
-    private var startResourceCount: Int32 = 0
+    fileprivate var startResourceCount: Int32 = 0
 
     var accumulateStatistics: Bool {
-        get {
-            return true
-        }
+        return true
     }
 
     #if TRACE_RESOURCES
@@ -78,14 +76,14 @@ extension RxTest {
         static let disposed = 1000
     }
 
-    func sleep(time: NSTimeInterval) {
-        NSRunLoop.currentRunLoop().runMode(NSDefaultRunLoopMode, beforeDate: NSDate(timeIntervalSinceNow: time))
+    func sleep(_ time: TimeInterval) {
+        RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date(timeIntervalSinceNow: time))
     }
 
     func setUpActions(){
         #if TRACE_RESOURCES
             self.startResourceCount = resourceCount
-            registerMallocHooks()
+            //registerMallocHooks()
             (startNumberOfAllocatedBytes, startNumberOfAllocations) = getMemoryInfo()
         #endif
     }
@@ -93,10 +91,11 @@ extension RxTest {
     func tearDownActions() {
         #if TRACE_RESOURCES
             // give 5 sec to clean up resources
-            for i in  0..<10 {
+            for _ in 0..<30 {
                 if self.startResourceCount < resourceCount {
                     // main schedulers need to finish work
-                    NSRunLoop.currentRunLoop().runMode(NSDefaultRunLoopMode, beforeDate: NSDate(timeIntervalSinceNow: 0.05))
+                    print("Waiting for resource cleanup ...")
+                    RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: NSDate(timeIntervalSinceNow: 0.05) as Date)
                 }
                 else {
                     break

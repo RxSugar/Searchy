@@ -5,8 +5,8 @@ import AVFoundation
 class SearchyController: UIViewController, UINavigationControllerDelegate {
 	let model:SearchyModel = SearchyModel(searchService: ItunesSearchService(networkLayer: URLSessionNetworkLayer()))
     let player = AVQueuePlayer()
-    private let context: ApplicationContext
-    private var transition:Transition?
+    fileprivate let context: ApplicationContext
+    fileprivate var transition:Transition?
     
     init(context: ApplicationContext) {
         self.context = context
@@ -25,11 +25,11 @@ class SearchyController: UIViewController, UINavigationControllerDelegate {
 		view = searchyView
 	}
 	
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         navigationController?.delegate = self
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         navigationController?.delegate = nil
     }
     
@@ -39,11 +39,11 @@ class SearchyController: UIViewController, UINavigationControllerDelegate {
         
         this.transition = Transition(selectedItem: $0, navigationController: navigationController)
         let item = SearchyDisplayItem(result: $0, imageProvider: this.context.imageProvider)
-        let snapshot = this.view.snapshotViewAfterScreenUpdates(false)
-        navigationController.pushViewController(SearchyDetailController(item: item, snapshot: snapshot), animated: true)
+        let snapshot = this.view.snapshotView(afterScreenUpdates: false)
+        navigationController.pushViewController(SearchyDetailController(item: item, snapshot: snapshot!), animated: true)
     }
     
-    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return transition
     }
 }

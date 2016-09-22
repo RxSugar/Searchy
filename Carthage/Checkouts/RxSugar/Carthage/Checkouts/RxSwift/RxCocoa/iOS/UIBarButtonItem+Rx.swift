@@ -13,47 +13,40 @@ import UIKit
 import RxSwift
 #endif
 
-extension UIBarButtonItem {
+var rx_tap_key: UInt8 = 0
+
+extension Reactive where Base: UIBarButtonItem {
     
-	/**
-	Bindable sink for `enabled` property.
-	*/
-	public var rx_enabled: AnyObserver<Bool> {
-		return AnyObserver { [weak self] event in
-			MainScheduler.ensureExecutingOnScheduler()
-			
-			switch event {
-			case .Next(let value):
-				self?.enabled = value
-			case .Error(let error):
-				bindingErrorToInterface(error)
-				break
-			case .Completed:
-				break
-			}
-		}
-	}
-	
+    /**
+    Bindable sink for `enabled` property.
+    */
+    public var enabled: AnyObserver<Bool> {
+        return UIBindingObserver(UIElement: self.base) { UIElement, value in
+            UIElement.isEnabled = value
+        }.asObserver()
+    }
+
     /**
     Reactive wrapper for target action pattern on `self`.
     */
-    public var rx_tap: ControlEvent<Void> {
-        let source: Observable<Void> = Observable.create { [weak self] observer in
-
-            guard let control = self else {
-                observer.on(.Completed)
-                return NopDisposable.instance
+    public var tap: ControlEvent<Void> {
+        let source = lazyInstanceObservable(&rx_tap_key) { () -> Observable<Void> in
+            Observable.create { [weak control = self.base] observer in
+                guard let control = control else {
+                    observer.on(.completed)
+                    return Disposables.create()
+                }
+                let target = BarButtonItemTarget(barButtonItem: control) {
+                    observer.on(.next())
+                }
+                return target
             }
-
-            let target = BarButtonItemTarget(barButtonItem: control) {
-                observer.on(.Next())
-            }
-            return target
-        }.takeUntil(rx_deallocated)
+            .takeUntil(self.deallocated)
+            .share()
+        }
         
         return ControlEvent(events: source)
     }
-    
 }
 
 
@@ -64,12 +57,12 @@ class BarButtonItemTarget: RxTarget {
     weak var barButtonItem: UIBarButtonItem?
     var callback: Callback!
     
-    init(barButtonItem: UIBarButtonItem, callback: () -> Void) {
+    init(barButtonItem: UIBarButtonItem, callback: @escaping () -> Void) {
         self.barButtonItem = barButtonItem
         self.callback = callback
         super.init()
         barButtonItem.target = self
-        barButtonItem.action = Selector("action:")
+        barButtonItem.action = #selector(BarButtonItemTarget.action(_:))
     }
     
     override func dispose() {
@@ -84,7 +77,7 @@ class BarButtonItemTarget: RxTarget {
         callback = nil
     }
     
-    func action(sender: AnyObject) {
+    func action(_ sender: AnyObject) {
         callback()
     }
     

@@ -1,16 +1,16 @@
-import Foundation
+import UIKit
 import RxSwift
 
-public final class TargetActionObservable<T>: NSObject, ObservableType {
-    public typealias E = T
-	public let actionSelector: Selector = "action"
-	
+public final class TargetActionObservable<Element>: NSObject, ObservableType {
+    public typealias E = Element
+    public let actionSelector = #selector(TargetActionObservable<Element>.action)
+    
 	private let _unsubscribe: (NSObjectProtocol, Selector) -> ()
-    private let subject = PublishSubject<E>()
-    private let valueGenerator: () throws -> T
+    private let subject = PublishSubject<Element>()
+    private let valueGenerator: () throws -> Element
     private let complete: Observable<Void>
 	
-    public init(valueGenerator generator: () throws -> T, subscribe subscribeAction: (NSObjectProtocol, Selector) -> (), unsubscribe: (NSObjectProtocol, Selector) -> (), complete completeEvents: Observable<Void>) {
+    public init(valueGenerator generator: @escaping () throws -> Element, subscribe subscribeAction: (NSObjectProtocol, Selector) -> (), unsubscribe: @escaping (NSObjectProtocol, Selector) -> (), complete completeEvents: Observable<Void>) {
 		valueGenerator = generator
 		_unsubscribe = unsubscribe
         complete = completeEvents
@@ -18,33 +18,33 @@ public final class TargetActionObservable<T>: NSObject, ObservableType {
 		subscribeAction(self, actionSelector)
 	}
 	
-	public convenience init (control: UIControl, forEvents controlEvents: UIControlEvents, valueGenerator generator: () throws -> T) {
+	public convenience init (control: UIControl, forEvents controlEvents: UIControlEvents, valueGenerator generator: @escaping () throws -> Element) {
 		self.init(
 			valueGenerator: generator,
 			subscribe: { (target, action) in
-				control.addTarget(target, action: action, forControlEvents: controlEvents)
+				control.addTarget(target, action: action, for: controlEvents)
 			},
 			unsubscribe: { (target, action) in
-				control.removeTarget(target, action: action, forControlEvents: controlEvents)
+				control.removeTarget(target, action: action, for: controlEvents)
 			},
             complete: control.rxs.onDeinit
 		)
 	}
 	
-    public convenience init<ObservedType: RXSObject>(notificationName: String, onObject: ObservedType, valueGenerator: (ObservedType) throws -> T) {
+    public convenience init<ObservedType: RXSObject>(notificationName: String, onObject: ObservedType, valueGenerator: @escaping (ObservedType) throws -> Element) {
 		self.init(
             valueGenerator: { [unowned onObject] in try valueGenerator(onObject) },
 			subscribe: { (target, action) in
-				NSNotificationCenter.defaultCenter().addObserver(target, selector: action, name: notificationName, object: onObject)
+				NotificationCenter.default.addObserver(target, selector: action, name: NSNotification.Name(rawValue: notificationName), object: onObject)
 			},
 			unsubscribe: { (target, _) in
-				NSNotificationCenter.defaultCenter().removeObserver(target, name: notificationName, object: onObject)
+				NotificationCenter.default.removeObserver(target, name: NSNotification.Name(rawValue: notificationName), object: onObject)
             },
             complete: onObject.rxs.onDeinit
 		)
 	}
     
-    public func subscribe<O: ObserverType where O.E == E>(observer: O) -> Disposable {
+    public func subscribe<O: ObserverType where O.E == Element>(_ observer: O) -> Disposable {
         let subjectDisposable = subject.takeUntil(complete).subscribe(observer)
         let triggerDisposable = AnonymousDisposable { _ = self }
         return CompositeDisposable() ++ subjectDisposable ++ triggerDisposable

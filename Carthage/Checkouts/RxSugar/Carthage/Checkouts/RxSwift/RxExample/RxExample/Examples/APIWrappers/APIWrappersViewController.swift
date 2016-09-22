@@ -14,7 +14,7 @@ import RxCocoa
 #endif
 
 extension UILabel {
-    public override var accessibilityValue: String! {
+    open override var accessibilityValue: String! {
         get {
             return self.text
         }
@@ -58,91 +58,120 @@ class APIWrappersViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        datePicker.date = NSDate(timeIntervalSince1970: 0)
+        datePicker.date = Date(timeIntervalSince1970: 0)
 
         // MARK: UIBarButtonItem
 
-        bbitem.rx_tap
-            .subscribeNext { [weak self] x in
+        bbitem.rx.tap
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UIBarButtonItem Tapped")
-            }
+            })
             .addDisposableTo(disposeBag)
 
         // MARK: UISegmentedControl
 
-        segmentedControl.rx_value
-            .subscribeNext { [weak self] x in
+        // also test two way binding
+        let segmentedValue = Variable(0)
+        _ = segmentedControl.rx.value <-> segmentedValue
+
+        segmentedValue.asObservable()
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UISegmentedControl value \(x)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
         // MARK: UISwitch
 
-        switcher.rx_value
-            .subscribeNext { [weak self] x in
+        /*
+        // also test two way binding
+        let switchValue = Variable(true)
+        /***⚠️Unlike other controls, Apple is reusing instances of UISwitch or a there is a leak,
+        so underlying observable sequence won't complete when nothing holds a strong reference
+        to UISwitch.⚠️***/
+        (switcher.rx.value <-> switchValue).addDisposableTo(disposeBag)
+
+        switchValue.asObservable()
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UISwitch value \(x)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
         // MARK: UIActivityIndicatorView
 
-        switcher.rx_value
-            .bindTo(activityIndicator.rx_animating)
+        switcher.rx.value
+            .bindTo(activityIndicator.rx.animating)
             .addDisposableTo(disposeBag)
-
+        */
 
         // MARK: UIButton
 
-        button.rx_tap
-            .subscribeNext { [weak self] x in
+        button.rx.tap
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UIButton Tapped")
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
         // MARK: UISlider
 
-        slider.rx_value
-            .subscribeNext { [weak self] x in
+        // also test two way binding
+        let sliderValue = Variable<Float>(1.0)
+        _ = slider.rx.value <-> sliderValue
+
+        sliderValue.asObservable()
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UISlider value \(x)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
         // MARK: UIDatePicker
 
-        datePicker.rx_date
-            .subscribeNext { [weak self] x in
+        // also test two way binding
+        let dateValue = Variable(Date(timeIntervalSince1970: 0))
+        _ = datePicker.rx.date <-> dateValue
+
+
+        dateValue.asObservable()
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UIDatePicker date \(x)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
         // MARK: UITextField
 
-        textField.rx_text
-            .subscribeNext { [weak self] x in
+        // also test two way binding
+        let textValue = Variable("")
+        _ = textField.rx.textInput <-> textValue
+
+        textValue.asObservable()
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UITextField text \(x)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
         // MARK: UIGestureRecognizer
 
-        mypan.rx_event
-            .subscribeNext { [weak self] x in
+        mypan.rx.event
+            .subscribe(onNext: { [weak self] x in
                 self?.debug("UIGestureRecognizer event \(x.state)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
 
         // MARK: UITextView
 
-        textView.rx_text
-            .subscribeNext { [weak self] x in
-                self?.debug("UITextView event \(x)")
-            }
+        // also test two way binding
+        let textViewValue = Variable("")
+        _ = textView.rx.textInput <-> textViewValue
+
+        textViewValue.asObservable()
+            .subscribe(onNext: { [weak self] x in
+                self?.debug("UITextView text \(x)")
+            })
             .addDisposableTo(disposeBag)
 
         // MARK: CLLocationManager
@@ -151,22 +180,21 @@ class APIWrappersViewController: ViewController {
         manager.requestWhenInUseAuthorization()
         #endif
 
-        manager.rx_didUpdateLocations
-            .subscribeNext { [weak self] x in
-                self?.debug("rx_didUpdateLocations \(x)")
-            }
+        manager.rx.didUpdateLocations
+            .subscribe(onNext: { x in
+                print("rx_didUpdateLocations \(x)")
+            })
             .addDisposableTo(disposeBag)
 
-        _ = manager.rx_didFailWithError
-            .subscribeNext { [weak self] x in
-                self?.debug("rx_didFailWithError \(x)")
-            }
+        _ = manager.rx.didFailWithError
+            .subscribe(onNext: { x in
+                print("rx_didFailWithError \(x)")
+            })
         
-        
-        manager.rx_didChangeAuthorizationStatus
-            .subscribeNext { status in
+        manager.rx.didChangeAuthorizationStatus
+            .subscribe(onNext: { status in
                 print("Authorization status \(status)")
-            }
+            })
             .addDisposableTo(disposeBag)
         
         manager.startUpdatingLocation()
@@ -175,7 +203,7 @@ class APIWrappersViewController: ViewController {
 
     }
 
-    func debug(string: String) {
+    func debug(_ string: String) {
         print(string)
         debugLabel.text = string
     }

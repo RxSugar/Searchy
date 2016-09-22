@@ -14,41 +14,28 @@ import RxCocoa
 #endif
 import UIKit
 
-extension UIImageView{
+extension Reactive where Base: UIImageView{
 
-    var rxex_downloadableImage: AnyObserver<DownloadableImage>{
-        return self.rxex_downloadableImageAnimated(nil)
+    var downloadableImage: AnyObserver<DownloadableImage>{
+        return downloadableImageAnimated(nil)
     }
 
-    func rxex_downloadableImageAnimated(transitionType:String?) -> AnyObserver<DownloadableImage> {
-
-        return AnyObserver { [weak self] event in
-
-            guard let strongSelf = self else { return }
-            MainScheduler.ensureExecutingOnScheduler()
-
-            switch event{
-            case .Next(let value):
-                for subview in strongSelf.subviews {
-                    subview.removeFromSuperview()
-                }
-                switch value{
-                case .Content(let image):
-                    strongSelf.rx_image.onNext(image)
-                case .OfflinePlaceholder:
-                    let label = UILabel(frame: strongSelf.bounds)
-                    label.textAlignment = .Center
-                    label.font = UIFont.systemFontOfSize(35)
-                    label.text = "⚠️"
-                    strongSelf.addSubview(label)
-                }
-            case .Error(let error):
-                bindingErrorToInterface(error)
-                break
-            case .Completed:
-                break
+    func downloadableImageAnimated(_ transitionType:String?) -> AnyObserver<DownloadableImage> {
+        return UIBindingObserver(UIElement: base as UIImageView) { imageView, image in
+            for subview in imageView.subviews {
+                subview.removeFromSuperview()
             }
-        }
+            switch image {
+            case .content(let image):
+                imageView.rx.image.onNext(image)
+            case .offlinePlaceholder:
+                let label = UILabel(frame: imageView.bounds)
+                label.textAlignment = .center
+                label.font = UIFont.systemFont(ofSize: 35)
+                label.text = "⚠️"
+                imageView.addSubview(label)
+            }
+        }.asObserver()
     }
 }
 #endif

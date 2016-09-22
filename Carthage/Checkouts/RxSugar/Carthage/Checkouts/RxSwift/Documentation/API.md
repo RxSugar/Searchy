@@ -3,7 +3,7 @@ API
 
 ## RxSwift supported operators
 
-In some cases there are multiple aliases for the same operator, because on different platforms / implementations, the same operation is sometimes called differently. Sometimes this is because historical reasons, sometimes because of reserved language keywords.
+In some cases there are multiple aliases for the same operator, because on different platforms / implementations, the same operation is sometimes named differently. Sometimes this is because of historical reasons, while sometimes because of reserved language keywords.
 
 When lacking a strong community consensus, RxSwift will usually include multiple aliases.
 
@@ -26,6 +26,7 @@ Operators are stateless by default.
  * [`timer`](http://reactivex.io/documentation/operators/timer.html)
 
 #### Transforming Observables
+
   * [`buffer`](http://reactivex.io/documentation/operators/buffer.html)
   * [`flatMap`](http://reactivex.io/documentation/operators/flatmap.html)
   * [`flatMapFirst`](http://reactivex.io/documentation/operators/flatmap.html)
@@ -35,6 +36,7 @@ Operators are stateless by default.
   * [`window`](http://reactivex.io/documentation/operators/window.html)
 
 #### Filtering Observables
+
   * [`debounce` / `throttle`](http://reactivex.io/documentation/operators/debounce.html)
   * [`distinctUntilChanged`](http://reactivex.io/documentation/operators/distinct.html)
   * [`elementAt`](http://reactivex.io/documentation/operators/elementat.html)
@@ -61,7 +63,7 @@ Operators are stateless by default.
 
 #### Observable Utility Operators
 
-  * [`delaySubscription`](http://reactivex.io/documentation/operators/delay.html)
+  * [`delaySubscription` / `delay`](http://reactivex.io/documentation/operators/delay.html)
   * [`do` / `doOnNext`](http://reactivex.io/documentation/operators/do.html)
   * [`observeOn` / `observeSingleOn`](http://reactivex.io/documentation/operators/observeon.html)
   * [`subscribe`](http://reactivex.io/documentation/operators/subscribe.html)
@@ -71,6 +73,7 @@ Operators are stateless by default.
   * debug
 
 #### Conditional and Boolean Operators
+
   * [`amb`](http://reactivex.io/documentation/operators/amb.html)
   * [`skipWhile`](http://reactivex.io/documentation/operators/skipwhile.html)
   * [`skipUntil`](http://reactivex.io/documentation/operators/skipuntil.html)
@@ -99,13 +102,13 @@ Creating new operators is also pretty straightforward.
 
 ```swift
 
-extension NSObject {
+extension Reactive where Base: NSObject {
 
-    public var rx_deallocated: Observable<Void> {}
+    public var deallocated: Observable<Void> {}
 
 #if !DISABLE_SWIZZLING
 
-    public var rx_deallocating: Observable<Void> {}
+    public var deallocating: Observable<Void> {}
 
 #endif
 
@@ -115,9 +118,9 @@ extension NSObject {
 
 
 ```swift
-extension NSObject {
+extension Reactive where Base: NSObject {
 
-    public func rx_observe<Element>(
+    public func observe<Element>(
         type: E.Type,
         _ keyPath: String,
         options: NSKeyValueObservingOptions = .New | .Initial,
@@ -126,7 +129,7 @@ extension NSObject {
 
 #if !DISABLE_SWIZZLING
 
-    public func rx_observeWeakly<Element>(
+    public func observeWeakly<Element>(
         type: E.Type,
         _ keyPath: String,
         options: NSKeyValueObservingOptions = .New | .Initial
@@ -137,23 +140,23 @@ extension NSObject {
 ```
 
 ```swift
-extension NSURLSession {
+extension Reactive where Base: NSURLSession {
 
-    public func rx_response(request: NSURLRequest) -> Observable<(NSData, NSURLResponse)> {}
+    public func response(request: NSURLRequest) -> Observable<(NSData, NSURLResponse)> {}
 
-    public func rx_data(request: NSURLRequest) -> Observable<NSData> {}
+    public func data(request: NSURLRequest) -> Observable<NSData> {}
 
-    public func rx_JSON(request: NSURLRequest) -> Observable<AnyObject> {}
+    public func JSON(request: NSURLRequest) -> Observable<AnyObject> {}
 
-    public func rx_JSON(URL: NSURL) -> Observable<AnyObject> {}
+    public func JSON(URL: NSURL) -> Observable<AnyObject> {}
 
 }
 ```
 
 ```swift
-extension NSNotificationCenter {
+extension Reactive where Base: NSNotificationCenter {
 
-    public func rx_notification(name: String, object: AnyObject?) -> Observable<NSNotification> {}
+    public func notification(name: String, object: AnyObject?) -> Observable<NSNotification> {}
 
 }
 ```
@@ -167,39 +170,39 @@ class DelegateProxy {
 ```
 
 ```swift
-extension CLLocationManager {
+extension Reactive where Base: CLLocationManager {
 
-    public var rx_delegate: DelegateProxy {}
+    public var delegate: DelegateProxy {}
 
-    public var rx_didUpdateLocations: Observable<[CLLocation]> {}
+    public var didUpdateLocations: Observable<[CLLocation]> {}
 
-    public var rx_didFailWithError: Observable<NSError> {}
+    public var didFailWithError: Observable<NSError> {}
 
-    public var rx_didFinishDeferredUpdatesWithError: Observable<NSError> {}
+    public var didFinishDeferredUpdatesWithError: Observable<NSError> {}
 
-    public var rx_didPauseLocationUpdates: Observable<Void> {}
+    public var didPauseLocationUpdates: Observable<Void> {}
 
-    public var rx_didResumeLocationUpdates: Observable<Void> {}
+    public var didResumeLocationUpdates: Observable<Void> {}
 
-    public var rx_didUpdateHeading: Observable<CLHeading> {}
+    public var didUpdateHeading: Observable<CLHeading> {}
 
-    public var rx_didEnterRegion: Observable<CLRegion> {}
+    public var didEnterRegion: Observable<CLRegion> {}
 
-    public var rx_didExitRegion: Observable<CLRegion> {}
+    public var didExitRegion: Observable<CLRegion> {}
 
-    public var rx_didDetermineStateForRegion: Observable<(state: CLRegionState, region: CLRegion)> {}
+    public var didDetermineStateForRegion: Observable<(state: CLRegionState, region: CLRegion)> {}
 
-    public var rx_monitoringDidFailForRegionWithError: Observable<(region: CLRegion?, error: NSError)> {}
+    public var monitoringDidFailForRegionWithError: Observable<(region: CLRegion?, error: NSError)> {}
 
-    public var rx_didStartMonitoringForRegion: Observable<CLRegion> {}
+    public var didStartMonitoringForRegion: Observable<CLRegion> {}
 
-    public var rx_didRangeBeaconsInRegion: Observable<(beacons: [CLBeacon], region: CLBeaconRegion)> {}
+    public var didRangeBeaconsInRegion: Observable<(beacons: [CLBeacon], region: CLBeaconRegion)> {}
 
-    public var rx_rangingBeaconsDidFailForRegionWithError: Observable<(region: CLBeaconRegion, error: NSError)> {}
+    public var rangingBeaconsDidFailForRegionWithError: Observable<(region: CLBeaconRegion, error: NSError)> {}
 
-    public var rx_didVisit: Observable<CLVisit> {}
+    public var didVisit: Observable<CLVisit> {}
 
-    public var rx_didChangeAuthorizationStatus: Observable<CLAuthorizationStatus> {}
+    public var didChangeAuthorizationStatus: Observable<CLAuthorizationStatus> {}
 
 }
 ```
@@ -208,250 +211,281 @@ extension CLLocationManager {
 
 ```swift
 
-extension UIControl {
+extension Reactive where Base: UIControl {
 
-    public func rx_controlEvent(controlEvents: UIControlEvents) -> ControlEvent<Void> {}
+    public func controlEvent(controlEvents: UIControlEvents) -> ControlEvent<Void> {}
 
-    public var rx_enabled: ObserverOf<Bool> {}
+    public var enabled: ObserverOf<Bool> {}
 }
 
 ```
 
 ```swift
-extension UIButton {
+extension Reactive where Base: UIButton {
 
-    public var rx_tap: ControlEvent<Void> {}
-
-}
-```
-
-```swift
-extension UITextField {
-
-    public var rx_text: ControlProperty<String> {}
+    public var tap: ControlEvent<Void> {}
 
 }
 ```
 
 ```swift
-extension UITextView {
+extension Reactive where Base: UITextField {
 
-    override func rx_createDelegateProxy() -> RxScrollViewDelegateProxy {}
-
-    public var rx_text: ControlProperty<String> {}
+    public var text: ControlProperty<String> {}
 
 }
 ```
 
 ```swift
-extension UISearchBar {
+extension Reactive where Base: UITextView {
 
-    public var rx_delegate: DelegateProxy {}
+    override func createDelegateProxy() -> RxScrollViewDelegateProxy {}
 
-    public var rx_searchText: ControlProperty<String> {}
-
-}
-```
-
-```swift
-extension UILabel {
-
-    public var rx_text: ObserverOf<String> {}
+    public var text: ControlProperty<String> {}
 
 }
 ```
 
 ```swift
-extension UIDatePicker {
+extension Reactive where Base: UISearchBar {
 
-    public var rx_date: ControlProperty<NSDate> {}
+    public var delegate: DelegateProxy {}
 
-}
-```
-
-```swift
-extension UIImageView {
-
-    public var rx_image: ObserverOf<UIImage!> {}
-
-    public func rx_imageAnimated(transitionType: String?) -> AnyObserver<UIImage?>
+    public var searchText: ControlProperty<String> {}
 
 }
 ```
 
 ```swift
-extension UIScrollView {
+extension Reactive where Base: UILabel {
 
-    public var rx_delegate: DelegateProxy {}
-
-    public func rx_setDelegate(delegate: UIScrollViewDelegate) {}
-
-    public var rx_contentOffset: ControlProperty<CGPoint> {}
+    public var text: ObserverOf<String> {}
 
 }
 ```
 
 ```swift
-extension UIBarButtonItem {
+extension Reactive where Base: UIDatePicker {
 
-    public var rx_tap: ControlEvent<Void> {}
-
-}
-```
-
-```swift
-extension UISlider {
-
-    public var rx_value: ControlProperty<Float> {}
+    public var date: ControlProperty<NSDate> {}
 
 }
 ```
 
 ```swift
-extension UITableView {
+extension Reactive where Base: UIImageView {
 
-    public var rx_dataSource: DelegateProxy {}
+    public var image: ObserverOf<UIImage!> {}
 
-    public func rx_setDataSource(dataSource: UITableViewDataSource) -> Disposable {}
-
-    public func rx_itemsWithCellFactory(source: O)(cellFactory: (UITableView, Int, S.Generator.Element) -> UITableViewCell) -> Disposable {}
-
-    public func rx_itemsWithCellIdentifier(cellIdentifier: String, cellType: Cell.Type = Cell.self)(source: O)(configureCell: (Int, S.Generator.Element, Cell) -> Void) -> Disposable {}
-
-    public func rx_itemsWithDataSource(dataSource: DataSource)(source: O) -> Disposable {}
-
-    public var rx_itemSelected: ControlEvent<NSIndexPath> {}
-
-    public var rx_itemDeselected: ControlEvent<NSIndexPath> {}
-
-    public var rx_itemInserted: ControlEvent<NSIndexPath> {}
-
-    public var rx_itemDeleted: ControlEvent<NSIndexPath> {}
-
-    public var rx_itemMoved: ControlEvent<ItemMovedEvent> {}
-
-    // This method only works in case one of the `rx_itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
-    public func rx_modelSelected<T>(modelType: T.Type) -> ControlEvent<T> {}
-
-    // This method only works in case one of the `rx_itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
-    public func rx_modelDeselected<T>(modelType: T.Type) -> ControlEvent<T> {}
+    public func imageAnimated(transitionType: String?) -> AnyObserver<UIImage?>
 
 }
 ```
 
 ```swift
-extension UICollectionView {
+extension Reactive where Base: UIScrollView {
 
-    public var rx_dataSource: DelegateProxy {}
+    public var delegate: DelegateProxy {}
 
-    public func rx_setDataSource(dataSource: UICollectionViewDataSource) -> Disposable {}
+    public func setDelegate(delegate: UIScrollViewDelegate) {}
 
-    public func rx_itemsWithCellFactory(source: O)(cellFactory: (UICollectionView, Int, S.Generator.Element) -> UICollectionViewCell) -> Disposable {}
-
-    public func rx_itemsWithCellIdentifier(cellIdentifier: String, cellType: Cell.Type = Cell.self)(source: O)(configureCell: (Int, S.Generator.Element, Cell) -> Void) -> Disposable {}
-
-    public func rx_itemsWithDataSource(dataSource: DataSource)(source: O) -> Disposable {}
-
-    public var rx_itemSelected: ControlEvent<NSIndexPath> {}
-
-    public var rx_itemDeselected: ControlEvent<NSIndexPath> {}
-
-    // This method only works in case one of the `rx_itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
-    public func rx_modelSelected<T>(modelType: T.Type) -> ControlEvent<T> {}
-
-    // This method only works in case one of the `rx_itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
-    public func rx_modelSelected<T>(modelType: T.Type) -> ControlEvent<T> {}
-}
-```
-
-```swift
-extension UIGestureRecognizer {
-
-    public var rx_event: ControlEvent<UIGestureRecognizer> {}
+    public var contentOffset: ControlProperty<CGPoint> {}
 
 }
 ```
 
 ```swift
-extension UIImagePickerController {
+extension Reactive where Base: UIBarButtonItem {
 
-    public var rx_didFinishPickingMediaWithInfo: Observable<[String : AnyObject]> {}
-
-    public var rx_didCancel: Observable<()> {}
+    public var tap: ControlEvent<Void> {}
 
 }
 ```
 
 ```swift
-extension UISegmentedControl {
+extension Reactive where Base: UISlider {
 
-    public var rx_value: ControlProperty<Int> {}
-
-}
-```
-
-```swift
-extension UISwitch {
-
-    public var rx_value: ControlProperty<Bool> {}
+    public var value: ControlProperty<Float> {}
 
 }
 ```
 
 ```swift
-extension UIActivityIndicatorView {
+extension Reactive where Base: UITableView {
 
-    public var rx_animating: AnyObserver<Bool> {}
+    public var dataSource: DelegateProxy {}
 
+    public func setDataSource(dataSource: UITableViewDataSource) -> Disposable {}
+
+    public func itemsWithCellFactory(source: O)(cellFactory: (UITableView, Int, S.Iterator.Element) -> UITableViewCell) -> Disposable {}
+
+    public func itemsWithCellIdentifier(cellIdentifier: String, cellType: Cell.Type = Cell.self)(source: O)(configureCell: (Int, S.Iterator.Element, Cell) -> Void) -> Disposable {}
+
+    public func itemsWithDataSource(dataSource: DataSource)(source: O) -> Disposable {}
+
+    public var itemSelected: ControlEvent<IndexPath> {}
+
+    public var itemDeselected: ControlEvent<IndexPath> {}
+
+    public var itemInserted: ControlEvent<IndexPath> {}
+
+    public var itemDeleted: ControlEvent<IndexPath> {}
+
+    public var itemMoved: ControlEvent<ItemMovedEvent> {}
+
+    // This method only works in case one of the `rx.itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
+    public func modelSelected<T>(modelType: T.Type) -> ControlEvent<T> {}
+
+    // This method only works in case one of the `rx.itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
+    public func modelDeselected<T>(modelType: T.Type) -> ControlEvent<T> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UICollectionView {
+
+    public var dataSource: DelegateProxy {}
+
+    public func setDataSource(dataSource: UICollectionViewDataSource) -> Disposable {}
+
+    public func itemsWithCellFactory(source: O)(cellFactory: (UICollectionView, Int, S.Iterator.Element) -> UICollectionViewCell) -> Disposable {}
+
+    public func itemsWithCellIdentifier(cellIdentifier: String, cellType: Cell.Type = Cell.self)(source: O)(configureCell: (Int, S.Iterator.Element, Cell) -> Void) -> Disposable {}
+
+    public func itemsWithDataSource(dataSource: DataSource)(source: O) -> Disposable {}
+
+    public var itemSelected: ControlEvent<IndexPath> {}
+
+    public var itemDeselected: ControlEvent<IndexPath> {}
+
+    // This method only works in case one of the `rx.itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
+    public func modelSelected<T>(modelType: T.Type) -> ControlEvent<T> {}
+
+    // This method only works in case one of the `rx.itemsWith*` methods was used, or data source implements `SectionedViewDataSourceType`
+    public func modelSelected<T>(modelType: T.Type) -> ControlEvent<T> {}
+}
+```
+
+```swift
+extension Reactive where Base: UIGestureRecognizer {
+
+    public var event: ControlEvent<UIGestureRecognizer> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UIImagePickerController {
+
+    public var didFinishPickingMediaWithInfo: Observable<[String : AnyObject]> {}
+
+    public var didCancel: Observable<()> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UISegmentedControl {
+
+    public var value: ControlProperty<Int> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UISwitch {
+
+    public var value: ControlProperty<Bool> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UIActivityIndicatorView {
+
+    public var animating: AnyObserver<Bool> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UINavigationItem {
+
+    public var title: AnyObserver<String?> {}
 }
 ```
 
 **OSX**
 
 ```swift
-extension NSControl {
+extension Reactive where Base: NSControl {
 
-    public var rx_controlEvent: ControlEvent<()> {}
+    public var controlEvent: ControlEvent<()> {}
 
-    public var rx_enabled: AnyObserver<Bool> {}
-
-}
-```
-
-```swift
-
-extension NSSlider {
-
-    public var rx_value: ControlProperty<Double> {}
+    public var enabled: AnyObserver<Bool> {}
 
 }
 ```
 
 ```swift
-extension NSButton {
 
-    public var rx_tap: ControlEvent<Void> {}
+extension Reactive where Base: NSSlider {
 
-    public var rx_state: ControlProperty<Int> {}
+    public var value: ControlProperty<Double> {}
 
 }
 ```
 
 ```swift
-extension NSImageView {
+extension Reactive where Base: NSButton {
 
-    public var rx_image: ObserverOf<NSImage?> {}
+    public var tap: ControlEvent<Void> {}
 
-    public func rx_imageAnimated(transitionType: String?) -> AnyObserver<NSImage?>
+    public var state: ControlProperty<Int> {}
+
 }
 ```
 
 ```swift
-extension NSTextField {
+extension Reactive where Base: NSImageView {
 
-    public var rx_delegate: DelegateProxy {}
+    public var image: ObserverOf<NSImage?> {}
 
-    public var rx_text: ControlProperty<String> {}
+    public func imageAnimated(transitionType: String?) -> AnyObserver<NSImage?>
+}
+```
+
+```swift
+extension Reactive where Base: NSTextField {
+
+    public var delegate: DelegateProxy {}
+
+    public var text: ControlProperty<String> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UITabBarItem {
+
+    public var badgeValue: AnyObserver<String?> {}
+
+}
+```
+
+```swift
+extension Reactive where Base: UITabBar {
+
+    public var didSelectItem: ControlEvent<UITabBarItem> {}
+
+    public var willBeginCustomizing: ControlEvent<[UITabBarItem]> {}
+
+    public var didBeginCustomizing: ControlEvent<[UITabBarItem]> {}
+
+    public var willEndCustomizing: ControlEvent<(items: [UITabBarItem], changed: Bool)> {}
+
+    public var didEndCustomizing: ControlEvent<(items: [UITabBarItem], changed: Bool)> {}
 
 }
 ```

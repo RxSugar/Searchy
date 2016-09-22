@@ -1,11 +1,11 @@
 import UIKit
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-	private let appWindow = UIWindow(frame: UIScreen.mainScreen().bounds)
+	fileprivate let appWindow = UIWindow(frame: UIScreen.main.bounds)
 
-	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		let navigationController = UINavigationController(rootViewController: SearchyController(context: ApplicationContext()))
-        navigationController.navigationBar.translucent = false
+        navigationController.navigationBar.isTranslucent = false
         navigationController.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor(hue:0.56, saturation:1, brightness:1, alpha:1)]
 
 		appWindow.rootViewController = navigationController

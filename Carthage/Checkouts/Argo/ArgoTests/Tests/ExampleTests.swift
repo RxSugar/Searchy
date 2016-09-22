@@ -1,17 +1,19 @@
 import XCTest
 import Argo
 import Curry
+import Runes
 
 class ExampleTests: XCTestCase {
   func testJSONWithRootArray() {
-    let stringArray: [String]? = JSONFromFile("array_root").flatMap(decode)
+    let stringArray: [String]? = json(fromFile: "array_root").flatMap(decode)
 
     XCTAssertNotNil(stringArray)
     XCTAssertEqual(stringArray!, ["foo", "bar", "baz"])
   }
 
   func testJSONWithRootObject() {
-    let user: User? = JSONFromFile("root_object").flatMap(curry(decodeWithRootKey)("user"))
+    let object = json(fromFile: "root_object") as? [String: Any]
+    let user: User? = object.flatMap { decode($0, rootKey: "user") }
 
     XCTAssert(user != nil)
     XCTAssert(user?.id == 1)
@@ -21,22 +23,23 @@ class ExampleTests: XCTestCase {
   }
 
   func testDecodingNonFinalClass() {
-    let url: NSURL? = JSONFromFile("url").flatMap(curry(decodeWithRootKey)("url"))
+    let object = json(fromFile: "url") as? [String: Any]
+    let url: URL? = object.flatMap { decode($0, rootKey: "url") }
 
     XCTAssert(url != nil)
     XCTAssert(url?.absoluteString == "http://example.com")
   }
 
   func testDecodingJSONWithRootArray() {
-    let expected = JSON.parse([["title": "Foo", "age": 21], ["title": "Bar", "age": 32]])
-    let json = JSONFromFile("root_array").map(JSON.parse)
+    let expected = JSON([["title": "Foo", "age": 21], ["title": "Bar", "age": 32]])
+    let j = json(fromFile: "root_array").map(JSON.init)
 
-    XCTAssert(.Some(expected) == json)
+    XCTAssert(.some(expected) == j)
   }
 
   func testFlatMapOptionals() {
-    let json: AnyObject? = JSONFromFile("user_with_email")
-    let user: User? = json.flatMap(decode)
+    let j: Any? = json(fromFile: "user_with_email")
+    let user: User? = j.flatMap(decode)
 
     XCTAssert(user?.id == 1)
     XCTAssert(user?.name == "Cool User")
@@ -44,8 +47,8 @@ class ExampleTests: XCTestCase {
   }
   
   func testNilCoalescing() {
-    let json: AnyObject? = JSONFromFile("user_with_nested_name")
-    let user: User? = json.flatMap(decode)
+    let j: Any? = json(fromFile: "user_with_nested_name")
+    let user: User? = j.flatMap(decode)
 
     XCTAssert(user?.id == 1)
     XCTAssert(user?.name == "Very Cool User")
@@ -53,8 +56,8 @@ class ExampleTests: XCTestCase {
   }
 
   func testFlatMapDecoded() {
-    let json: AnyObject? = JSONFromFile("user_with_email")
-    let user: Decoded<User> = .fromOptional(json) >>- decode
+    let j: Any? = json(fromFile: "user_with_email")
+    let user: Decoded<User> = .fromOptional(j) >>- decode
 
     XCTAssert(user.value?.id == 1)
     XCTAssert(user.value?.name == "Cool User")

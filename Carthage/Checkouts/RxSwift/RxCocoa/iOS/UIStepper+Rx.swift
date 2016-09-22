@@ -14,17 +14,20 @@ import UIKit
 import RxSwift
 #endif
 
-extension UIStepper {
+extension Reactive where Base: UIStepper {
     
     /**
     Reactive wrapper for `value` property.
     */
-    public var rx_value: ControlProperty<Double> {
-        return rx_value(getter: { [weak self] in
-            self?.value ?? 0
-        }, setter: { [weak self] value in
-            self?.value = value
-        })
+    public var value: ControlProperty<Double> {
+        return Reactive<UIControl>.value(
+            self.base,
+            getter: { stepper in
+                stepper.value
+            }, setter: { stepper, value in
+                stepper.value = value
+            }
+        )
     }
     
 }

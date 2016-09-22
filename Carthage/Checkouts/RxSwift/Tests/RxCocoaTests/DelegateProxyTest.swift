@@ -17,13 +17,26 @@ import UIKit
 // MARK: Protocols
 
 @objc protocol TestDelegateProtocol {
-    optional func testEventHappened(value: Int)
+    @objc optional func testEventHappened(_ value: Int)
+}
+
+@objc class MockTestDelegateProtocol
+    : NSObject
+    , TestDelegateProtocol
+{
+    var numbers = [Int]()
+
+    func testEventHappened(_ value: Int) {
+        numbers.append(value)
+    }
 }
 
 protocol TestDelegateControl: NSObjectProtocol {
-    func doThatTest(value: Int)
+    func doThatTest(_ value: Int)
 
     var test: Observable<Int> { get }
+
+    func setMineForwardDelegate(_ testDelegate: TestDelegateProtocol) -> Disposable
 }
 
 // MARK: Tests
@@ -35,10 +48,10 @@ class DelegateProxyTest : RxTest {
         
         view.delegate = mock
         
-        let _ = view.rx_proxy
+        let _ = view.rx.proxy
         
         XCTAssertEqual(mock.messages, [])
-        XCTAssertTrue(view.rx_proxy.forwardToDelegate() === mock)
+        XCTAssertTrue(view.rx.proxy.forwardToDelegate() === mock)
     }
     
     func test_forwardsUnobservedMethods() {
@@ -47,7 +60,7 @@ class DelegateProxyTest : RxTest {
         
         view.delegate = mock
         
-        let _ = view.rx_proxy
+        let _ = view.rx.proxy
         
         view.delegate?.threeDView?(view, didLearnSomething: "Psssst ...")
         
@@ -62,10 +75,10 @@ class DelegateProxyTest : RxTest {
         
         var observedFeedRequest = false
         
-        let d = view.rx_proxy.observe("threeDView:didLearnSomething:")
-            .subscribeNext { n in
+        let d = view.rx.proxy.observe(#selector(ThreeDSectionedViewProtocol.threeDView(_:didLearnSomething:)))
+            .subscribe(onNext: { n in
                 observedFeedRequest = true
-            }
+            })
         defer {
             d.dispose()
         }
@@ -85,10 +98,10 @@ class DelegateProxyTest : RxTest {
         
         var nMessages = 0
         
-        let d = view.rx_proxy.observe("threeDView:didLearnSomething:")
-            .subscribeNext { n in
+        let d = view.rx.proxy.observe(#selector(ThreeDSectionedViewProtocol.threeDView(_:didLearnSomething:)))
+            .subscribe(onNext: { n in
                 nMessages += 1
-            }
+            })
         
         XCTAssertTrue(nMessages == 0)
         view.delegate?.threeDView?(view, didLearnSomething: "Psssst ...")
@@ -117,24 +130,23 @@ class DelegateProxyTest : RxTest {
         
         view.delegate = mock
        
-        XCTAssertTrue(!mock.respondsToSelector("threeDView(threeDView:didGetXXX:"))
+        XCTAssertTrue(!mock.responds(to: NSSelectorFromString("threeDView(threeDView:didGetXXX:")))
         
-        let sentArgument = NSIndexPath(index: 0)
+        let sentArgument = IndexPath(index: 0)
         
-        var receivedArgument: NSIndexPath? = nil
+        var receivedArgument: IndexPath? = nil
         
-        let d = view.rx_proxy.observe("threeDView:didGetXXX:")
-            .subscribeNext { n in
-                let ip = n[1] as! NSIndexPath
+        let d = view.rx.proxy.observe(#selector(ThreeDSectionedViewProtocol.threeDView(_:didGetXXX:)))
+            .subscribe(onNext: { n in
+                let ip = n[1] as! IndexPath
                 receivedArgument = ip
-            }
+            })
         defer {
             d.dispose()
         }
 
-        XCTAssertTrue(receivedArgument === nil)
         view.delegate?.threeDView?(view, didGetXXX: sentArgument)
-        XCTAssertTrue(receivedArgument === sentArgument)
+        XCTAssertTrue(receivedArgument == sentArgument)
         
         XCTAssertEqual(mock.messages, [])
     }
@@ -148,16 +160,16 @@ class DelegateProxyTest : RxTest {
         var completed = false
         
         autoreleasepool {
-            XCTAssertTrue(!mock.respondsToSelector("threeDView(threeDView:didGetXXX:"))
+            XCTAssertTrue(!mock.responds(to: NSSelectorFromString("threeDView:threeDView:didGetXXX:")))
             
-            let sentArgument = NSIndexPath(index: 0)
+            let sentArgument = IndexPath(index: 0)
             
             _ = view
-                .rx_proxy
-                .observe("threeDView:didGetXXX:")
-                .subscribeCompleted {
+                .rx.proxy
+                .observe(#selector(ThreeDSectionedViewProtocol.threeDView(_:didGetXXX:)))
+                .subscribe(onCompleted: {
                     completed = true
-                }
+                })
             
             view.delegate?.threeDView?(view, didGetXXX: sentArgument)
         }
@@ -171,7 +183,7 @@ class DelegateProxyTest : RxTest {
 extension DelegateProxyTest {
     func test_DelegateProxyHierarchyWorks() {
         let tableView = UITableView()
-        _ = tableView.rx_delegate.observe("scrollViewWillBeginDragging:")
+        _ = tableView.rx.delegate.observe(#selector(UIScrollViewDelegate.scrollViewWillBeginDragging(_:)))
     }
 }
 #endif
@@ -179,7 +191,7 @@ extension DelegateProxyTest {
 // MARK: Testing extensions
 
 extension DelegateProxyTest {
-    func performDelegateTest<Control: TestDelegateControl>(@autoclosure createControl: () -> Control) {
+    func performDelegateTest<Control: TestDelegateControl>( _ createControl: @autoclosure() -> Control) {
         var control: TestDelegateControl!
 
         autoreleasepool {
@@ -197,9 +209,9 @@ extension DelegateProxyTest {
                 completed = true
             })
 
-            _ = (control as! NSObject).rx_deallocated.subscribeNext { _ in
+            _ = (control as! NSObject).rx.deallocated.subscribe(onNext: { _ in
                 deallocated = true
-            }
+            })
         }
 
         XCTAssertTrue(receivedValue == nil)
@@ -207,6 +219,18 @@ extension DelegateProxyTest {
             control.doThatTest(382763)
         }
         XCTAssertEqual(receivedValue, 382763)
+
+        autoreleasepool {
+            let mine = MockTestDelegateProtocol()
+            let disposable = control.setMineForwardDelegate(mine)
+
+            XCTAssertEqual(mine.numbers, [])
+            control.doThatTest(2)
+            XCTAssertEqual(mine.numbers, [2])
+            disposable.dispose()
+            control.doThatTest(3)
+            XCTAssertEqual(mine.numbers, [2])
+        }
 
         XCTAssertFalse(deallocated)
         XCTAssertFalse(completed)
@@ -226,14 +250,14 @@ class Food: NSObject {
 }
 
 @objc protocol ThreeDSectionedViewProtocol {
-    func threeDView(threeDView: ThreeDSectionedView, listenToMeee: NSIndexPath)
-    func threeDView(threeDView: ThreeDSectionedView, feedMe: NSIndexPath)
-    func threeDView(threeDView: ThreeDSectionedView, howTallAmI: NSIndexPath) -> CGFloat
+    func threeDView(_ threeDView: ThreeDSectionedView, listenToMeee: IndexPath)
+    func threeDView(_ threeDView: ThreeDSectionedView, feedMe: IndexPath)
+    func threeDView(_ threeDView: ThreeDSectionedView, howTallAmI: IndexPath) -> CGFloat
     
-    optional func threeDView(threeDView: ThreeDSectionedView, didGetXXX: NSIndexPath)
-    optional func threeDView(threeDView: ThreeDSectionedView, didLearnSomething: String)
-    optional func threeDView(threeDView: ThreeDSectionedView, didFallAsleep: NSIndexPath)
-    optional func threeDView(threeDView: ThreeDSectionedView, getMeSomeFood: NSIndexPath) -> Food
+    @objc optional func threeDView(_ threeDView: ThreeDSectionedView, didGetXXX: IndexPath)
+    @objc optional func threeDView(_ threeDView: ThreeDSectionedView, didLearnSomething: String)
+    @objc optional func threeDView(_ threeDView: ThreeDSectionedView, didFallAsleep: IndexPath)
+    @objc optional func threeDView(_ threeDView: ThreeDSectionedView, getMeSomeFood: IndexPath) -> Food
 }
 
 class ThreeDSectionedView: NSObject {
@@ -253,36 +277,34 @@ class ThreeDSectionedViewDelegateProxy : DelegateProxy
     
     // delegate
     
-    func threeDView(threeDView: ThreeDSectionedView, listenToMeee: NSIndexPath) {
+    func threeDView(_ threeDView: ThreeDSectionedView, listenToMeee: IndexPath) {
         
     }
     
-    func threeDView(threeDView: ThreeDSectionedView, feedMe: NSIndexPath) {
+    func threeDView(_ threeDView: ThreeDSectionedView, feedMe: IndexPath) {
         
     }
     
-    func threeDView(threeDView: ThreeDSectionedView, howTallAmI: NSIndexPath) -> CGFloat {
+    func threeDView(_ threeDView: ThreeDSectionedView, howTallAmI: IndexPath) -> CGFloat {
         return 1.1
     }
     
     // integration
     
-    class func setCurrentDelegate(delegate: AnyObject?, toObject object: AnyObject) {
+    class func setCurrentDelegate(_ delegate: AnyObject?, toObject object: AnyObject) {
         let view = object as! ThreeDSectionedView
         view.delegate = delegate as? ThreeDSectionedViewProtocol
     }
     
-    class func currentDelegateFor(object: AnyObject) -> AnyObject? {
+    class func currentDelegateFor(_ object: AnyObject) -> AnyObject? {
         let view = object as! ThreeDSectionedView
         return view.delegate
     }
 }
 
-extension ThreeDSectionedView {
-    var rx_proxy: DelegateProxy {
-        get {
-            return proxyForObject(ThreeDSectionedViewDelegateProxy.self, self)
-        }
+extension Reactive where Base: ThreeDSectionedView {
+    var proxy: DelegateProxy {
+        return ThreeDSectionedViewDelegateProxy.proxyForObject(base)
     }
 }
 
@@ -292,30 +314,62 @@ class MockThreeDSectionedViewProtocol : NSObject, ThreeDSectionedViewProtocol {
     
     var messages: [String] = []
     
-    func threeDView(threeDView: ThreeDSectionedView, listenToMeee: NSIndexPath) {
+    func threeDView(_ threeDView: ThreeDSectionedView, listenToMeee: IndexPath) {
         messages.append("listenToMeee")
     }
     
-    func threeDView(threeDView: ThreeDSectionedView, feedMe: NSIndexPath) {
+    func threeDView(_ threeDView: ThreeDSectionedView, feedMe: IndexPath) {
         messages.append("feedMe")
     }
     
-    func threeDView(threeDView: ThreeDSectionedView, howTallAmI: NSIndexPath) -> CGFloat {
+    func threeDView(_ threeDView: ThreeDSectionedView, howTallAmI: IndexPath) -> CGFloat {
         messages.append("howTallAmI")
         return 3
     }
     
-    /*func threeDView(threeDView: ThreeDSectionedView, didGetXXX: NSIndexPath) {
+    /*func threeDView(threeDView: ThreeDSectionedView, didGetXXX: IndexPath) {
         messages.append("didGetXXX")
     }*/
     
-    func threeDView(threeDView: ThreeDSectionedView, didLearnSomething: String) {
+    func threeDView(_ threeDView: ThreeDSectionedView, didLearnSomething: String) {
         messages.append("didLearnSomething")
     }
     
-    //optional func threeDView(threeDView: ThreeDSectionedView, didFallAsleep: NSIndexPath)
-    func threeDView(threeDView: ThreeDSectionedView, getMeSomeFood: NSIndexPath) -> Food {
+    //optional func threeDView(threeDView: ThreeDSectionedView, didFallAsleep: IndexPath)
+    func threeDView(_ threeDView: ThreeDSectionedView, getMeSomeFood: IndexPath) -> Food {
         messages.append("getMeSomeFood")
         return Food()
     }
 }
+
+#if os(OSX)
+extension MockTestDelegateProtocol
+    : NSTextFieldDelegate {
+
+    }
+#endif
+
+#if os(iOS) || os(tvOS)
+extension MockTestDelegateProtocol
+    : UICollectionViewDataSource
+    , UIScrollViewDelegate
+    , UITableViewDataSource
+    , UITableViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        fatalError()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        fatalError()
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        fatalError()
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        fatalError()
+    }
+}
+#endif

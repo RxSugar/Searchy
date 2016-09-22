@@ -24,53 +24,53 @@ class ImagePickerController: ViewController {
         super.viewDidLoad()
 
 
-        cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
 
-        cameraButton.rx_tap
+        cameraButton.rx.tap
             .flatMapLatest { [weak self] _ in
-                return UIImagePickerController.rx_createWithParent(self) { picker in
-                    picker.sourceType = .Camera
+                return Reactive<UIImagePickerController>.createWithParent(self) { picker in
+                    picker.sourceType = .camera
                     picker.allowsEditing = false
                 }
-                .flatMap { $0.rx_didFinishPickingMediaWithInfo }
+                .flatMap { $0.rx.didFinishPickingMediaWithInfo }
                 .take(1)
             }
             .map { info in
                 return info[UIImagePickerControllerOriginalImage] as? UIImage
             }
-            .bindTo(imageView.rx_image)
+            .bindTo(imageView.rx.image)
             .addDisposableTo(disposeBag)
 
-        galleryButton.rx_tap
+        galleryButton.rx.tap
             .flatMapLatest { [weak self] _ in
-                return UIImagePickerController.rx_createWithParent(self) { picker in
-                    picker.sourceType = .PhotoLibrary
+                return Reactive<UIImagePickerController>.createWithParent(self) { picker in
+                    picker.sourceType = .photoLibrary
                     picker.allowsEditing = false
                 }
                 .flatMap {
-                    $0.rx_didFinishPickingMediaWithInfo
+                    $0.rx.didFinishPickingMediaWithInfo
                 }
                 .take(1)
             }
             .map { info in
                 return info[UIImagePickerControllerOriginalImage] as? UIImage
             }
-            .bindTo(imageView.rx_image)
+            .bindTo(imageView.rx.image)
             .addDisposableTo(disposeBag)
 
-        cropButton.rx_tap
+        cropButton.rx.tap
             .flatMapLatest { [weak self] _ in
-                return UIImagePickerController.rx_createWithParent(self) { picker in
-                    picker.sourceType = .PhotoLibrary
+                return Reactive<UIImagePickerController>.createWithParent(self) { picker in
+                    picker.sourceType = .photoLibrary
                     picker.allowsEditing = true
                 }
-                .flatMap { $0.rx_didFinishPickingMediaWithInfo }
+                .flatMap { $0.rx.didFinishPickingMediaWithInfo }
                 .take(1)
             }
             .map { info in
-                return info[UIImagePickerControllerOriginalImage] as? UIImage
+                return info[UIImagePickerControllerEditedImage] as? UIImage
             }
-            .bindTo(imageView.rx_image)
+            .bindTo(imageView.rx.image)
             .addDisposableTo(disposeBag)
     }
     

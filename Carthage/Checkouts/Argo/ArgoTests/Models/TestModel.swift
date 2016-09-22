@@ -1,5 +1,6 @@
 import Argo
 import Curry
+import Runes
 
 struct TestModel {
   let numerics: TestModelNumerics
@@ -14,36 +15,46 @@ struct TestModel {
 }
 
 extension TestModel: Decodable {
-  static func decode(j: JSON) -> Decoded<TestModel> {
+  static func decode(_ json: JSON) -> Decoded<TestModel> {
     let curriedInit = curry(self.init)
     return curriedInit
-      <^> j <| "numerics"
-      <*> j <| ["user_opt", "name"]
-      <*> j <| "bool"
-      <*> j <|| "string_array"
-      <*> j <||? "string_array_opt"
-      <*> j <|| ["embedded", "string_array"]
-      <*> j <||? ["embedded", "string_array_opt"]
-      <*> j <|? "user_opt"
-      <*> (j <| "dict" >>- { [String: String].decode($0) })
+      <^> json <| "numerics"
+      <*> json <| ["user_opt", "name"]
+      <*> json <| "bool"
+      <*> json <|| "string_array"
+      <*> json <||? "string_array_opt"
+      <*> json <|| ["embedded", "string_array"]
+      <*> json <||? ["embedded", "string_array_opt"]
+      <*> json <|? "user_opt"
+      <*> (json <| "dict" >>- { [String: String].decode($0) })
   }
 }
 
 struct TestModelNumerics {
   let int: Int
   let int64: Int64
+  let int64String: Int64
   let double: Double
   let float: Float
   let intOpt: Int?
+  let uint: UInt
+  let uint64: UInt64
+  let uint64String: UInt64
 }
 
 extension TestModelNumerics: Decodable {
-  static func decode(j: JSON) -> Decoded<TestModelNumerics> {
-    return curry(self.init)
-      <^> j <| "int"
-      <*> j <| "int64"
-      <*> j <| "double"
-      <*> j <| "float"
-      <*> j <|? "int_opt"
+  static func decode(_ json: JSON) -> Decoded<TestModelNumerics> {
+    let f = curry(self.init)
+      <^> json <| "int"
+      <*> json <| "int64"
+      <*> json <| "int64_string"
+      <*> json <| "double"
+      <*> json <| "float"
+      <*> json <|? "int_opt"
+
+    return f
+      <*> json <| "uint"
+      <*> json <| "uint64"
+      <*> json <| "uint64_string"
   }
 }

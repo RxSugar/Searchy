@@ -1,11 +1,11 @@
 import UIKit
 
 protocol SearchyImageTransitionable : SearchyReversableTransitionable {
-    func imageViewForItem(item: SearchResult) -> UIImageView?
+    func imageViewForItem(_ item: SearchResult) -> UIImageView?
 }
 
 protocol SearchyReversableTransitionable {
-    func setVisibleTransitionState(visible:Bool)
+    func setVisibleTransitionState(_ visible:Bool)
     func view() -> UIView
 }
 
@@ -22,38 +22,38 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
        self.imageTransition = ImageTransition.build(selectedItem, navigationController: navigationController)
     }
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         imageTransition(transitionContext)?.animate()
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return ImageTransition.duration
     }
 }
 
 struct ImageTransition {
     static let duration = 0.3
-    private let navigationController:UINavigationController
-    private let selectedItem:SearchResult
-    private let fromView: UIView
-    private let toView: UIView
-    private let containerView: UIView
-    private let fromImageView: UIImageView
-    private let toImageView: UIImageView
-    private let fromTransitionable: SearchyImageTransitionable
-    private let toTransitionable: SearchyImageTransitionable
-    private let context: UIViewControllerContextTransitioning
+    fileprivate let navigationController:UINavigationController
+    fileprivate let selectedItem:SearchResult
+    fileprivate let fromView: UIView
+    fileprivate let toView: UIView
+    fileprivate let containerView: UIView
+    fileprivate let fromImageView: UIImageView
+    fileprivate let toImageView: UIImageView
+    fileprivate let fromTransitionable: SearchyImageTransitionable
+    fileprivate let toTransitionable: SearchyImageTransitionable
+    fileprivate let context: UIViewControllerContextTransitioning
     
     init?(selectedItem: SearchResult, navigationController: UINavigationController, transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromTransitionable = transitionContext.viewForKey(UITransitionContextFromViewKey) as? SearchyImageTransitionable,
-            let toTransitionable = transitionContext.viewForKey(UITransitionContextToViewKey) as? SearchyImageTransitionable,
-            let containerView = transitionContext.containerView(),
+        guard let fromTransitionable = transitionContext.view(forKey: UITransitionContextViewKey.from) as? SearchyImageTransitionable,
+            let toTransitionable = transitionContext.view(forKey: UITransitionContextViewKey.to) as? SearchyImageTransitionable,
             let fromImageView = fromTransitionable.imageViewForItem(selectedItem),
             let toImageView = toTransitionable.imageViewForItem(selectedItem) else {
                 print("FAIL!!!")
-                transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                 return nil
         }
+        let containerView = transitionContext.containerView
         
         self.fromTransitionable = fromTransitionable
         self.toTransitionable = toTransitionable
@@ -69,34 +69,34 @@ struct ImageTransition {
     
     func animate() {
         let isPush = navigationController.viewControllers.reduce(false) { isPush, viewController in
-            return isPush || viewController.isViewLoaded() && viewController.view == fromView
+            return isPush || viewController.isViewLoaded && viewController.view == fromView
         }
         let topView = isPush ? toView : fromView
         containerView.addSubview(fromView)
         containerView.addSubview(toView)
-        containerView.bringSubviewToFront(topView)
+        containerView.bringSubview(toFront: topView)
         
         toTransitionable.setVisibleTransitionState(false)
         fromTransitionable.setVisibleTransitionState(true)
         
-        toView.frame = context.finalFrameForViewController(context.viewControllerForKey(UITransitionContextToViewControllerKey)!)
+        toView.frame = context.finalFrame(for: context.viewController(forKey: UITransitionContextViewControllerKey.to)!)
         toView.layoutIfNeeded()
         
         let imageSnapshot = UIImageView(image: fromImageView.image)
         imageSnapshot.contentMode = fromImageView.contentMode
-        imageSnapshot.frame = fromImageView.convertRect(fromImageView.bounds, toView: containerView)
+        imageSnapshot.frame = fromImageView.convert(fromImageView.bounds, to: containerView)
         containerView.addSubview(imageSnapshot)
         
-        fromImageView.hidden = true
-        toImageView.hidden = true
+        fromImageView.isHidden = true
+        toImageView.isHidden = true
         
-        UIView.animateWithDuration(ImageTransition.duration, animations: {
+        UIView.animate(withDuration: ImageTransition.duration, animations: {
             self.toTransitionable.setVisibleTransitionState(!self.cancelled())
             self.fromTransitionable.setVisibleTransitionState(self.cancelled())
-            imageSnapshot.frame = self.toImageView.convertRect(self.toImageView.bounds, toView: self.containerView)
+            imageSnapshot.frame = self.toImageView.convert(self.toImageView.bounds, to: self.containerView)
             }, completion: { _ in
-                self.fromImageView.hidden = false
-                self.toImageView.hidden = false
+                self.fromImageView.isHidden = false
+                self.toImageView.isHidden = false
                 self.toTransitionable.setVisibleTransitionState(!self.cancelled())
                 self.fromTransitionable.setVisibleTransitionState(self.cancelled())
                 imageSnapshot.removeFromSuperview()
@@ -105,10 +105,13 @@ struct ImageTransition {
     }
     
     func cancelled() -> Bool {
-        return self.context.transitionWasCancelled()
+        return self.context.transitionWasCancelled
     }
     
-    static func build(selectedItem: SearchResult, navigationController: UINavigationController)(transitionContext: UIViewControllerContextTransitioning) -> ImageTransition? {
-        return self.init(selectedItem: selectedItem, navigationController: navigationController, transitionContext: transitionContext)
+    static func build(_ selectedItem: SearchResult, navigationController: UINavigationController) -> (UIViewControllerContextTransitioning) -> ImageTransition? {
+        return {
+            transitionContext in
+            self.init(selectedItem: selectedItem, navigationController: navigationController, transitionContext: transitionContext)
+        }
     }
 }

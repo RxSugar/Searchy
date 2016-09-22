@@ -2,7 +2,7 @@ import UIKit
 import RxSwift
 
 struct SearchyDisplayItem {
-	private let disposeBag = DisposeBag()
+	fileprivate let disposeBag = DisposeBag()
     let result:SearchResult
 	let image:Observable<UIImage?>
     

@@ -19,24 +19,24 @@ import RxSwift
 #endif
 
 #if os(iOS) || os(OSX) || os(tvOS)
-extension NSLayoutConstraint {
+extension Reactive where Base: NSLayoutConstraint {
     /**
      Bindable sink for `constant` property.
      */
-    public var rx_constant: AnyObserver<CGFloat> {
-        return AnyObserver { [weak self] event in
-            MainScheduler.ensureExecutingOnScheduler()
-
-            switch event {
-            case .Next(let value):
-                self?.constant = value
-            case .Error(let error):
-                bindingErrorToInterface(error)
-                break
-            case .Completed:
-                break
-            }
-        }
+    public var constant: AnyObserver<CGFloat> {
+        return UIBindingObserver(UIElement: self.base) { constraint, constant in
+            constraint.constant = constant
+        }.asObserver()
+    }
+    
+    /**
+     Bindable sink for `active` property.
+     */
+    @available(iOS 8, OSX 10.10, *)
+    public var active: AnyObserver<Bool> {
+        return UIBindingObserver(UIElement: self.base) { constraint, value in
+            constraint.isActive = value
+        }.asObserver()
     }
 }
 

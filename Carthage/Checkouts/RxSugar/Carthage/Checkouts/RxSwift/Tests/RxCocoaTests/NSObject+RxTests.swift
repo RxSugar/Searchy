@@ -15,21 +15,21 @@ class NSObjectTests: RxTest {
     
 }
 
-// rx_deallocated
+// deallocated
 extension NSObjectTests {
     func testDeallocated_ObservableFires() {
         var a = NSObject()
         
         var fired = false
         
-        _ = a
-            .rx_deallocated
+        _ = a.rx
+            .deallocated
             .map { _ in
                 return 1
             }
-            .subscribeNext { _ in
+            .subscribe(onNext: { _ in
                 fired = true
-            }
+            })
         
         XCTAssertFalse(fired)
         
@@ -43,14 +43,14 @@ extension NSObjectTests {
         
         var fired = false
         
-        _ = a
-            .rx_deallocated
+        _ = a.rx
+            .deallocated
             .map { _ in
                 return 1
             }
-            .subscribeCompleted {
+            .subscribe(onCompleted: {
                 fired = true
-            }
+            })
         
         XCTAssertFalse(fired)
         
@@ -64,14 +64,14 @@ extension NSObjectTests {
         
         var fired = false
 
-        _ = a
-            .rx_deallocated
+        _ = a.rx
+            .deallocated
             .map { _ in
                 return 1
             }
-            .subscribeNext { _ in
+            .subscribe(onNext: { _ in
                 fired = true
-            }
+            })
             .dispose()
 
         XCTAssertFalse(fired)
@@ -83,7 +83,7 @@ extension NSObjectTests {
 }
 
 #if !DISABLE_SWIZZLING
-// rx_deallocating
+// rx.deallocating
 extension NSObjectTests {
     func testDeallocating_ObservableFires() {
         var a = NSObject()
@@ -91,13 +91,13 @@ extension NSObjectTests {
         var fired = false
         
         _ = a
-            .rx_deallocating
+            .rx.deallocating
             .map { _ in
                 return 1
             }
-            .subscribeNext { _ in
+            .subscribe(onNext: { _ in
                 fired = true
-            }
+            })
         
         XCTAssertFalse(fired)
         
@@ -112,13 +112,13 @@ extension NSObjectTests {
         var fired = false
         
         _ = a
-            .rx_deallocating
+            .rx.deallocating
             .map { _ in
                 return 1
             }
-            .subscribeCompleted {
+            .subscribe(onCompleted: {
                 fired = true
-            }
+            })
         
         XCTAssertFalse(fired)
         
@@ -133,13 +133,13 @@ extension NSObjectTests {
         var fired = false
 
         _ = a
-            .rx_deallocating
+            .rx.deallocating
             .map { _ in
                 return 1
             }
-            .subscribeNext { _ in
+            .subscribe(onNext: { _ in
                 fired = true
-            }
+            })
             .dispose()
         
         XCTAssertFalse(fired)

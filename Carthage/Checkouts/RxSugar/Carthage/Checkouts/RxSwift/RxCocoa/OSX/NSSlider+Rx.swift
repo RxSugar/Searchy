@@ -12,17 +12,21 @@ import RxSwift
 #endif
 import Cocoa
 
-extension NSSlider {
+extension Reactive where Base: NSSlider {
     
     /**
     Reactive wrapper for `value` property.
     */
-    public var rx_value: ControlProperty<Double> {
-        return rx_value(getter: { [weak self] in
-            return self?.doubleValue ?? 0
-        }, setter: { [weak self] value in
-            self?.doubleValue = value
-        })
+    public var value: ControlProperty<Double> {
+        return Reactive<NSControl>.value(
+            base,
+            getter: { control in
+                return control.doubleValue
+            },
+            setter: { control, value in
+                control.doubleValue = value
+            }
+        )
     }
     
 }

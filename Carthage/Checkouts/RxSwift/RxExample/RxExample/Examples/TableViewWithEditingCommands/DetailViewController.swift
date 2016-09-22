@@ -23,17 +23,17 @@ class DetailViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        imageView.makeRoundedCorners(5)
+        imageView.makeRoundedCorners(40)
         
-        let url = NSURL(string: user.imageURL)!
-        let request = NSURLRequest(URL: url)
+        let url = URL(string: user.imageURL)!
+        let request = URLRequest(url: url)
         
-        NSURLSession.sharedSession().rx_data(request)
+        URLSession.shared.rx.data(request)
             .map { data in
                 UIImage(data: data)
             }
             .observeOn($.mainScheduler)
-            .subscribe(imageView.rx_image)
+            .subscribe(imageView.rx.image)
             .addDisposableTo(disposeBag)
         
         label.text = user.firstName + " " + user.lastName

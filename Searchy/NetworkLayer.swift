@@ -3,34 +3,34 @@ import UIKit
 import RxSwift
 
 protocol NetworkLayer {
-	func dataFromUrl(urlString: String) -> Observable<NSData>
-	func jsonFromUrl(urlString: String) -> Observable<AnyObject>
+	func dataFromUrl(_ urlString: String) -> Observable<Data>
+	func jsonFromUrl(_ urlString: String) -> Observable<Any>
 }
 
-enum SearchyNetworkError: ErrorType {
-    case BadResponse
-    case DeserializationError(ErrorType)
-    case Fatal
+enum SearchyNetworkError: Error {
+    case badResponse
+    case deserializationError(Error)
+    case fatal
 }
 
 class URLSessionNetworkLayer : NetworkLayer {
-	let session = NSURLSession.sharedSession()
+	let session = URLSession.shared
     
-    func fetchRequest(request: NSURLRequest) -> Observable<(NSData, NSHTTPURLResponse)> {
+    func fetchRequest(_ request: URLRequest) -> Observable<(Data, HTTPURLResponse)> {
         return Observable.create { observer in
-            let task = self.session.dataTaskWithRequest(request) { (data, response, error) in
-                guard let response = response, data = data else {
-                    observer.on(.Error(error ?? SearchyNetworkError.Fatal))
+            let task = self.session.dataTask(with: request as URLRequest) { (data, response, error) in
+                guard let response = response, let data = data else {
+                    observer.on(.error(error ?? SearchyNetworkError.fatal))
                     return
                 }
                 
-                guard let httpResponse = response as? NSHTTPURLResponse else {
-                    observer.on(.Error(SearchyNetworkError.BadResponse))
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    observer.on(.error(SearchyNetworkError.badResponse))
                     return
                 }
                 
-                observer.on(.Next(data, httpResponse))
-                observer.on(.Completed)
+                observer.on(.next(data, httpResponse))
+                observer.on(.completed)
             }
             
             let t = task
@@ -42,26 +42,26 @@ class URLSessionNetworkLayer : NetworkLayer {
         }
     }
     
-	func dataFromUrl(urlString: String) -> Observable<NSData> {
+	func dataFromUrl(_ urlString: String) -> Observable<Data> {
 		return fetchRequest(requestForPath(urlString))
             .map { data, _ in return data }
             .observeOn(MainScheduler.instance)
         
 	}
 	
-	func jsonFromUrl(urlString: String) -> Observable<AnyObject> {
+	func jsonFromUrl(_ urlString: String) -> Observable<Any> {
 		return fetchRequest(requestForPath(urlString))
             .map { data, response in
                 do {
-                    return try NSJSONSerialization.JSONObjectWithData(data ?? NSData(), options: [])
+                    return try JSONSerialization.jsonObject(with: data, options: [])
                 } catch let error {
-                    throw SearchyNetworkError.DeserializationError(error)
+                    throw SearchyNetworkError.deserializationError(error)
                 }
             }
             .observeOn(MainScheduler.instance)
 	}
 	
-	private func requestForPath(urlString: String) -> NSURLRequest {
-		return NSURLRequest(URL: NSURL(string: urlString)!)
+	fileprivate func requestForPath(_ urlString: String) -> URLRequest {
+		return URLRequest(url: URL(string: urlString)!)
 	}
 }

@@ -7,8 +7,8 @@ enum TestRawString: String {
 }
 
 enum TestRawInt: Int {
-  case Zero
-  case One
+  case zero
+  case one
 }
 
 extension TestRawString: Decodable { }
@@ -16,26 +16,26 @@ extension TestRawInt: Decodable { }
 
 class RawRepresentable: XCTestCase {
   func testStringEnum() {
-    let json = JSON.Object([
-      "string": JSON.String("CoolString"),
-      "another": JSON.String("NotCoolStringBro")
+    let json = JSON.object([
+      "string": JSON.string("CoolString"),
+      "another": JSON.string("NotCoolStringBro")
       ])
 
-    let string: TestRawString? = json <| "string"
-    let another: TestRawString? = json <| "another"
+    let string: TestRawString? = (json <| "string").value
+    let another: TestRawString? = (json <| "another").value
     XCTAssert(TestRawString.CoolString == string)
     XCTAssert(TestRawString.NotCoolStringBro == another)
   }
 
   func testIntEnum() {
-    let json = JSON.Object([
-      "zero": JSON.Number(0),
-      "one": JSON.Number(1)
+    let json = JSON.object([
+      "zero": JSON.number(0),
+      "one": JSON.number(1)
       ])
 
-    let zero: TestRawInt? = json <| "zero"
-    let one: TestRawInt? = json <| "one"
-    XCTAssert(TestRawInt.Zero == zero)
-    XCTAssert(TestRawInt.One == one)
+    let zero: TestRawInt? = (json <| "zero").value
+    let one: TestRawInt? = (json <| "one").value
+    XCTAssert(TestRawInt.zero == zero)
+    XCTAssert(TestRawInt.one == one)
   }
 }

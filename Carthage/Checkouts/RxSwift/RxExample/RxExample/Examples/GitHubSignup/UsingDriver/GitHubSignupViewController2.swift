@@ -31,10 +31,10 @@ class GitHubSignupViewController2 : ViewController {
 
         let viewModel = GithubSignupViewModel2(
             input: (
-                username: usernameOutlet.rx_text.asDriver(),
-                password: passwordOutlet.rx_text.asDriver(),
-                repeatedPassword: repeatedPasswordOutlet.rx_text.asDriver(),
-                loginTaps: signupOutlet.rx_tap.asDriver()
+                username: usernameOutlet.rx.text.asDriver(),
+                password: passwordOutlet.rx.text.asDriver(),
+                repeatedPassword: repeatedPasswordOutlet.rx.text.asDriver(),
+                loginTaps: signupOutlet.rx.tap.asDriver()
             ),
             dependency: (
                 API: GitHubDefaultAPI.sharedAPI,
@@ -45,36 +45,41 @@ class GitHubSignupViewController2 : ViewController {
 
         // bind results to  {
         viewModel.signupEnabled
-            .driveNext { [weak self] valid  in
-                self?.signupOutlet.enabled = valid
+            .drive(onNext: { [weak self] valid  in
+                self?.signupOutlet.isEnabled = valid
                 self?.signupOutlet.alpha = valid ? 1.0 : 0.5
-            }
+            })
             .addDisposableTo(disposeBag)
 
         viewModel.validatedUsername
-            .drive(usernameValidationOutlet.ex_validationResult)
+            .drive(usernameValidationOutlet.rx.validationResult)
             .addDisposableTo(disposeBag)
 
         viewModel.validatedPassword
-            .drive(passwordValidationOutlet.ex_validationResult)
+            .drive(passwordValidationOutlet.rx.validationResult)
             .addDisposableTo(disposeBag)
 
         viewModel.validatedPasswordRepeated
-            .drive(repeatedPasswordValidationOutlet.ex_validationResult)
+            .drive(repeatedPasswordValidationOutlet.rx.validationResult)
             .addDisposableTo(disposeBag)
 
         viewModel.signingIn
-            .drive(signingUpOulet.rx_animating)
+            .drive(signingUpOulet.rx.animating)
             .addDisposableTo(disposeBag)
 
         viewModel.signedIn
-            .driveNext { signedIn in
+            .drive(onNext: { signedIn in
                 print("User signed in \(signedIn)")
-            }
+            })
             .addDisposableTo(disposeBag)
         //}
 
-        let tapBackground = UITapGestureRecognizer(target: self, action: Selector("dismissKeyboard:"))
+        let tapBackground = UITapGestureRecognizer()
+        tapBackground.rx.event
+            .subscribe(onNext: { [weak self] _ in
+                self?.view.endEditing(true)
+            })
+            .addDisposableTo(disposeBag)
         view.addGestureRecognizer(tapBackground)
     }
    
@@ -86,17 +91,13 @@ class GitHubSignupViewController2 : ViewController {
     // This will work well with UINavigationController, but has an assumption that view controller will
     // never be added as a child view controller. If we didn't recreate the dispose bag here,
     // then our resources would never be properly released.
-    override func willMoveToParentViewController(parent: UIViewController?) {
+    override func willMove(toParentViewController parent: UIViewController?) {
         if let parent = parent {
-            assert(parent.isKindOfClass(UINavigationController), "Please read comments")
+            assert(parent as? UINavigationController != nil, "Please read comments")
         }
         else {
             self.disposeBag = DisposeBag()
         }
-    }
-
-    func dismissKeyboard(gr: UITapGestureRecognizer) {
-        view.endEditing(true)
     }
 
 }

@@ -4,15 +4,15 @@ import RxSugar
 @testable import Searchy
 
 struct FakeSearchService: SearchService {
-    let searchOperation:(String -> Observable<[SearchResult]>)
+    let searchOperation:((String) -> Observable<[SearchResult]>)
 	
-	func search(searchTerm: String) -> Observable<[SearchResult]> {
+	func search(_ searchTerm: String) -> Observable<[SearchResult]> {
 		return searchOperation(searchTerm)
 	}
 }
 
 class SearchyModelTests: XCTestCase {
-	static let url =  NSURL(string: "http://www.asynchrony.com")!
+	static let url =  URL(string: "http://www.asynchrony.com")!
     let resultOne = SearchResult(artist: "One", songTitle: "hello", resultUrl: SearchyModelTests.url, iconUrl: SearchyModelTests.url)
     let resultTwo = SearchResult(artist: "Two", songTitle: "hello", resultUrl: SearchyModelTests.url, iconUrl: SearchyModelTests.url)
     let resultThree = SearchResult(artist: "Three", songTitle: "hello", resultUrl: SearchyModelTests.url, iconUrl: SearchyModelTests.url)

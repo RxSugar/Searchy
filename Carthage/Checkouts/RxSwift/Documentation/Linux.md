@@ -16,10 +16,10 @@ let package = Package(
 )
 ```
 
-What does work:
+What works:
 * Distribution using Swift Package Manager
 * Single Threaded mode (CurrentThreadScheduler)
-* Half of unit tests are passing.
+* Half of the unit tests are passing.
 * Projects that can be compiled and "used":
     * RxSwift
     * RxBlocking
@@ -28,4 +28,4 @@ What does work:
 What doesn't work:
 * Schedulers - because they are dependent on https://github.com/apple/swift-corelibs-libdispatch and it still hasn't been released
 * Multithreading - still no access to c11 locks
-* For some reason it looks like Swift compiler generates wrong code when using `ErrorType` on `Linux`, so don't use errors, otherwise you can get weird crashes.
+* For some reason it looks like Swift compiler generates wrong code when using `Swift.Error` on `Linux`, so don't use errors, otherwise you can get weird crashes.

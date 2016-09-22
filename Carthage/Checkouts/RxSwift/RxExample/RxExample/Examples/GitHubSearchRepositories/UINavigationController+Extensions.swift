@@ -18,24 +18,17 @@ struct Colors {
     static let OnlineColor = nil as UIColor?
 }
 
-extension UINavigationController {
-    var rx_serviceState: AnyObserver<ServiceState?> {
-        return AnyObserver { event in
-            switch event {
-            case .Next(let maybeServiceState):
-                // if nil is being bound, then don't change color, it's not perfect, but :)
-                if let serviceState = maybeServiceState {
-                    let isOffline = serviceState ?? .Online == .Offline
+extension Reactive where Base: UINavigationController {
+    var serviceState: AnyObserver<ServiceState?> {
+        return UIBindingObserver(UIElement: base) { navigationController, maybeServiceState in
+            // if nil is being bound, then don't change color, it's not perfect, but :)
+            if let serviceState = maybeServiceState {
+                let isOffline = serviceState == .offline
 
-                    self.navigationBar.backgroundColor = isOffline
-                        ? Colors.OfflineColor
-                        : Colors.OnlineColor
-                }
-            case .Error(let error):
-                bindingErrorToInterface(error)
-            case .Completed:
-                break
+                navigationController.navigationBar.backgroundColor = isOffline
+                    ? Colors.OfflineColor
+                    : Colors.OnlineColor
             }
-        }
+        }.asObserver()
     }
 }

@@ -11,13 +11,13 @@ class UIButton_SugarTests: XCTestCase {
         var events: [String] = []
         _ = eventStream.subscribeNext { events.append("tap") }
         
-        testObject.fireControlEvents([.TouchUpInside])
+        testObject.fireControlEvents([testObject.rxs.primaryControlEvent()])
         XCTAssertEqual(events, ["tap"])
         
-        testObject.fireControlEvents([.TouchDown])
+        testObject.fireControlEvents([.touchDown])
         XCTAssertEqual(events, ["tap"])
         
-        testObject.fireControlEvents([.TouchUpInside])
+        testObject.fireControlEvents([testObject.rxs.primaryControlEvent()])
         XCTAssertEqual(events, ["tap", "tap"])
     }
 }

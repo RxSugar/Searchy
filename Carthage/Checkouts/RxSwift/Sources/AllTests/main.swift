@@ -55,16 +55,19 @@ _ObservableBlockingTest.allTests = [
     //("testToArray_fail", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testToArray_fail(); _ObservableBlockingTest.tearDown(); }),
     ("testToArray_someData", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testToArray_someData(); _ObservableBlockingTest.tearDown(); }),
     ("testToArray_withRealScheduler", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testToArray_withRealScheduler(); _ObservableBlockingTest.tearDown(); }),
+    ("testToArray_independent", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testToArray_independent(); _ObservableBlockingTest.tearDown(); }),
     ("testFirst_empty", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testFirst_empty(); _ObservableBlockingTest.tearDown(); }),
     ("testFirst_return", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testFirst_return(); _ObservableBlockingTest.tearDown(); }),
     //("testFirst_fail", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testFirst_fail(); _ObservableBlockingTest.tearDown(); }),
     ("testFirst_someData", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testFirst_someData(); _ObservableBlockingTest.tearDown(); }),
     ("testFirst_withRealScheduler", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testFirst_withRealScheduler(); _ObservableBlockingTest.tearDown(); }),
+    ("testFirst_independent", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testFirst_independent(); _ObservableBlockingTest.tearDown(); }),
     ("testLast_empty", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testLast_empty(); _ObservableBlockingTest.tearDown(); }),
     ("testLast_return", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testLast_return(); _ObservableBlockingTest.tearDown(); }),
     //("testLast_fail", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testLast_fail(); _ObservableBlockingTest.tearDown(); }),
     ("testLast_someData", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testLast_someData(); _ObservableBlockingTest.tearDown(); }),
     ("testLast_withRealScheduler", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testLast_withRealScheduler(); _ObservableBlockingTest.tearDown(); }),
+    ("testLast_independent", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testLast_independent(); _ObservableBlockingTest.tearDown(); }),
     ("testSingle_empty", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_empty(); _ObservableBlockingTest.tearDown(); }),
     ("testSingle_return", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_return(); _ObservableBlockingTest.tearDown(); }),
     ("testSingle_two", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_two(); _ObservableBlockingTest.tearDown(); }),
@@ -79,6 +82,7 @@ _ObservableBlockingTest.allTests = [
     //("testSingle_predicate_throws", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_predicate_throws(); _ObservableBlockingTest.tearDown(); }),
     //("testSingle_predicate_fail", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_predicate_fail(); _ObservableBlockingTest.tearDown(); }),
     ("testSingle_predicate_withRealScheduler", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_predicate_withRealScheduler(); _ObservableBlockingTest.tearDown(); }),
+    ("testSingle_independent", { _ObservableBlockingTest.setUp(); _ObservableBlockingTest.testSingle_independent(); _ObservableBlockingTest.tearDown(); }),
 ]
 
 
@@ -87,6 +91,22 @@ _ObserverTests.allTests = [
     ("testConvenienceOn_Next", { _ObserverTests.setUp(); _ObserverTests.testConvenienceOn_Next(); _ObserverTests.tearDown(); }),
     //("testConvenienceOn_Error", { _ObserverTests.setUp(); _ObserverTests.testConvenienceOn_Error(); _ObserverTests.tearDown(); }),
     ("testConvenienceOn_Complete", { _ObserverTests.setUp(); _ObserverTests.testConvenienceOn_Complete(); _ObserverTests.tearDown(); }),
+]
+
+
+let _PublishSubjectTest = PublishSubjectTest()
+_PublishSubjectTest.allTests = [
+    ("test_hasObserversNoObservers", { _PublishSubjectTest.setUp(); _PublishSubjectTest.test_hasObserversNoObservers(); _PublishSubjectTest.tearDown(); }),
+    ("test_hasObserversOneObserver", { _PublishSubjectTest.setUp(); _PublishSubjectTest.test_hasObserversOneObserver(); _PublishSubjectTest.tearDown(); }),
+    ("test_hasObserversManyObserver", { _PublishSubjectTest.setUp(); _PublishSubjectTest.test_hasObserversManyObserver(); _PublishSubjectTest.tearDown(); }),
+]
+
+
+let _ReplaySubjectTest = ReplaySubjectTest()
+_ReplaySubjectTest.allTests = [
+    ("test_hasObserversNoObservers", { _ReplaySubjectTest.setUp(); _ReplaySubjectTest.test_hasObserversNoObservers(); _ReplaySubjectTest.tearDown(); }),
+    ("test_hasObserversOneObserver", { _ReplaySubjectTest.setUp(); _ReplaySubjectTest.test_hasObserversOneObserver(); _ReplaySubjectTest.tearDown(); }),
+    ("test_hasObserversManyObserver", { _ReplaySubjectTest.setUp(); _ReplaySubjectTest.test_hasObserversManyObserver(); _ReplaySubjectTest.tearDown(); }),
 ]
 
 
@@ -343,6 +363,7 @@ _DisposableTest.allTests = [
     ("testActionDisposable", { _DisposableTest.setUp(); _DisposableTest.testActionDisposable(); _DisposableTest.tearDown(); }),
     ("testHotObservable_Disposing", { _DisposableTest.setUp(); _DisposableTest.testHotObservable_Disposing(); _DisposableTest.tearDown(); }),
     ("testCompositeDisposable_TestNormal", { _DisposableTest.setUp(); _DisposableTest.testCompositeDisposable_TestNormal(); _DisposableTest.tearDown(); }),
+    ("testCompositeDisposable_TestInitWithNumberOfDisposables", { _DisposableTest.setUp(); _DisposableTest.testCompositeDisposable_TestInitWithNumberOfDisposables(); _DisposableTest.tearDown(); }),
     ("testCompositeDisposable_TestRemoving", { _DisposableTest.setUp(); _DisposableTest.testCompositeDisposable_TestRemoving(); _DisposableTest.tearDown(); }),
     ("testRefCountDisposable_RefCounting", { _DisposableTest.setUp(); _DisposableTest.testRefCountDisposable_RefCounting(); _DisposableTest.tearDown(); }),
     ("testRefCountDisposable_PrimaryDisposesFirst", { _DisposableTest.setUp(); _DisposableTest.testRefCountDisposable_PrimaryDisposesFirst(); _DisposableTest.tearDown(); }),
@@ -464,16 +485,24 @@ _ObservableStandardSequenceOperatorsTest.allTests = [
     ("testSingle_One", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSingle_One(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     ("testSingle_Many", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSingle_Many(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     //("testSingle_Error", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSingle_Error(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
+    ("testSingle_DecrementCountsFirst", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSingle_DecrementCountsFirst(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     ("testSinglePredicate_Empty", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSinglePredicate_Empty(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     ("testSinglePredicate_One", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSinglePredicate_One(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     ("testSinglePredicate_Many", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSinglePredicate_Many(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     //("testSinglePredicate_Error", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSinglePredicate_Error(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
     //("testSinglePredicate_Throws", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSinglePredicate_Throws(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
+    ("testSinglePredicate_DecrementCountsFirst", { _ObservableStandardSequenceOperatorsTest.setUp(); _ObservableStandardSequenceOperatorsTest.testSinglePredicate_DecrementCountsFirst(); _ObservableStandardSequenceOperatorsTest.tearDown(); }),
 ]
 
 
 let _ObservableBindingTest = ObservableBindingTest()
 _ObservableBindingTest.allTests = [
+    ("testMulticast_Cold_Completed", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testMulticast_Cold_Completed(); _ObservableBindingTest.tearDown(); }),
+    //("testMulticast_Cold_Error", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testMulticast_Cold_Error(); _ObservableBindingTest.tearDown(); }),
+    ("testMulticast_Cold_Dispose", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testMulticast_Cold_Dispose(); _ObservableBindingTest.tearDown(); }),
+    ("testMulticast_Cold_Zip", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testMulticast_Cold_Zip(); _ObservableBindingTest.tearDown(); }),
+    //("testMulticast_SubjectSelectorThrows", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testMulticast_SubjectSelectorThrows(); _ObservableBindingTest.tearDown(); }),
+    //("testMulticast_SelectorThrows", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testMulticast_SelectorThrows(); _ObservableBindingTest.tearDown(); }),
     ("testRefCount_DeadlockSimple", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testRefCount_DeadlockSimple(); _ObservableBindingTest.tearDown(); }),
     //("testRefCount_DeadlockErrorAfterN", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testRefCount_DeadlockErrorAfterN(); _ObservableBindingTest.tearDown(); }),
     //("testRefCount_DeadlockErrorImmediatelly", { _ObservableBindingTest.setUp(); _ObservableBindingTest.testRefCount_DeadlockErrorImmediatelly(); _ObservableBindingTest.tearDown(); }),
@@ -532,13 +561,19 @@ _ObservableSingleTest.allTests = [
     ("testDistinctUntilChanged_keySelector_Div2", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDistinctUntilChanged_keySelector_Div2(); _ObservableSingleTest.tearDown(); }),
     //("testDistinctUntilChanged_keySelectorThrows", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDistinctUntilChanged_keySelectorThrows(); _ObservableSingleTest.tearDown(); }),
     //("testDistinctUntilChanged_comparerThrows", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDistinctUntilChanged_comparerThrows(); _ObservableSingleTest.tearDown(); }),
-    ("testDo_shouldSeeAllValues", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_shouldSeeAllValues(); _ObservableSingleTest.tearDown(); }),
-    ("testDo_plainAction", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_plainAction(); _ObservableSingleTest.tearDown(); }),
-    ("testDo_nextCompleted", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_nextCompleted(); _ObservableSingleTest.tearDown(); }),
-    ("testDo_completedNever", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_completedNever(); _ObservableSingleTest.tearDown(); }),
-    //("testDo_nextError", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_nextError(); _ObservableSingleTest.tearDown(); }),
-    //("testDo_nextErrorNot", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_nextErrorNot(); _ObservableSingleTest.tearDown(); }),
-    //("testDo_Throws", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDo_Throws(); _ObservableSingleTest.tearDown(); }),
+    ("testDoOn_shouldSeeAllValues", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_shouldSeeAllValues(); _ObservableSingleTest.tearDown(); }),
+    ("testDoOn_plainAction", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_plainAction(); _ObservableSingleTest.tearDown(); }),
+    ("testDoOn_nextCompleted", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_nextCompleted(); _ObservableSingleTest.tearDown(); }),
+    ("testDoOn_completedNever", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_completedNever(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOn_nextError", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_nextError(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOn_nextErrorNot", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_nextErrorNot(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOn_Throws", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOn_Throws(); _ObservableSingleTest.tearDown(); }),
+    ("testDoOnNext_normal", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOnNext_normal(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOnNext_throws", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOnNext_throws(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOnError_normal", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOnError_normal(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOnError_throws", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOnError_throws(); _ObservableSingleTest.tearDown(); }),
+    ("testDoOnCompleted_normal", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOnCompleted_normal(); _ObservableSingleTest.tearDown(); }),
+    //("testDoOnCompleted_throws", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testDoOnCompleted_throws(); _ObservableSingleTest.tearDown(); }),
     ("testRetry_Basic", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testRetry_Basic(); _ObservableSingleTest.tearDown(); }),
     ("testRetry_Infinite", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testRetry_Infinite(); _ObservableSingleTest.tearDown(); }),
     //("testRetry_Observable_Error", { _ObservableSingleTest.setUp(); _ObservableSingleTest.testRetry_Observable_Error(); _ObservableSingleTest.tearDown(); }),
@@ -597,6 +632,9 @@ _BehaviorSubjectTest.allTests = [
     ("test_Finite", { _BehaviorSubjectTest.setUp(); _BehaviorSubjectTest.test_Finite(); _BehaviorSubjectTest.tearDown(); }),
     //("test_Error", { _BehaviorSubjectTest.setUp(); _BehaviorSubjectTest.test_Error(); _BehaviorSubjectTest.tearDown(); }),
     ("test_Canceled", { _BehaviorSubjectTest.setUp(); _BehaviorSubjectTest.test_Canceled(); _BehaviorSubjectTest.tearDown(); }),
+    ("test_hasObserversNoObservers", { _BehaviorSubjectTest.setUp(); _BehaviorSubjectTest.test_hasObserversNoObservers(); _BehaviorSubjectTest.tearDown(); }),
+    ("test_hasObserversOneObserver", { _BehaviorSubjectTest.setUp(); _BehaviorSubjectTest.test_hasObserversOneObserver(); _BehaviorSubjectTest.tearDown(); }),
+    ("test_hasObserversManyObserver", { _BehaviorSubjectTest.setUp(); _BehaviorSubjectTest.test_hasObserversManyObserver(); _BehaviorSubjectTest.tearDown(); }),
 ]
 
 
@@ -723,6 +761,8 @@ CurrentThreadScheduler.instance.schedule(()) { _ in
         _VariableTest,
         _ObservableBlockingTest,
         _ObserverTests,
+        _PublishSubjectTest,
+        _ReplaySubjectTest,
         _ObservableMultipleTest,
         _CurrentThreadSchedulerTest,
         _DisposableTest,

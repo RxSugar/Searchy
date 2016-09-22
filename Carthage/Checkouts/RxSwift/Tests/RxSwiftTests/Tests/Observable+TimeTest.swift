@@ -20,196 +20,49 @@ class ObservableTimeTest : RxTest {
 
 // MARK: Throttle
 extension ObservableTimeTest {
-    func test_ThrottleTimeSpan_AllPass() {
+    func test_ThrottleTimeSpan_NotLatest_Completed() {
         let scheduler = TestScheduler(initialClock: 0)
 
         let xs = scheduler.createHotObservable([
-            next(150, 0),
-            next(210, 1),
-            next(240, 2),
-            next(270, 3),
-            next(300, 4),
-            completed(400)
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            next(410, 6),
+            next(450, 7),
+            completed(500)
             ])
 
         let res = scheduler.start {
-            xs.throttle(20, scheduler: scheduler)
+            xs.throttle(200, latest: false, scheduler: scheduler)
         }
 
         let correct = [
-            next(230, 1),
-            next(260, 2),
-            next(290, 3),
-            next(320, 4),
-            completed(400)
+            next(210, 2),
+            next(410, 6),
+            completed(500)
         ]
 
         XCTAssertEqual(res.events, correct)
 
         let subscriptions = [
-            Subscription(200, 400)
+            Subscription(200, 500)
         ]
 
         XCTAssertEqual(xs.subscriptions, subscriptions)
     }
 
-    func test_ThrottleTimeSpan_AllPass_ErrorEnd() {
+    func test_ThrottleTimeSpan_NotLatest_Never() {
         let scheduler = TestScheduler(initialClock: 0)
 
         let xs = scheduler.createHotObservable([
             next(150, 0),
-            next(210, 1),
-            next(240, 2),
-            next(270, 3),
-            next(300, 4),
-            error(400, testError)
+
             ])
 
         let res = scheduler.start {
-            xs.throttle(20, scheduler: scheduler)
-        }
-
-        let correct = [
-            next(230, 1),
-            next(260, 2),
-            next(290, 3),
-            next(320, 4),
-            error(400, testError)
-        ]
-
-        XCTAssertEqual(res.events, correct)
-
-        let subscriptions = [
-            Subscription(200, 400)
-        ]
-
-        XCTAssertEqual(xs.subscriptions, subscriptions)
-    }
-
-    func test_ThrottleTimeSpan_AllDrop() {
-        let scheduler = TestScheduler(initialClock: 0)
-
-        let xs = scheduler.createHotObservable([
-            next(150, 0),
-            next(210, 1),
-            next(240, 2),
-            next(270, 3),
-            next(300, 4),
-            next(330, 5),
-            next(360, 6),
-            next(390, 7),
-            completed(400)
-            ])
-
-        let res = scheduler.start {
-            xs.throttle(40, scheduler: scheduler)
-        }
-
-        let correct = [
-            next(400, 7),
-            completed(400)
-        ]
-
-        XCTAssertEqual(res.events, correct)
-
-        let subscriptions = [
-            Subscription(200, 400)
-        ]
-
-        XCTAssertEqual(xs.subscriptions, subscriptions)
-    }
-
-    func test_ThrottleTimeSpan_AllDrop_ErrorEnd() {
-        let scheduler = TestScheduler(initialClock: 0)
-
-        let xs = scheduler.createHotObservable([
-            next(150, 0),
-            next(210, 1),
-            next(240, 2),
-            next(270, 3),
-            next(300, 4),
-            next(330, 5),
-            next(360, 6),
-            next(390, 7),
-            error(400, testError)
-            ])
-
-        let res = scheduler.start {
-            xs.throttle(40, scheduler: scheduler)
-        }
-
-        let correct: [Recorded<Event<Int>>] = [
-            error(400, testError)
-        ]
-
-        XCTAssertEqual(res.events, correct)
-
-        let subscriptions = [
-            Subscription(200, 400)
-        ]
-
-        XCTAssertEqual(xs.subscriptions, subscriptions)
-    }
-
-    func test_ThrottleEmpty() {
-        let scheduler = TestScheduler(initialClock: 0)
-
-        let xs = scheduler.createHotObservable([
-            next(150, 0),
-            completed(300)
-            ])
-
-        let res = scheduler.start {
-            xs.throttle(10, scheduler: scheduler)
-        }
-
-        let correct = [
-            completed(300, Int.self)
-        ]
-
-        XCTAssertEqual(res.events, correct)
-
-        let subscriptions = [
-            Subscription(200, 300)
-        ]
-
-        XCTAssertEqual(xs.subscriptions, subscriptions)
-    }
-
-    func test_ThrottleError() {
-        let scheduler = TestScheduler(initialClock: 0)
-
-        let xs = scheduler.createHotObservable([
-            next(150, 0),
-            error(300, testError)
-            ])
-
-        let res = scheduler.start {
-            xs.throttle(10, scheduler: scheduler)
-        }
-
-        let correct = [
-            error(300, testError, Int.self)
-        ]
-
-        XCTAssertEqual(res.events, correct)
-
-        let subscriptions = [
-            Subscription(200, 300)
-        ]
-
-        XCTAssertEqual(xs.subscriptions, subscriptions)
-    }
-
-    func test_ThrottleNever() {
-        let scheduler = TestScheduler(initialClock: 0)
-
-        let xs = scheduler.createHotObservable([
-            next(150, 0),
-            ])
-
-        let res = scheduler.start {
-            xs.throttle(10, scheduler: scheduler)
+            xs.throttle(200, latest: false, scheduler: scheduler)
         }
 
         let correct: [Recorded<Event<Int>>] = [
@@ -224,52 +77,309 @@ extension ObservableTimeTest {
         XCTAssertEqual(xs.subscriptions, subscriptions)
     }
 
-    func test_ThrottleSimple() {
+    func test_ThrottleTimeSpan_NotLatest_Empty() {
         let scheduler = TestScheduler(initialClock: 0)
 
         let xs = scheduler.createHotObservable([
             next(150, 0),
-            next(210, 1),
-            next(240, 2),
-            next(250, 3),
-            next(280, 4),
-            completed(300)
+            completed(500)
             ])
 
         let res = scheduler.start {
-            xs.throttle(20, scheduler: scheduler)
+            xs.throttle(200, latest: false, scheduler: scheduler)
         }
 
         let correct = [
-            next(230, 1),
-            next(270, 3),
-            next(300, 4),
-            completed(300)
+            completed(500, Int.self)
         ]
 
         XCTAssertEqual(res.events, correct)
 
         let subscriptions = [
-            Subscription(200, 300)
+            Subscription(200, 500)
         ]
 
         XCTAssertEqual(xs.subscriptions, subscriptions)
     }
 
-    func test_ThrottleWithRealScheduler() {
-        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
+    func test_ThrottleTimeSpan_NotLatest_Error() {
+        let scheduler = TestScheduler(initialClock: 0)
 
-        let start = NSDate()
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            error(410, testError),
+            next(450, 7),
+            completed(500)
+            ])
 
-        let a = try! [Observable.just(0), Observable.never()].toObservable().concat()
+        let res = scheduler.start {
+            xs.throttle(200, latest: false, scheduler: scheduler)
+        }
+
+        let correct = [
+            next(210, 2),
+            error(410, testError)
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 410)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_NotLatest_NoEnd() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            next(410, 6),
+            next(450, 7),
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, latest: false, scheduler: scheduler)
+        }
+
+        let correct = [
+            next(210, 2),
+            next(410, 6)
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 1000)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_NotLatest_WithRealScheduler() {
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+
+        let start = Date()
+
+        let a = try! Observable.from([0, 1])
+            .throttle(2.0, latest: false, scheduler: scheduler)
+            .toBlocking()
+            .toArray()
+
+        let end = Date()
+
+        XCTAssertEqualWithAccuracy(0.0, end.timeIntervalSince(start), accuracy: 0.5)
+        XCTAssertEqual(a, [0])
+    }
+}
+
+// MARK: Throttle
+extension ObservableTimeTest {
+
+    func test_ThrottleTimeSpan_Completed() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            next(410, 6),
+            next(450, 7),
+            completed(500)
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, scheduler: scheduler)
+        }
+
+        let correct = [
+            next(210, 2),
+            next(410, 6),
+            next(610, 7),
+            completed(610)
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 500)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_CompletedAfterDueTime() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            next(410, 6),
+            next(450, 7),
+            completed(900)
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, scheduler: scheduler)
+        }
+
+        let correct = [
+            next(210, 2),
+            next(410, 6),
+            next(610, 7),
+            completed(900)
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 900)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_Never() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 0),
+
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, scheduler: scheduler)
+        }
+
+        let correct: [Recorded<Event<Int>>] = [
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 1000)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_Empty() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 0),
+            completed(500)
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, scheduler: scheduler)
+        }
+
+        let correct = [
+            completed(500, Int.self)
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 500)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_Error() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            error(410, testError),
+            next(450, 7),
+            completed(500)
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, scheduler: scheduler)
+        }
+
+        let correct = [
+            next(210, 2),
+            error(410, testError)
+        ]
+
+        XCTAssertEqual(res.events, correct)
+
+        let subscriptions = [
+            Subscription(200, 410)
+        ]
+
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+
+    func test_ThrottleTimeSpan_NoEnd() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(210, 2),
+            next(250, 3),
+            next(310, 4),
+            next(350, 5),
+            next(410, 6),
+            next(450, 7),
+            ])
+
+        let res = scheduler.start {
+            xs.throttle(200, scheduler: scheduler)
+        }
+
+        let correct = [
+            next(210, 2),
+            next(410, 6),
+            next(610, 7),
+        ]
+        
+        XCTAssertEqual(res.events, correct)
+        
+        let subscriptions = [
+            Subscription(200, 1000)
+        ]
+        
+        XCTAssertEqual(xs.subscriptions, subscriptions)
+    }
+    
+    func test_ThrottleTimeSpan_WithRealScheduler() {
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+
+        let start = Date()
+
+        let a = try! Observable.from([0, 1])
             .throttle(2.0, scheduler: scheduler)
             .toBlocking()
-            .first()
+            .toArray()
 
-        let end = NSDate()
+        let end = Date()
 
-        XCTAssertEqualWithAccuracy(2, end.timeIntervalSinceDate(start), accuracy: 0.5)
-        XCTAssertEqual(a, 0)
+        XCTAssertEqualWithAccuracy(2, end.timeIntervalSince(start), accuracy: 0.5)
+        XCTAssertEqual(a, [0, 1])
     }
 }
 
@@ -536,14 +646,14 @@ extension ObservableTimeTest {
     }
 
     func testInterval_TimeSpan_Zero_DefaultScheduler() {
-        let scheduler = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
+        let scheduler = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
 
         let observer = PrimitiveMockObserver<Int64>()
 
-        let expectCompleted = expectationWithDescription("It will complete")
+        let expectCompleted = expectation(description: "It will complete")
 
         let d = Observable<Int64>.interval(0, scheduler: scheduler).takeWhile { $0 < 10 } .subscribe(onNext: { t in
-            observer.on(.Next(t))
+            observer.on(.next(t))
         }, onCompleted: {
             expectCompleted.fulfill()
         })
@@ -552,18 +662,18 @@ extension ObservableTimeTest {
             d.dispose()
         }
 
-        waitForExpectationsWithTimeout(1.0) { e in
+        waitForExpectations(timeout: 1.0) { e in
             XCTAssert(e == nil, "Did not complete")
         }
 
-        let cleanResources = expectationWithDescription("Clean resources")
+        let cleanResources = expectation(description: "Clean resources")
 
-        scheduler.schedule(()) { _ in
+        _ = scheduler.schedule(()) { _ in
             cleanResources.fulfill()
-            return NopDisposable.instance
+            return Disposables.create()
         }
 
-        waitForExpectationsWithTimeout(1.0) { e in
+        waitForExpectations(timeout: 1.0) { e in
             XCTAssert(e == nil, "Did not clean up")
         }
 
@@ -586,18 +696,18 @@ extension ObservableTimeTest {
     }
 
     func test_IntervalWithRealScheduler() {
-        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
 
-        let start = NSDate()
+        let start = Date()
 
         let a = try! Observable<Int64>.interval(1, scheduler: scheduler)
             .take(2)
             .toBlocking()
             .toArray()
 
-        let end = NSDate()
+        let end = Date()
 
-        XCTAssertEqualWithAccuracy(2, end.timeIntervalSinceDate(start), accuracy: 0.5)
+        XCTAssertEqualWithAccuracy(2, end.timeIntervalSince(start), accuracy: 0.5)
         XCTAssertEqual(a, [0, 1])
     }
 }
@@ -1006,6 +1116,7 @@ extension ObservableTimeTest {
             completed(600)
             ])
         
+        
         let res = scheduler.start {
             xs.buffer(timeSpan: 70, count: 3, scheduler: scheduler).map { EquatableArray($0) }
         }
@@ -1093,7 +1204,7 @@ extension ObservableTimeTest {
     }
 
     func testBufferWithTimeOrCount_Default() {
-        let backgroundScheduler = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
+        let backgroundScheduler = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
         
         let result = try! Observable.range(start: 1, count: 10, scheduler: backgroundScheduler)
             .buffer(timeSpan: 1000, count: 3, scheduler: backgroundScheduler)
@@ -1293,7 +1404,7 @@ extension ObservableTimeTest {
     }*/
     
     func windowWithTimeOrCount_Default() {
-        let backgroundScheduler = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .Default)
+        let backgroundScheduler = SerialDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
         
         let result = try! Observable.range(start: 1, count: 10, scheduler: backgroundScheduler)
             .window(timeSpan: 1000, count: 3, scheduler: backgroundScheduler)
@@ -1450,7 +1561,7 @@ extension ObservableTimeTest {
         XCTAssertEqual(res.events, [
             next(210, 42),
             next(220, 43),
-            error(245, RxError.Timeout)
+            error(245, RxError.timeout)
             ])
 
         XCTAssertEqual(xs.subscriptions, [
@@ -1777,5 +1888,356 @@ extension ObservableTimeTest {
         
         XCTAssertEqual(ys.subscriptions, [
             ])
+    }
+}
+
+// MARK: Delay
+extension ObservableTimeTest {
+    
+    func testDelay_TimeSpan_Simple1() {
+        let scheduler = TestScheduler(initialClock: 0)
+    
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(250, 2),
+            next(350, 3),
+            next(450, 4),
+            completed(550)
+            ])
+    
+        let res = scheduler.start {
+            xs.delay(100, scheduler: scheduler)
+        }
+    
+        XCTAssertEqual(res.events, [
+            next(350, 2),
+            next(450, 3),
+            next(550, 4),
+            completed(650)
+            ])
+    
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 550)
+            ])
+    }
+    
+    func testDelay_TimeSpan_Simple2() {
+        let scheduler = TestScheduler(initialClock: 0)
+        
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(250, 2),
+            next(350, 3),
+            next(450, 4),
+            completed(550)
+            ])
+        
+        let res = scheduler.start {
+            xs.delay(50, scheduler: scheduler)
+        }
+        
+        XCTAssertEqual(res.events, [
+            next(300, 2),
+            next(400, 3),
+            next(500, 4),
+            completed(600)
+            ])
+        
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 550)
+            ])
+    }
+    
+    func testDelay_TimeSpan_Simple3() {
+        let scheduler = TestScheduler(initialClock: 0)
+        
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(250, 2),
+            next(350, 3),
+            next(450, 4),
+            completed(550)
+            ])
+        
+        let res = scheduler.start {
+            xs.delay(150, scheduler: scheduler)
+        }
+        
+        XCTAssertEqual(res.events, [
+            next(400, 2),
+            next(500, 3),
+            next(600, 4),
+            completed(700)
+            ])
+        
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 550)
+            ])
+    }
+
+    func testDelay_TimeSpan_Error() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            error(250, testError)
+            ])
+
+        let res = scheduler.start {
+            xs.delay(150, scheduler: scheduler)
+        }
+
+        XCTAssertEqual(res.events, [
+            error(250, testError)
+            ])
+
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 250)
+            ])
+    }
+
+    func testDelay_TimeSpan_Completed() {
+        let scheduler = TestScheduler(initialClock: 0)
+
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            completed(250)
+            ])
+
+        let res = scheduler.start {
+            xs.delay(150, scheduler: scheduler)
+        }
+
+        XCTAssertEqual(res.events, [
+            completed(400)
+            ])
+
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 250)
+            ])
+    }
+
+    func testDelay_TimeSpan_Error1() {
+        let scheduler = TestScheduler(initialClock: 0)
+    
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(250, 2),
+            next(350, 3),
+            next(450, 4),
+            error(550, testError)
+            ])
+    
+        let res = scheduler.start {
+            xs.delay(50, scheduler: scheduler)
+        }
+    
+        XCTAssertEqual(res.events, [
+            next(300, 2),
+            next(400, 3),
+            next(500, 4),
+            error(550, testError)
+            ])
+        
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 550)
+            ])
+    }
+    
+    func testDelay_TimeSpan_Error2() {
+        let scheduler = TestScheduler(initialClock: 0)
+        
+        let xs = scheduler.createHotObservable([
+            next(150, 1),
+            next(250, 2),
+            next(350, 3),
+            next(450, 4),
+            error(550, testError)
+            ])
+        
+        let res = scheduler.start {
+            xs.delay(150, scheduler: scheduler)
+        }
+        
+        XCTAssertEqual(res.events, [
+            next(400, 2),
+            next(500, 3),
+            error(550, testError)
+            ])
+        
+        XCTAssertEqual(xs.subscriptions, [
+            Subscription(200, 550)
+            ])
+    }
+    
+    func testDelay_TimeSpan_Real_Simple() {
+        let waitForError: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+        
+        let s = PublishSubject<Int>()
+    
+        let res = s.delay(0.01, scheduler: scheduler)
+    
+        var array = [Int]()
+        
+        let subscription = res.subscribe(
+            onNext: { i in
+                array.append(i)
+            },
+            onCompleted: {
+                waitForError.onCompleted()
+        })
+        
+        DispatchQueue.global(qos: .default).async {
+            s.onNext(1)
+            s.onNext(2)
+            s.onNext(3)
+            s.onCompleted()
+        }
+
+        try! _ = waitForError.toBlocking(timeout: 5.0).first()
+        
+        subscription.dispose()
+        
+        XCTAssertEqual([1, 2, 3], array)
+    }
+    
+    func testDelay_TimeSpan_Real_Error1() {
+        let errorReceived: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+        
+        let s = PublishSubject<Int>()
+
+        let res = s.delay(0.01, scheduler: scheduler)
+        
+        var array = [Int]()
+
+        var error: Swift.Error? = nil
+        
+        let subscription = res.subscribe(
+            onNext: { i in
+                array.append(i)
+            },
+            onError: { e in
+                error = e
+                errorReceived.onCompleted()
+        })
+        
+        DispatchQueue.global(qos: .default).async {
+            s.onNext(1)
+            s.onNext(2)
+            s.onNext(3)
+            s.onError(testError)
+        }
+
+        try! errorReceived.toBlocking(timeout: 5.0).first()
+        
+        subscription.dispose()
+
+        XCTAssertEqual(error! as NSError, testError)
+    }
+    
+    func testDelay_TimeSpan_Real_Error2() {
+        let elementProcessed: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let errorReceived: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+        
+        let s = PublishSubject<Int>()
+        
+        let res = s.delay(0.01, scheduler: scheduler)
+        
+        var array = [Int]()
+        var err: NSError!
+        
+        let subscription = res.subscribe(
+            onNext: { i in
+                array.append(i)
+                elementProcessed.onCompleted()
+            },
+            onError: { ex in
+                err = ex as NSError
+                errorReceived.onCompleted()
+        })
+        
+        DispatchQueue.global(qos: .default).async {
+            s.onNext(1)
+            try! _ = elementProcessed.toBlocking(timeout: 5.0).first()
+            s.onError(testError)
+        }
+
+        try! _ = errorReceived.toBlocking(timeout: 5.0).first()
+        
+        subscription.dispose()
+        
+        XCTAssertEqual([1], array)
+        XCTAssertEqual(testError, err)
+    }
+
+
+    func testDelay_TimeSpan_Real_Error3() {
+        let elementProcessed: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let errorReceived: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let acknowledged: ReplaySubject<()> = ReplaySubject.create(bufferSize: 1)
+        let scheduler = ConcurrentDispatchQueueScheduler(globalConcurrentQueueQOS: .default)
+        
+        let s = PublishSubject<Int>()
+        
+        let res = s.delay(0.01, scheduler: scheduler)
+        
+        var array = [Int]()
+        var err: NSError!
+        
+        let subscription = res.subscribe(
+            onNext: { i in
+                array.append(i)
+                elementProcessed.onCompleted()
+                try! _ = acknowledged.toBlocking(timeout: 5.0).first()
+            },
+            onError: { ex in
+                err = ex as NSError
+                errorReceived.onCompleted()
+        })
+        
+        DispatchQueue.global(qos: .default).async {
+            s.onNext(1)
+            try! _ = elementProcessed.toBlocking(timeout: 5.0).first()
+            s.onError(testError)
+            acknowledged.onCompleted()
+        }
+
+        try! _ = errorReceived.toBlocking(timeout: 5.0).first()
+        
+        subscription.dispose()
+        
+        XCTAssertEqual([1], array)
+        XCTAssertEqual(testError, err)
+    }
+    
+    func testDelay_TimeSpan_Positive() {
+        let scheduler = TestScheduler(initialClock: 0)
+    
+        let msgs = [
+            next(150, 1),
+            next(250, 2),
+            next(350, 3),
+            next(450, 4),
+            completed(550)
+        ]
+    
+        let xs = scheduler.createHotObservable(msgs)
+    
+        let delay: RxTimeInterval = 42
+        let res = scheduler.start {
+            xs.delay(delay, scheduler: scheduler)
+        }
+    
+        XCTAssertEqual(res.events,
+            msgs.map { Recorded(time: $0.time + Int(delay), event: $0.value) }
+                .filter { $0.time > 200 })
+    }
+    
+    func testDelay_TimeSpan_DefaultScheduler() {
+        let scheduler = MainScheduler.instance
+        XCTAssertEqual(try! Observable.just(1).delay(0.001, scheduler: scheduler).toBlocking(timeout: 5.0).toArray(), [1])
     }
 }

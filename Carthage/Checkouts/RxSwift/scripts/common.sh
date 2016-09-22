@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-#set -o xtrace
 
 RESET="\033[0m"
 BLACK="\033[30m"
@@ -22,11 +21,17 @@ BOLDWHITE="\033[1m\033[37m"
 
 # make sure all tests are passing
 
-DEFAULT_IOS7_SIMULATOR=RxSwiftTest/iPhone-4s/iOS/7.1
-DEFAULT_IOS8_SIMULATOR=RxSwiftTest/iPhone-6/iOS/8.4
-DEFAULT_IOS9_SIMULATOR=RxSwiftTest/iPhone-6/iOS/9.2
-DEFAULT_WATCHOS2_SIMULATOR=RxSwiftTest/Apple-Watch-38mm/watchOS/2.1
-DEFAULT_TVOS_SIMULATOR=RxSwiftTest/Apple-TV-1080p/tvOS/9.1
+IS_SWIFT_3=`swift --version | grep "Apple Swift version 3.0" | wc -l`
+
+if [ "${IS_SWIFT_3}" -eq 1 ]; then
+    DEFAULT_IOS_SIMULATOR=RxSwiftTest/iPhone-6/iOS/10.0
+    DEFAULT_WATCHOS_SIMULATOR=RxSwiftTest/Apple-Watch-38mm/watchOS/3.0
+    DEFAULT_TVOS_SIMULATOR=RxSwiftTest/Apple-TV-1080p/tvOS/10.0
+else
+    DEFAULT_IOS_SIMULATOR=RxSwiftTest/iPhone-6/iOS/9.3
+    DEFAULT_WATCHOS_SIMULATOR=RxSwiftTest/Apple-Watch-38mm/watchOS/2.2
+    DEFAULT_TVOS_SIMULATOR=RxSwiftTest/Apple-TV-1080p/tvOS/9.1
+fi
 
 function runtime_available() {
 	if [ `xcrun simctl list runtimes | grep "${1}" | wc -l` -eq 1 ]; then
@@ -91,14 +96,6 @@ function ensure_simulator_available() {
 	xcrun simctl create "${SIMULATOR}" "com.apple.CoreSimulator.SimDeviceType.${DEVICE}" "${RUNTIME}"
 }
 
-if runtime_available "com.apple.CoreSimulator.SimRuntime.iOS-9-2"; then
-	DEFAULT_IOS9_SIMULATOR=RxSwiftTest/iPhone-6/iOS/9.2
-elif runtime_available "com.apple.CoreSimulator.SimRuntime.iOS-9-1"; then
-	DEFAULT_IOS9_SIMULATOR=RxSwiftTest/iPhone-6/iOS/9.1
-else
-	DEFAULT_IOS9_SIMULATOR=RxSwiftTest/iPhone-6/iOS/9.0
-fi
-
 BUILD_DIRECTORY=build
 
 function rx() {
@@ -130,17 +127,23 @@ function action() {
 				echo "Running on ${DESTINATION}"
 			fi
 	else
-			DESTINATION='platform=OS X,arch=x86_64'
+			DESTINATION='platform=macOS,arch=x86_64'
 	fi
 
-	STATUS=""
+    set -x
+		killall Simulator || true
 	xcodebuild -workspace "${WORKSPACE}" \
 				-scheme "${SCHEME}" \
 				-configuration "${CONFIGURATION}" \
 				-derivedDataPath "${BUILD_DIRECTORY}" \
 				-destination "$DESTINATION" \
-				$ACTION | xcpretty -c; STATUS=${PIPESTATUS[0]}
+				$ACTION | tee build/last-build-output.txt | xcpretty -c
+    exitIfLastStatusWasUnsuccessful
+    set +x
+}
 
+function exitIfLastStatusWasUnsuccessful() {
+  STATUS=${PIPESTATUS[0]}
 	if [ $STATUS -ne 0 ]; then
 		echo $STATUS
  		exit $STATUS

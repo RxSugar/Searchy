@@ -19,12 +19,12 @@ public protocol DriverConvertibleType : ObservableConvertibleType {
     /**
     Converts self to `Driver`.
     */
-    @warn_unused_result(message="http://git.io/rxs.uo")
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
     func asDriver() -> Driver<E>
 }
 
 extension DriverConvertibleType {
-    @warn_unused_result(message="http://git.io/rxs.uo")
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
     public func asObservable() -> Observable<E> {
         return asDriver().asObservable()
     }
@@ -75,7 +75,7 @@ public struct Driver<Element> : DriverConvertibleType {
     /**
     - returns: Built observable sequence.
     */
-    @warn_unused_result(message="http://git.io/rxs.uo")
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
     public func asObservable() -> Observable<E> {
         return _source
     }
@@ -83,7 +83,7 @@ public struct Driver<Element> : DriverConvertibleType {
     /**
     - returns: `self`
     */
-    @warn_unused_result(message="http://git.io/rxs.uo")
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
     public func asDriver() -> Driver<E> {
         return self
     }
@@ -97,9 +97,9 @@ extension Driver {
 
     - returns: An observable sequence with no elements.
     */
-    @warn_unused_result(message="http://git.io/rxs.uo")
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
     public static func empty() -> Driver<E> {
-        return Driver(raw: Observable.empty().subscribeOn(driverSubscribeOnScheduler))
+        return Driver(Observable.empty().subscribeOn(driverSubscribeOnScheduler))
     }
 
     /**
@@ -107,9 +107,9 @@ extension Driver {
 
     - returns: An observable sequence whose observers will never get called.
     */
-    @warn_unused_result(message="http://git.io/rxs.uo")
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
     public static func never() -> Driver<E> {
-        return Driver(raw: Observable.never().subscribeOn(driverSubscribeOnScheduler))
+        return Driver(Observable.never().subscribeOn(driverSubscribeOnScheduler))
     }
 
     /**
@@ -118,9 +118,9 @@ extension Driver {
     - parameter element: Single element in the resulting observable sequence.
     - returns: An observable sequence containing the single specified element.
     */
-    @warn_unused_result(message="http://git.io/rxs.uo")
-    public static func just(element: E) -> Driver<E> {
-        return Driver(raw: Observable.just(element).subscribeOn(driverSubscribeOnScheduler))
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
+    public static func just(_ element: E) -> Driver<E> {
+        return Driver(Observable.just(element).subscribeOn(driverSubscribeOnScheduler))
     }
 
     /**
@@ -129,27 +129,69 @@ extension Driver {
      - parameter observableFactory: Observable factory function to invoke for each observer that subscribes to the resulting sequence.
      - returns: An observable sequence whose observers trigger an invocation of the given observable factory function.
      */
-    @warn_unused_result(message="http://git.io/rxs.uo")
-    public static func deferred(observableFactory: () -> Driver<E>)
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
+    public static func deferred(_ observableFactory: @escaping () -> Driver<E>)
         -> Driver<E> {
         return Driver(Observable.deferred { observableFactory().asObservable() })
     }
 
-    @warn_unused_result(message="http://git.io/rxs.uo")
-    public static func of(elements: E ...) -> Driver<E> {
-        let source = elements.toObservable().subscribeOn(driverSubscribeOnScheduler)
+    /**
+    This method creates a new Observable instance with a variable number of elements.
+
+    - seealso: [from operator on reactivex.io](http://reactivex.io/documentation/operators/from.html)
+
+    - parameter elements: Elements to generate.
+    - returns: The observable sequence whose elements are pulled from the given arguments.
+    */
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
+    public static func of(_ elements: E ...) -> Driver<E> {
+        let source = Observable.from(elements, scheduler: driverSubscribeOnScheduler)
         return Driver(raw: source)
     }
+}
 
+extension Driver where Element : SignedInteger {
+    /**
+     Returns an observable sequence that produces a value after each period, using the specified scheduler to run timers and to send out observer messages.
+
+     - seealso: [interval operator on reactivex.io](http://reactivex.io/documentation/operators/interval.html)
+
+     - parameter period: Period for producing the values in the resulting sequence.
+     - returns: An observable sequence that produces a value after each period.
+     */
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
+    public static func interval(_ period: RxTimeInterval)
+        -> Driver<E> {
+        return Driver(Observable.interval(period, scheduler: driverObserveOnScheduler))
+    }
+}
+
+// MARK: timer
+
+extension Driver where Element: SignedInteger {
+    /**
+     Returns an observable sequence that periodically produces a value after the specified initial relative due time has elapsed, using the specified scheduler to run timers.
+
+     - seealso: [timer operator on reactivex.io](http://reactivex.io/documentation/operators/timer.html)
+
+     - parameter dueTime: Relative time at which to produce the first value.
+     - parameter period: Period to produce subsequent values.
+     - returns: An observable sequence that produces a value after due time has elapsed and then each period.
+     */
+    // @warn_unused_result(message:"http://git.io/rxs.uo")
+    public static func timer(_ dueTime: RxTimeInterval, period: RxTimeInterval)
+        -> Driver<E> {
+        return Driver(Observable.timer(dueTime, period: period, scheduler: driverObserveOnScheduler))
+    }
 }
 
 /**
  This method can be used in unit tests to ensure that driver is using mock schedulers instead of
- maind schedulers.
+ main schedulers.
 
  **This shouldn't be used in normal release builds.**
 */
-public func driveOnScheduler(scheduler: SchedulerType, action: () -> ()) {
+public func driveOnScheduler(_ scheduler: SchedulerType, action: () -> ()) {
     let originalObserveOnScheduler = driverObserveOnScheduler
     let originalSubscribeOnScheduler = driverSubscribeOnScheduler
 
@@ -158,8 +200,21 @@ public func driveOnScheduler(scheduler: SchedulerType, action: () -> ()) {
 
     action()
 
+    // If you remove this line , compiler buggy optimizations will change behavior of this code
+    _forceCompilerToStopDoingInsaneOptimizationsThatBreakCode(driverObserveOnScheduler)
+    _forceCompilerToStopDoingInsaneOptimizationsThatBreakCode(driverSubscribeOnScheduler)
+    // Scary, I know
+
     driverObserveOnScheduler = originalObserveOnScheduler
     driverSubscribeOnScheduler = originalSubscribeOnScheduler
+}
+
+func _forceCompilerToStopDoingInsaneOptimizationsThatBreakCode(_ scheduler: SchedulerType) {
+    let a: Int32 = 1
+    let b = 314 + Int32(arc4random() & 1)
+    if a == b {
+        print(scheduler)
+    }
 }
 
 var driverObserveOnScheduler: SchedulerType = MainScheduler.instance
