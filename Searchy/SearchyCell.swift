@@ -33,13 +33,9 @@ class SearchyCell : UICollectionViewCell {
         label.backgroundColor = UIColor.white
         self.contentView.addSubview(label)
         
-        item.asObservable().subscribeNext { [unowned self] item in
-            self.label.text = "\(item.artist) - \(item.songTitle)"
-        }.addDisposableTo(rxs.disposeBag)
-		
-        image.asObservable().subscribeNext {
-            self.imageView.image = $0
-        }.addDisposableTo(rxs.disposeBag)
+        rxs.disposeBag
+            ++ self.label.rxs.text <~ item.asObservable().map { "\($0.artist) - \($0.songTitle)" }
+            ++ self.imageView.rxs.image <~ image.asObservable()
     }
     
     func populateCell(_ cellItem: SearchyDisplayItem) {

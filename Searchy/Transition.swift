@@ -33,16 +33,16 @@ class Transition : NSObject, UIViewControllerAnimatedTransitioning {
 
 struct ImageTransition {
     static let duration = 0.3
-    fileprivate let navigationController:UINavigationController
-    fileprivate let selectedItem:SearchResult
-    fileprivate let fromView: UIView
-    fileprivate let toView: UIView
-    fileprivate let containerView: UIView
-    fileprivate let fromImageView: UIImageView
-    fileprivate let toImageView: UIImageView
-    fileprivate let fromTransitionable: SearchyImageTransitionable
-    fileprivate let toTransitionable: SearchyImageTransitionable
-    fileprivate let context: UIViewControllerContextTransitioning
+    private let navigationController:UINavigationController
+    private let selectedItem:SearchResult
+    private let fromView: UIView
+    private let toView: UIView
+    private let containerView: UIView
+    private let fromImageView: UIImageView
+    private let toImageView: UIImageView
+    private let fromTransitionable: SearchyImageTransitionable
+    private let toTransitionable: SearchyImageTransitionable
+    private let context: UIViewControllerContextTransitioning
     
     init?(selectedItem: SearchResult, navigationController: UINavigationController, transitionContext: UIViewControllerContextTransitioning) {
         guard let fromTransitionable = transitionContext.view(forKey: UITransitionContextViewKey.from) as? SearchyImageTransitionable,

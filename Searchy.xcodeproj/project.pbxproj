@@ -603,13 +603,13 @@
 				5A6E654E1C650B1F001C03FB /* RxBlocking.framework */,
 				5A6E65501C650B1F001C03FB /* RxBlocking.framework */,
 				5A6E65521C650B1F001C03FB /* RxBlocking.framework */,
-				5A6E65541C650B1F001C03FB /* RxTests.framework */,
-				5A6E65561C650B1F001C03FB /* RxTests.framework */,
-				5A6E65581C650B1F001C03FB /* RxTests.framework */,
-				5A6E655A1C650B1F001C03FB /* RxTests.framework */,
+				5A6E65541C650B1F001C03FB /* RxTest.framework */,
+				5A6E65561C650B1F001C03FB /* RxTest.framework */,
+				5A6E65581C650B1F001C03FB /* RxTest.framework */,
+				5A6E655A1C650B1F001C03FB /* RxTest.framework */,
 				5A6E655C1C650B1F001C03FB /* AllTests-iOS.xctest */,
 				5A6E655E1C650B1F001C03FB /* AllTests-tvOS.xctest */,
-				5A6E65601C650B1F001C03FB /* AllTests-OSX.xctest */,
+				5A6E65601C650B1F001C03FB /* AllTests-macOS.xctest */,
 				5A6E65621C650B1F001C03FB /* PerformanceTests.app */,
 			);
 			name = Products;
@@ -717,7 +717,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = Asynchrony;
 				TargetAttributes = {
 					5A1839301BEA6BC900622B04 = {
@@ -857,31 +857,31 @@
 			remoteRef = 5A6E65511C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5A6E65541C650B1F001C03FB /* RxTests.framework */ = {
+		5A6E65541C650B1F001C03FB /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 5A6E65531C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5A6E65561C650B1F001C03FB /* RxTests.framework */ = {
+		5A6E65561C650B1F001C03FB /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 5A6E65551C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5A6E65581C650B1F001C03FB /* RxTests.framework */ = {
+		5A6E65581C650B1F001C03FB /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 5A6E65571C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5A6E655A1C650B1F001C03FB /* RxTests.framework */ = {
+		5A6E655A1C650B1F001C03FB /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 5A6E65591C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -899,10 +899,10 @@
 			remoteRef = 5A6E655D1C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5A6E65601C650B1F001C03FB /* AllTests-OSX.xctest */ = {
+		5A6E65601C650B1F001C03FB /* AllTests-macOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "AllTests-OSX.xctest";
+			path = "AllTests-macOS.xctest";
 			remoteRef = 5A6E655F1C650B1F001C03FB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1193,8 +1193,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1237,8 +1239,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1257,6 +1261,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1268,7 +1273,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Searchy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1285,7 +1289,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = "";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Searchy/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

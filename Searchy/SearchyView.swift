@@ -5,9 +5,9 @@ import RxSugar
 let StandardTouchSize = CGFloat(44)
 
 class SearchyView: UIView, SearchyImageTransitionable {
-	fileprivate let disposeBag = DisposeBag()
-    fileprivate let tableHandler:TableHandler
-    fileprivate let textField = UITextField()
+	private let disposeBag = DisposeBag()
+    private let tableHandler: TableHandler
+    private let textField = UITextField()
     
     let searchResults = Variable<SearchResults>([])
     let selectionEvents:Observable<SearchResult>
@@ -71,14 +71,13 @@ class SearchyView: UIView, SearchyImageTransitionable {
     }
     
     class TableHandler : UICollectionViewFlowLayout, UICollectionViewDataSource, UICollectionViewDelegate {
-		fileprivate let disposeBag = DisposeBag()
-        weak var parent:SearchyView?
-        let view:UICollectionView
-        let data = Variable<SearchResults>([])
-        fileprivate let imageProvider:ImageProvider
-		fileprivate let selectionEventsPublisher = PublishSubject<SearchResult>()
-		let selectionEvents:Observable<SearchResult>
+        weak var parent: SearchyView?
+        let view: UICollectionView
         let layout = UICollectionViewFlowLayout()
+        let data = Variable<SearchResults>([])
+        private let imageProvider: ImageProvider
+		private let selectionEventsPublisher = PublishSubject<SearchResult>()
+		let selectionEvents: Observable<SearchResult>
         
         init(imageProvider: ImageProvider) {
 			selectionEvents = selectionEventsPublisher.asObservable()
@@ -96,9 +95,7 @@ class SearchyView: UIView, SearchyImageTransitionable {
             view.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
             view.backgroundColor = UIColor.white
             
-            data.asObservable().subscribeNext { [unowned self] _ in
-                self.view.reloadData()
-            }.addDisposableTo(disposeBag)
+            view.rxs.disposeBag ++ { [weak self] _ in self?.view.reloadData() } <~ data.asObservable()
         }
         
         required init?(coder aDecoder: NSCoder) {

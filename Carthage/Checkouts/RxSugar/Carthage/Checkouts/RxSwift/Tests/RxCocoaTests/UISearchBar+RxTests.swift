@@ -1,6 +1,6 @@
 //
 //  UISearchBar+RxTests.swift
-//  Rx
+//  Tests
 //
 //  Created by Krunoslav Zaher on 3/12/16.
 //  Copyright © 2016 Krunoslav Zaher. All rights reserved.
@@ -16,7 +16,7 @@ import XCTest
 class UISearchBarTests : RxTest {
     func testText_completesOnDealloc() {
         let createView: () -> UISearchBar = { UISearchBar(frame: CGRect(x: 0, y: 0, width: 1, height: 1)) }
-        ensurePropertyDeallocated(createView, "a") { (view: UISearchBar) in view.rx.text }
+        ensurePropertyDeallocated(createView, "a") { (view: UISearchBar) in view.rx.text.orEmpty }
     }
 
     func testText_changeEventWorks() {

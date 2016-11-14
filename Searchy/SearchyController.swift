@@ -3,10 +3,10 @@ import SafariServices
 import AVFoundation
 
 class SearchyController: UIViewController, UINavigationControllerDelegate {
-	let model:SearchyModel = SearchyModel(searchService: ItunesSearchService(networkLayer: URLSessionNetworkLayer()))
+	let model: SearchyModel = SearchyModel(searchService: ItunesSearchService(networkLayer: URLSessionNetworkLayer()))
     let player = AVQueuePlayer()
-    fileprivate let context: ApplicationContext
-    fileprivate var transition:Transition?
+    private let context: ApplicationContext
+    private var transition: Transition?
     
     init(context: ApplicationContext) {
         self.context = context

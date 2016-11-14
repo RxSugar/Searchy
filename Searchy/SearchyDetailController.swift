@@ -4,8 +4,8 @@ import AVFoundation
 class SearchyDetailController: UIViewController, UINavigationControllerDelegate {
     let item:SearchyDisplayItem
     let snapshot:UIView
-    fileprivate var interactivePopTransition:UIPercentDrivenInteractiveTransition?
-    fileprivate let popGesture = UIScreenEdgePanGestureRecognizer()
+    private var interactivePopTransition:UIPercentDrivenInteractiveTransition?
+    private let popGesture = UIScreenEdgePanGestureRecognizer()
     
     init(item: SearchyDisplayItem, snapshot:UIView) {
         self.item = item
@@ -50,7 +50,7 @@ class SearchyDetailController: UIViewController, UINavigationControllerDelegate 
         switch popGesture.state {
         case .began:
             interactivePopTransition = UIPercentDrivenInteractiveTransition()
-            navigationController?.popViewController(animated: true)
+            _ = navigationController?.popViewController(animated: true)
         case .changed:
             interactivePopTransition?.update(progress)
         case .ended:

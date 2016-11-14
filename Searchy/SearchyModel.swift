@@ -13,15 +13,13 @@ class SearchyModel {
 			.share()
 	}
     
-    fileprivate static func stripWhitespace(_ term: String) -> String {
+    private static func stripWhitespace(_ term: String) -> String {
         return term.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
 
-    fileprivate static func searchTerm(_ searchService:SearchService) -> (String) -> Observable<SearchResults> {
-        return {
-            term in
+    private static func searchTerm(_ searchService:SearchService) -> (String) -> Observable<SearchResults> {
+        return { term in
             guard term.characters.count > 0 else { return Observable.just(SearchResults()) }
-		
             return searchService.search(term)
         }
 	}

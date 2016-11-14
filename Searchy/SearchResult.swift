@@ -4,17 +4,17 @@ import Curry
 import Runes
 
 struct SearchResult: Equatable {
-    let artist:String
-    let songTitle:String
-    let resultUrl:URL?
-    let iconUrl:URL?
+    let artist: String
+    let songTitle: String
+    let resultUrl: URL?
+    let iconUrl: URL?
     
     static let emptyResult = SearchResult(artist: "", songTitle: "", resultUrl: URL(string: ""), iconUrl: URL(string: ""))
 }
 
 typealias SearchResults = [SearchResult]
 
-func ==(lhs:SearchResult, rhs:SearchResult) -> Bool {
+func ==(lhs: SearchResult, rhs: SearchResult) -> Bool {
     return lhs.artist == rhs.artist && lhs.songTitle == rhs.songTitle && lhs.resultUrl == rhs.resultUrl && lhs.iconUrl == rhs.iconUrl
 }
 

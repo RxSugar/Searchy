@@ -13,7 +13,7 @@ import RxSwift
 import RxCocoa
 #endif
 
-class SimpleTableViewExampleViewController : ViewController {
+class SimpleTableViewExampleViewController : ViewController, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
 
     override func viewDidLoad() {
@@ -47,4 +47,5 @@ class SimpleTableViewExampleViewController : ViewController {
             .addDisposableTo(disposeBag)
 
     }
+
 }

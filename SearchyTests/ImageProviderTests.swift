@@ -8,7 +8,7 @@ func testImageNamed(_ named: String) -> UIImage! {
 }
 
 extension UIImage {
-	var pngData:Data! {
+	var pngData: Data! {
         return UIImagePNGRepresentation(self)
     }
 }
@@ -19,7 +19,7 @@ class FakeNetworkLayer : NetworkLayer {
     static let cloneThree = testImageNamed("clone-3.png")
     static let cloneFour = testImageNamed("clone-4.png")
 	
-	func dataFromUrl(_ urlString: String) -> Observable<NSData> {
+	func dataFromUrl(_ urlString: String) -> Observable<Data> {
 		switch urlString {
 		case "http://example.com/one.png":
 			return Observable.just(FakeNetworkLayer.cloneOne!.pngData)
@@ -34,7 +34,7 @@ class FakeNetworkLayer : NetworkLayer {
 		}
 	}
 	
-	func jsonFromUrl(_ urlString: String) -> Observable<AnyObject> { return Observable.never() }
+	func jsonFromUrl(_ urlString: String) -> Observable<Any> { return Observable.never() }
 }
 
 class ImageProviderTests: XCTestCase {
@@ -52,9 +52,9 @@ class ImageProviderTests: XCTestCase {
         let testObject = ImageProvider(networkLayer: FakeNetworkLayer())
         
         var count = 0
-        _ = result.asObservable().subscribeNext { _ in
-            count++
-        }
+        _ = result.asObservable().subscribe(onNext: { _ in
+            count += 1
+        })
         
         _ = result <~ testObject.imageFromURL(URL(string: "http://example.com/two.png")!)
         let firstLoad = result.value

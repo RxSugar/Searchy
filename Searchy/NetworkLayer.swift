@@ -36,9 +36,7 @@ class URLSessionNetworkLayer : NetworkLayer {
             let t = task
             t.resume()
             
-            return AnonymousDisposable {
-                task.cancel()
-            }
+            return Disposables.create { _ in task.cancel() }
         }
     }
     

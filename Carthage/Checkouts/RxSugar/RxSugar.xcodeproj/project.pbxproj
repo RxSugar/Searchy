@@ -259,7 +259,7 @@
 
 /* Begin PBXFileReference section */
 		4D1733A71D39D858004A2EF6 /* Animator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
-		4D1733AA1D39D8B7004A2EF6 /* AnimatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatorTests.swift; sourceTree = "<group>"; };
+		4D1733AA1D39D8B7004A2EF6 /* AnimatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnimatorTests.swift; path = RxSugarTests/AnimatorTests.swift; sourceTree = SOURCE_ROOT; };
 		4D27989C1C76D7F4007C63B9 /* UIGestureRecognizer+Sugar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIGestureRecognizer+Sugar.swift"; path = "RxSugar/UIGestureRecognizer+Sugar.swift"; sourceTree = "<group>"; };
 		4D2798B31C76DC45007C63B9 /* UIGestureRecognizer+SugarTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIGestureRecognizer+SugarTests.swift"; path = "RxSugarTests/UIGestureRecognizer+SugarTests.swift"; sourceTree = "<group>"; };
 		4D2798B51C77A9A2007C63B9 /* UITapGestureRecognizer+Sugar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UITapGestureRecognizer+Sugar.swift"; path = "RxSugar/UITapGestureRecognizer+Sugar.swift"; sourceTree = "<group>"; };
@@ -291,7 +291,7 @@
 		5A9AE87E1C65458100F8FD92 /* IgnoreNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IgnoreNil.swift; sourceTree = "<group>"; };
 		5A9AE8801C65459000F8FD92 /* CombinePrevious.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CombinePrevious.swift; sourceTree = "<group>"; };
 		5A9AE8821C6545C900F8FD92 /* OptionalType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalType.swift; sourceTree = "<group>"; };
-		5A9AE8841C6545FC00F8FD92 /* CombinePreviousTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CombinePreviousTests.swift; path = ../RxSugarTests/CombinePreviousTests.swift; sourceTree = "<group>"; };
+		5A9AE8841C6545FC00F8FD92 /* CombinePreviousTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CombinePreviousTests.swift; path = RxSugarTests/CombinePreviousTests.swift; sourceTree = SOURCE_ROOT; };
 		5A9AE8871C6548AA00F8FD92 /* IgnoreNilTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IgnoreNilTests.swift; path = RxSugarTests/IgnoreNilTests.swift; sourceTree = SOURCE_ROOT; };
 		5A9AE91B1C6A599000F8FD92 /* RxSugar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RxSugar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A9AE9241C6A599000F8FD92 /* RxSugarTests-tvOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "RxSugarTests-tvOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -466,13 +466,13 @@
 				4D91C38E1C62711A00926C99 /* RxBlocking.framework */,
 				4D91C3901C62711A00926C99 /* RxBlocking.framework */,
 				4D91C3921C62711A00926C99 /* RxBlocking.framework */,
-				4D91C3941C62711A00926C99 /* RxTests.framework */,
-				4D91C3961C62711A00926C99 /* RxTests.framework */,
-				4D91C3981C62711A00926C99 /* RxTests.framework */,
-				4D91C39A1C62711A00926C99 /* RxTests.framework */,
+				4D91C3941C62711A00926C99 /* RxTest.framework */,
+				4D91C3961C62711A00926C99 /* RxTest.framework */,
+				4D91C3981C62711A00926C99 /* RxTest.framework */,
+				4D91C39A1C62711A00926C99 /* RxTest.framework */,
 				4D91C39C1C62711A00926C99 /* AllTests-iOS.xctest */,
 				4D91C39E1C62711A00926C99 /* AllTests-tvOS.xctest */,
-				4D91C3A01C62711A00926C99 /* AllTests-OSX.xctest */,
+				4D91C3A01C62711A00926C99 /* AllTests-macOS.xctest */,
 				4D91C3A21C62711A00926C99 /* PerformanceTests.app */,
 			);
 			name = Products;
@@ -639,7 +639,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = RxSugar;
 				TargetAttributes = {
 					4D381CFA1D341E50001F7085 = {
@@ -776,31 +776,31 @@
 			remoteRef = 4D91C3911C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4D91C3941C62711A00926C99 /* RxTests.framework */ = {
+		4D91C3941C62711A00926C99 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 4D91C3931C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4D91C3961C62711A00926C99 /* RxTests.framework */ = {
+		4D91C3961C62711A00926C99 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 4D91C3951C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4D91C3981C62711A00926C99 /* RxTests.framework */ = {
+		4D91C3981C62711A00926C99 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 4D91C3971C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4D91C39A1C62711A00926C99 /* RxTests.framework */ = {
+		4D91C39A1C62711A00926C99 /* RxTest.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = RxTests.framework;
+			path = RxTest.framework;
 			remoteRef = 4D91C3991C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -818,10 +818,10 @@
 			remoteRef = 4D91C39D1C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		4D91C3A01C62711A00926C99 /* AllTests-OSX.xctest */ = {
+		4D91C3A01C62711A00926C99 /* AllTests-macOS.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "AllTests-OSX.xctest";
+			path = "AllTests-macOS.xctest";
 			remoteRef = 4D91C39F1C62711A00926C99 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1010,6 +1010,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1022,7 +1023,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.2;
 			};
@@ -1034,6 +1035,7 @@
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1045,7 +1047,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.2;
 			};
@@ -1064,8 +1066,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1112,8 +1116,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1146,6 +1152,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1166,6 +1173,7 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1208,6 +1216,7 @@
 		5A9AE92C1C6A599000F8FD92 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1219,7 +1228,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1228,6 +1237,7 @@
 		5A9AE92D1C6A599000F8FD92 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1239,7 +1249,7 @@
 				PRODUCT_NAME = "$(PROJECT_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1253,7 +1263,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.rxsugar.RxSugarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Debug;
@@ -1266,7 +1276,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.rxsugar.RxSugarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Release;

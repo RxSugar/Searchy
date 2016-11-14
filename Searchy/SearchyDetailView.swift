@@ -1,15 +1,15 @@
 import UIKit
 import RxSwift
+import RxSugar
 
 class SearchyDetailView: UIView, SearchyImageTransitionable {
-    fileprivate let margin:CGFloat = 10.0
-    fileprivate let imageView = UIImageView()
-    fileprivate let titleLabel = UILabel()
-    fileprivate let item:SearchyDisplayItem
-    fileprivate let backgroundSnapshot:UIView
-    fileprivate let blurView:UIVisualEffectView
-    fileprivate let blurEffect = UIBlurEffect(style: .light)
-    fileprivate let disposeBag = DisposeBag()
+    private let margin:CGFloat = 10.0
+    private let imageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let item:SearchyDisplayItem
+    private let backgroundSnapshot:UIView
+    private let blurView: UIVisualEffectView
+    private let blurEffect = UIBlurEffect(style: .light)
     
     init(item: SearchyDisplayItem, backgroundSnapshot: UIView) {
         self.item = item
@@ -27,9 +27,7 @@ class SearchyDetailView: UIView, SearchyImageTransitionable {
         backgroundColor = UIColor.white.withAlphaComponent(0.5)
         
         titleLabel.text = "\(item.result.artist) - \(item.result.songTitle)"
-        item.image.asObservable().subscribeNext { [weak self] in
-            self?.imageView.image = $0
-        }.addDisposableTo(disposeBag)
+        rxs.disposeBag ++ { [weak self] in self?.imageView.image = $0 } <~ item.image.asObservable()
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -14,9 +14,6 @@
       location = "group:README.md">
    </FileRef>
    <FileRef
-      location = "group:ISSUE_TEMPLATE.md">
-   </FileRef>
-   <FileRef
       location = "group:CHANGELOG.md">
    </FileRef>
    <Group
@@ -32,12 +29,18 @@
          location = "group:RxSwift.podspec">
       </FileRef>
       <FileRef
-         location = "group:RxTests.podspec">
+         location = "group:RxTest.podspec">
       </FileRef>
    </Group>
    <Group
       location = "group:scripts"
       name = "scripts">
+      <FileRef
+         location = "group:update-jazzy-config.rb">
+      </FileRef>
+      <FileRef
+         location = "group:update-jazzy-docs.sh">
+      </FileRef>
       <FileRef
          location = "group:all-tests.sh">
       </FileRef>
@@ -66,9 +69,6 @@
    <Group
       location = "group:Documentation"
       name = "Documentation">
-      <FileRef
-         location = "group:API.md">
-      </FileRef>
       <FileRef
          location = "group:DesignRationale.md">
       </FileRef>
