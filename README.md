@@ -9,7 +9,7 @@ There are a number of popular architectural patterns in use on iOS: MVVM, VIPER,
 MVC often results in “Massive View Controller” rather than a useful separation of concerns. “MVVM” is Not Very Good” details some problems with the MVVM pattern on iOS. VIPER has many parts and a fairly rigid structure. We have found MVB to be a simpler way to enforce separation of concerns while being flexible enough to work well in a small or a large project.
 
 ### Searchy – MVB By Example
-Searchy is a small app that uses the MVB pattern with RxSwift to search the iTunes API and display songs and cover art. The example code in this post is taken directly from that code. The full source is available at [https://gitlab.asynchrony.com/mark.sands/Searchy.git](https://gitlab.asynchrony.com/mark.sands/Searchy.git).
+Searchy is a small app that uses the MVB pattern with RxSwift to search the iTunes API and display songs and cover art. The example code in this post is taken directly from this project.
 
 ### Defining Terms
 Many of the common terms used in these patterns do not have a consistent definition, so here is a definition of each term within the context of this article:
